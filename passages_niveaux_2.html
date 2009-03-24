@@ -1,0 +1,874 @@
+	<!--
+	/**
+	 * 
+	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 *
+	 * This file is a part of Cursus
+	 *
+	 * Cursus is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * Cursus is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+	 * originally released under the LGPL <http://www.gnu.org/licenses/>
+	 * by Olivier LOYNET (tbsooo@free.fr)
+	 *
+	 * Cursus uses Potajx
+	 * released under the GPL <http://www.gnu.org/licenses/>
+	 * by Maxime CHAPELET (umxprime@umxprime.com)
+	 * 
+	 **/
+	 -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr"><head>
+
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="cursus.css" type="text/css">
+<title>Passages et niveau des étudiants</title>
+<script type="text/javascript">
+	function sortie( qui ) {
+  var i, elem, vis;
+  for (i= 11; i<= 13; i++) {
+  	elem = document.getElementById( i+"_"+qui );
+  	vis = elem.style;
+  	vis.display = (vis.display==''||vis.display=='')?'none':'';
+  }
+  document.getElementById( "11_"+qui ).style.borderLeft = '1px dotted #808080';
+}
+ function cache() {
+	var i, j, Id;
+  for (j= 1; j<= 4; j++) {
+	  for (i= 11; i<= 13; i++) {
+	  	Id = i+"_"+j;
+		  if (document.getElementById(Id)) {
+		  	document.getElementById(Id).style.display = 'none';
+		  }
+	  }
+  }
+ }
+</script>
+<style type="text/css">
+	.nom {
+		width: 272px;
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.semestre {
+		background-color: #808080;
+		color: inherit;
+		height: 10px;
+		width: auto;
+	}
+	.off {
+		display: none;
+	}
+	.valide {
+		background: url(img/trame-vert.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.non_valide {
+		background: url(img/trame-rose.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.neutre {
+		background: url(img/trame-gris.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.sortie {
+		/*border-bottom: 1px solid #808080;*/
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.sortie_off {
+		background: url(img/trame-rose.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.sortie_on {
+		background: url(img/trame-vert.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.noborder {
+	border: 2px dotted #f00;
+}
+form image {
+	border: none;
+}
+table {
+	font : 11px "Trebuchet MS", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	left: 20px;
+	border: 0px;
+	color: #404040;
+	background-color: inherit;
+	border-spacing : 0px;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	/*background: url(img/motif-trans.png);*/
+	background-color: #C8C8C8;
+	color: #808080;
+}
+#global {
+	position: relative;
+	width: 760px;
+	margin-left: -380px;
+	left: 50%;
+	background: url(img/fond-principal.png) 0 0 repeat-y;
+	}
+
+td {
+	padding: 5px;
+}
+h2{
+	font: 14px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: inherit;
+	margin-left: 20px;
+	}
+.hide {
+	display: none;
+}
+img {
+	border: none;
+}
+
+#menuCursus {
+	position: relative;
+	top: 0px;
+	left: 11px;
+	padding-left: 10px;
+	width: 728px;
+	background-color: #eee;
+	color: inherit;
+	/*background: url(img/trame-gris.gif);*/
+	height: 35px;
+}
+#menuCursus a {
+	text-decoration: none;
+	color: #808080;
+	background-color: inherit;
+	/*padding: 6px 10px 6px 8px;*/
+	/*padding: 6px 9px 6px 7px;*/
+	padding: 6px 6px 6px 6px;
+	/*background: url(img/trame-vert.gif);*/
+	margin: 0 -8px 0 -6px;
+}
+
+#menuCursus li a:hover {
+	/*background: url(img/trame-vert.gif);*/
+	background-color: #fff;
+	color: #60acbf;
+	/*border: 1px dotted #bbb;*/
+}
+#menuCursus li {
+	display: inline;
+	padding: 6px 8px 6px 6px;
+	border-bottom: 1px dotted #bbb;
+	border-left: 1px dotted #bbb;
+	border-right: 1px dotted #bbb;
+	font: 10px Georgia, "Trebuchet MS", serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: #eee;
+}
+#menuCursus li.courant {
+	display: inline;
+	/*padding: 6px 10px 6px 8px;*/
+	padding: 6px 8px 6px 6px;
+	border-bottom: 1px dotted #bbb;
+	border-left: 1px dotted #bbb;
+	border-right: 1px dotted #bbb;
+	/*background-color: #60acbf;*/
+	color: #60acbf;
+	background-color: #fff;
+}
+#menuCursus li.nomEnseignant {
+	font-size: 13px;
+	text-transform: capitalize;
+	margin-left: 25px;
+	color: #60acbf;
+	background-color: #fff;
+	/*border-color: #fff;*+
+	/*border: 1px solid red;*/
+	line-height: 22px;
+	padding-bottom: 5px;
+}
+#menuCursus li.logoff {
+	margin-left: -5px;
+	display: inline;
+	padding: 6px 8px 6px 6px;
+}
+#menuCursus li.logoff a {
+	background-color: #80B711;
+	color: #fff;
+}
+#menuCursus li.logoff a:hover {
+	background-color: #FF8500;
+	color: #444;
+	}
+#semestre {
+	position: relative;
+	left: 11px;
+	padding-left: 10px;
+	width: 728px;
+	height: 35px;
+	margin-bottom: 20px;
+	background-color: #f8f8f8;
+	color: inherit;
+	/*background: url(img/trame-gris.gif);*/
+}
+#semestre li {
+	padding-top: 10px;
+	display: inline;
+	float: left;
+}
+#semestre ul {
+	margin-left: 30%;
+	margin-right: -30%;
+}
+#semestre a {
+	position: absolute;
+	height: 15px;
+	width: 45px;
+	text-indent: -5000px;
+	text-decoration: none;
+	/*border: 1px solid red;*/
+}
+#sem-precedent a{
+	background: url(img/semestre.gif) 0 -15px no-repeat;
+}
+#sem-precedent a:hover {
+	background: url(img/semestre.gif) 0 -45px no-repeat;
+}
+#sem-suivant a {
+	background: url(img/semestre.gif) 0 0px no-repeat;
+}
+#sem-suivant a:hover {
+	background: url(img/semestre.gif) 0 -30px no-repeat;
+}
+#semestre li h2{
+	font: 14px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: inherit;
+	margin-left: 60px;
+	margin-right: 15px;
+}
+</style>
+</head>
+<body onload="javascript:cache();">
+<div id="global">
+
+	<div id="menuCursus">
+		<ul>
+			<li><a title="gestion de vos modules" href="http://192.168.0.10/cursus/sessions.php">modules</a></li>
+			<li><a href="http://192.168.0.10/cursus/tutorats.php">tutorats</a></li>
+			<li><a href="http://192.168.0.10/cursus/vue_etu_sem.php?ns=1">coordination</a></li>
+			<li class="courant">Passages de semestre</li>
+			<li><a title="Modifier votre mot de passe et indentifiant" href="http://192.168.0.10/cursus/edition_prof.php">infos perso</a></li>
+			<li class="nomEnseignant">Damien Prud'homme</li>
+			<li class="logoff"><a title="se déconnecter" href="http://192.168.0.10/cursus/login.php">déconnexion</a></li>
+		</ul>
+	</div>
+<div id="semestre">
+	<ul>
+		<li id="sem-precedent"><a href="http://192.168.0.10/cursus/passages_niveaux.php?nPeriode=1">&lt;---   </a></li>
+		<li><h2>2006/2007 - second semestre</h2></li>
+		<li id="sem-suivant"><a href="http://192.168.0.10/cursus/passages_niveaux.php?nPeriode=18">---&gt;</a></li>
+	</ul>
+</div>
+
+
+<form method="post" action="passages_niveaux.php" name="passages">
+<table>
+	<tbody>
+		<tr>
+			<th>Nom de l'étudiant</th>
+			<th>S1</th>
+			<th>S2</th>
+			<th>S3</th>
+			<th>S4</th>
+			<th>S5</th>
+			<th>S6</th>
+			<th>S7</th>
+			<th>S8</th>
+			<th>S9</th>
+			<th>S10</th>
+			<th></th>
+		</tr>
+				<tr>
+			<td class="nom">Jean-Baptiste Bourgois</td>
+			<td class="valide"><input class="off" name="etudiant_0" value="1_1" type="radio"></td>
+			<td class="valide"><input class="off" name="etudiant_0" value="2_1" checked="checked" type="radio"></td>
+			<td class="neutre"><input name="etudiant_0" value="3_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="4_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="5_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="6_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="7_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="8_1" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="9_1" type="radio"></td>
+			
+			<td class="non_valide"><input class="off" name="etudiant_0" value="10_1" type="radio"></td>
+			<td class="vide"><a href="javascript:sortie(1);"><img src="img/sortie.gif" title="sortie de cycle" /></a></td>
+			<td class="sortie_on" id="11_1"><input name="etudiant_0" value="11_1" type="radio" title="DNAP"></td>
+			<td class="sortie_off" id="12_1"><input class="off" name="etudiant_0" value="12_1" type="radio"></td>
+			<td class="sortie" id="13_1"><input name="etudiant_0" value="13_1" type=radio ><img src="img/abandon.gif" title="abandon, changement d'école, etc" /></td>
+		</tr>
+				<tr>
+			<td class="nom">Maxence Ciekawy</td>
+			<td class="valide"><input class="off" name="etudiant_1" value="1_2" type="radio"></td>
+			<td class="valide"><input class="off" name="etudiant_1" value="2_2" checked="checked" type="radio"></td>
+			<td class="neutre"><input name="etudiant_0" value="3_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="4_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="5_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="6_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="7_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="8_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="9_2" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="10_2" type="radio"></td>
+			<td class="vide"><a href="javascript:sortie(2);"><img src="img/sortie.gif" title="sortie de cycle" /></a></td>
+			<td class="sortie_off" id="11_2"><input class="off" name="etudiant_0" value="11_2" type="radio"></td>
+			<td class="sortie_off" id="12_2"><input class="off" name="etudiant_0" value="12_2" type="radio"></td>
+			<td class="sortie" id="13_2"><input name="etudiant_0" value="13_2" type="radio"><img src="img/abandon.gif" title="abandon, changement d'école, etc" /></td>
+		</tr>
+				<tr>
+			<td class="nom">Thomas Couteux</td>
+			<td class="valide"><input class="off" name="etudiant_2" value="1_3" type="radio"></td>
+			<td class="valide"><input class="off" name="etudiant_2" value="2_3" checked="checked" type="radio"></td>
+			<td class="neutre"><input name="etudiant_0" value="3_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="4_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="5_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="6_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="7_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="8_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="9_3" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="10_3" type="radio"></td>
+			<td class="vide"><a href="javascript:sortie(3);"><img src="img/sortie.gif" title="sortie de cycle" /></a></td>
+			<td class="sortie_off" id="11_3"><input class="off" name="etudiant_0" value="11_3" type="radio"></td>
+			<td class="sortie_off" id="12_3"><input class="off" name="etudiant_0" value="12_3" type="radio"></td>
+			<td class="sortie" id="13_3"><input name="etudiant_0" value="13_3" type="radio"><img src="img/abandon.gif" title="abandon, changement d'école, etc" /></td>
+		</tr>
+				<tr>
+			<td class="nom">Clélia Dehon</td>
+			<td class="valide"><input class="off" name="etudiant_3" value="1_4" type="radio"></td>
+			<td class="valide"><input class="off" name="etudiant_3" value="2_4" checked="checked" type="radio"></td>
+			<td class="neutre"><input name="etudiant_0" value="3_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="4_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="5_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="6_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="7_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="8_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="9_4" type="radio"></td>
+			<td class="non_valide"><input class="off" name="etudiant_0" value="10_4" type="radio"></td>
+			<td class="vide"><a href="javascript:sortie(4);"><img src="img/sortie.gif" title="sortie de cycle" /></a></td>
+			<td class="sortie_off" id="11_4"><input class="off" name="etudiant_0" value="11_4" type="radio"></td>
+			<td class="sortie_off" id="12_4"><input class="off" name="etudiant_0" value="12_4" type="radio"></td>
+			<td class="sortie" id="13_4"><input name="etudiant_0" value="13_4" type="radio"><img src="img/abandon.gif" title="abandon, changement d'école, etc" /></td>
+		</tr>
+				<tr>
+			<td class="nom">Anne Delemotte</td>
+			<td class="valide"><input name="etudiant_4" value="1_6" type="radio"></td>
+			<td class="valide"><input name="etudiant_4" value="2_6" checked="checked" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="3_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="4_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="5_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="6_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="7_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="8_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="9_6" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_4" value="10_6" type="radio"></td>
+			<td class="sortie"><input name="etudiant_4" value="11_6" type="radio"></td>
+			<td class="sortie"><input name="etudiant_4" value="12_6" type="radio"></td>
+			<td class="sortie"><input name="etudiant_4" value="13_6" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Audrey Dumure</td>
+			<td class="valide"><input name="etudiant_5" value="1_7" type="radio"></td>
+			<td class="valide"><input name="etudiant_5" value="2_7" checked="checked" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="3_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="4_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="5_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="6_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="7_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="8_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="9_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="10_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="11_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="12_7" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_5" value="13_7" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Isabelle Durant</td>
+			<td class="valide"><input name="etudiant_6" value="1_8" type="radio"></td>
+			<td class="valide"><input name="etudiant_6" value="2_8" checked="checked" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="3_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="4_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="5_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="6_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="7_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="8_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="9_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="10_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="11_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="12_8" type="radio"></td>
+			<td class="non_valide"><input name="etudiant_6" value="13_8" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Maxime Fedrick</td>
+			<td><input name="etudiant_7" value="1_9" type="radio"></td><td><input name="etudiant_7" value="2_9" checked="checked" type="radio"></td><td><input name="etudiant_7" value="3_9" type="radio"></td><td><input name="etudiant_7" value="4_9" type="radio"></td><td><input name="etudiant_7" value="5_9" type="radio"></td><td><input name="etudiant_7" value="6_9" type="radio"></td><td><input name="etudiant_7" value="7_9" type="radio"></td><td><input name="etudiant_7" value="8_9" type="radio"></td><td><input name="etudiant_7" value="9_9" type="radio"></td><td><input name="etudiant_7" value="10_9" type="radio"></td><td><input name="etudiant_7" value="11_9" type="radio"></td><td><input name="etudiant_7" value="12_9" type="radio"></td><td><input name="etudiant_7" value="13_9" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Victor Fourcade</td>
+			<td><input name="etudiant_8" value="1_10" type="radio"></td><td><input name="etudiant_8" value="2_10" checked="checked" type="radio"></td><td><input name="etudiant_8" value="3_10" type="radio"></td><td><input name="etudiant_8" value="4_10" type="radio"></td><td><input name="etudiant_8" value="5_10" type="radio"></td><td><input name="etudiant_8" value="6_10" type="radio"></td><td><input name="etudiant_8" value="7_10" type="radio"></td><td><input name="etudiant_8" value="8_10" type="radio"></td><td><input name="etudiant_8" value="9_10" type="radio"></td><td><input name="etudiant_8" value="10_10" type="radio"></td><td><input name="etudiant_8" value="11_10" type="radio"></td><td><input name="etudiant_8" value="12_10" type="radio"></td><td><input name="etudiant_8" value="13_10" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Anne-Claire Gergaud</td>
+			<td><input name="etudiant_9" value="1_11" type="radio"></td><td><input name="etudiant_9" value="2_11" checked="checked" type="radio"></td><td><input name="etudiant_9" value="3_11" type="radio"></td><td><input name="etudiant_9" value="4_11" type="radio"></td><td><input name="etudiant_9" value="5_11" type="radio"></td><td><input name="etudiant_9" value="6_11" type="radio"></td><td><input name="etudiant_9" value="7_11" type="radio"></td><td><input name="etudiant_9" value="8_11" type="radio"></td><td><input name="etudiant_9" value="9_11" type="radio"></td><td><input name="etudiant_9" value="10_11" type="radio"></td><td><input name="etudiant_9" value="11_11" type="radio"></td><td><input name="etudiant_9" value="12_11" type="radio"></td><td><input name="etudiant_9" value="13_11" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Sandrine Goessens</td>
+			<td><input name="etudiant_10" value="1_12" type="radio"></td><td><input name="etudiant_10" value="2_12" checked="checked" type="radio"></td><td><input name="etudiant_10" value="3_12" type="radio"></td><td><input name="etudiant_10" value="4_12" type="radio"></td><td><input name="etudiant_10" value="5_12" type="radio"></td><td><input name="etudiant_10" value="6_12" type="radio"></td><td><input name="etudiant_10" value="7_12" type="radio"></td><td><input name="etudiant_10" value="8_12" type="radio"></td><td><input name="etudiant_10" value="9_12" type="radio"></td><td><input name="etudiant_10" value="10_12" type="radio"></td><td><input name="etudiant_10" value="11_12" type="radio"></td><td><input name="etudiant_10" value="12_12" type="radio"></td><td><input name="etudiant_10" value="13_12" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Fabien Guitard</td>
+			<td><input name="etudiant_11" value="1_13" type="radio"></td><td><input name="etudiant_11" value="2_13" checked="checked" type="radio"></td><td><input name="etudiant_11" value="3_13" type="radio"></td><td><input name="etudiant_11" value="4_13" type="radio"></td><td><input name="etudiant_11" value="5_13" type="radio"></td><td><input name="etudiant_11" value="6_13" type="radio"></td><td><input name="etudiant_11" value="7_13" type="radio"></td><td><input name="etudiant_11" value="8_13" type="radio"></td><td><input name="etudiant_11" value="9_13" type="radio"></td><td><input name="etudiant_11" value="10_13" type="radio"></td><td><input name="etudiant_11" value="11_13" type="radio"></td><td><input name="etudiant_11" value="12_13" type="radio"></td><td><input name="etudiant_11" value="13_13" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Guillaume Hecka</td>
+			<td><input name="etudiant_12" value="1_14" type="radio"></td><td><input name="etudiant_12" value="2_14" checked="checked" type="radio"></td><td><input name="etudiant_12" value="3_14" type="radio"></td><td><input name="etudiant_12" value="4_14" type="radio"></td><td><input name="etudiant_12" value="5_14" type="radio"></td><td><input name="etudiant_12" value="6_14" type="radio"></td><td><input name="etudiant_12" value="7_14" type="radio"></td><td><input name="etudiant_12" value="8_14" type="radio"></td><td><input name="etudiant_12" value="9_14" type="radio"></td><td><input name="etudiant_12" value="10_14" type="radio"></td><td><input name="etudiant_12" value="11_14" type="radio"></td><td><input name="etudiant_12" value="12_14" type="radio"></td><td><input name="etudiant_12" value="13_14" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Florence Hotte</td>
+			<td><input name="etudiant_13" value="1_15" type="radio"></td><td><input name="etudiant_13" value="2_15" checked="checked" type="radio"></td><td><input name="etudiant_13" value="3_15" type="radio"></td><td><input name="etudiant_13" value="4_15" type="radio"></td><td><input name="etudiant_13" value="5_15" type="radio"></td><td><input name="etudiant_13" value="6_15" type="radio"></td><td><input name="etudiant_13" value="7_15" type="radio"></td><td><input name="etudiant_13" value="8_15" type="radio"></td><td><input name="etudiant_13" value="9_15" type="radio"></td><td><input name="etudiant_13" value="10_15" type="radio"></td><td><input name="etudiant_13" value="11_15" type="radio"></td><td><input name="etudiant_13" value="12_15" type="radio"></td><td><input name="etudiant_13" value="13_15" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Min Hae Jeong</td>
+			<td><input name="etudiant_14" value="1_16" type="radio"></td><td><input name="etudiant_14" value="2_16" checked="checked" type="radio"></td><td><input name="etudiant_14" value="3_16" type="radio"></td><td><input name="etudiant_14" value="4_16" type="radio"></td><td><input name="etudiant_14" value="5_16" type="radio"></td><td><input name="etudiant_14" value="6_16" type="radio"></td><td><input name="etudiant_14" value="7_16" type="radio"></td><td><input name="etudiant_14" value="8_16" type="radio"></td><td><input name="etudiant_14" value="9_16" type="radio"></td><td><input name="etudiant_14" value="10_16" type="radio"></td><td><input name="etudiant_14" value="11_16" type="radio"></td><td><input name="etudiant_14" value="12_16" type="radio"></td><td><input name="etudiant_14" value="13_16" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Hélène Jeseney</td>
+			<td><input name="etudiant_15" value="1_18" type="radio"></td><td><input name="etudiant_15" value="2_18" checked="checked" type="radio"></td><td><input name="etudiant_15" value="3_18" type="radio"></td><td><input name="etudiant_15" value="4_18" type="radio"></td><td><input name="etudiant_15" value="5_18" type="radio"></td><td><input name="etudiant_15" value="6_18" type="radio"></td><td><input name="etudiant_15" value="7_18" type="radio"></td><td><input name="etudiant_15" value="8_18" type="radio"></td><td><input name="etudiant_15" value="9_18" type="radio"></td><td><input name="etudiant_15" value="10_18" type="radio"></td><td><input name="etudiant_15" value="11_18" type="radio"></td><td><input name="etudiant_15" value="12_18" type="radio"></td><td><input name="etudiant_15" value="13_18" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Yann Lemaire</td>
+			<td><input name="etudiant_16" value="1_17" type="radio"></td><td><input name="etudiant_16" value="2_17" checked="checked" type="radio"></td><td><input name="etudiant_16" value="3_17" type="radio"></td><td><input name="etudiant_16" value="4_17" type="radio"></td><td><input name="etudiant_16" value="5_17" type="radio"></td><td><input name="etudiant_16" value="6_17" type="radio"></td><td><input name="etudiant_16" value="7_17" type="radio"></td><td><input name="etudiant_16" value="8_17" type="radio"></td><td><input name="etudiant_16" value="9_17" type="radio"></td><td><input name="etudiant_16" value="10_17" type="radio"></td><td><input name="etudiant_16" value="11_17" type="radio"></td><td><input name="etudiant_16" value="12_17" type="radio"></td><td><input name="etudiant_16" value="13_17" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marian Louis</td>
+			<td><input name="etudiant_17" value="1_19" type="radio"></td><td><input name="etudiant_17" value="2_19" checked="checked" type="radio"></td><td><input name="etudiant_17" value="3_19" type="radio"></td><td><input name="etudiant_17" value="4_19" type="radio"></td><td><input name="etudiant_17" value="5_19" type="radio"></td><td><input name="etudiant_17" value="6_19" type="radio"></td><td><input name="etudiant_17" value="7_19" type="radio"></td><td><input name="etudiant_17" value="8_19" type="radio"></td><td><input name="etudiant_17" value="9_19" type="radio"></td><td><input name="etudiant_17" value="10_19" type="radio"></td><td><input name="etudiant_17" value="11_19" type="radio"></td><td><input name="etudiant_17" value="12_19" type="radio"></td><td><input name="etudiant_17" value="13_19" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Thibault Mangeard</td>
+			<td><input name="etudiant_18" value="1_20" type="radio"></td><td><input name="etudiant_18" value="2_20" checked="checked" type="radio"></td><td><input name="etudiant_18" value="3_20" type="radio"></td><td><input name="etudiant_18" value="4_20" type="radio"></td><td><input name="etudiant_18" value="5_20" type="radio"></td><td><input name="etudiant_18" value="6_20" type="radio"></td><td><input name="etudiant_18" value="7_20" type="radio"></td><td><input name="etudiant_18" value="8_20" type="radio"></td><td><input name="etudiant_18" value="9_20" type="radio"></td><td><input name="etudiant_18" value="10_20" type="radio"></td><td><input name="etudiant_18" value="11_20" type="radio"></td><td><input name="etudiant_18" value="12_20" type="radio"></td><td><input name="etudiant_18" value="13_20" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Aline Marche</td>
+			<td><input name="etudiant_19" value="1_21" type="radio"></td><td><input name="etudiant_19" value="2_21" checked="checked" type="radio"></td><td><input name="etudiant_19" value="3_21" type="radio"></td><td><input name="etudiant_19" value="4_21" type="radio"></td><td><input name="etudiant_19" value="5_21" type="radio"></td><td><input name="etudiant_19" value="6_21" type="radio"></td><td><input name="etudiant_19" value="7_21" type="radio"></td><td><input name="etudiant_19" value="8_21" type="radio"></td><td><input name="etudiant_19" value="9_21" type="radio"></td><td><input name="etudiant_19" value="10_21" type="radio"></td><td><input name="etudiant_19" value="11_21" type="radio"></td><td><input name="etudiant_19" value="12_21" type="radio"></td><td><input name="etudiant_19" value="13_21" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marek Marciniak</td>
+			<td><input name="etudiant_20" value="1_22" type="radio"></td><td><input name="etudiant_20" value="2_22" checked="checked" type="radio"></td><td><input name="etudiant_20" value="3_22" type="radio"></td><td><input name="etudiant_20" value="4_22" type="radio"></td><td><input name="etudiant_20" value="5_22" type="radio"></td><td><input name="etudiant_20" value="6_22" type="radio"></td><td><input name="etudiant_20" value="7_22" type="radio"></td><td><input name="etudiant_20" value="8_22" type="radio"></td><td><input name="etudiant_20" value="9_22" type="radio"></td><td><input name="etudiant_20" value="10_22" type="radio"></td><td><input name="etudiant_20" value="11_22" type="radio"></td><td><input name="etudiant_20" value="12_22" type="radio"></td><td><input name="etudiant_20" value="13_22" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Sophie Marechal</td>
+			<td><input name="etudiant_21" value="1_23" type="radio"></td><td><input name="etudiant_21" value="2_23" checked="checked" type="radio"></td><td><input name="etudiant_21" value="3_23" type="radio"></td><td><input name="etudiant_21" value="4_23" type="radio"></td><td><input name="etudiant_21" value="5_23" type="radio"></td><td><input name="etudiant_21" value="6_23" type="radio"></td><td><input name="etudiant_21" value="7_23" type="radio"></td><td><input name="etudiant_21" value="8_23" type="radio"></td><td><input name="etudiant_21" value="9_23" type="radio"></td><td><input name="etudiant_21" value="10_23" type="radio"></td><td><input name="etudiant_21" value="11_23" type="radio"></td><td><input name="etudiant_21" value="12_23" type="radio"></td><td><input name="etudiant_21" value="13_23" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Jean N'Guyen</td>
+			<td><input name="etudiant_22" value="1_24" type="radio"></td><td><input name="etudiant_22" value="2_24" checked="checked" type="radio"></td><td><input name="etudiant_22" value="3_24" type="radio"></td><td><input name="etudiant_22" value="4_24" type="radio"></td><td><input name="etudiant_22" value="5_24" type="radio"></td><td><input name="etudiant_22" value="6_24" type="radio"></td><td><input name="etudiant_22" value="7_24" type="radio"></td><td><input name="etudiant_22" value="8_24" type="radio"></td><td><input name="etudiant_22" value="9_24" type="radio"></td><td><input name="etudiant_22" value="10_24" type="radio"></td><td><input name="etudiant_22" value="11_24" type="radio"></td><td><input name="etudiant_22" value="12_24" type="radio"></td><td><input name="etudiant_22" value="13_24" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Johanna Penet</td>
+			<td><input name="etudiant_23" value="1_25" type="radio"></td><td><input name="etudiant_23" value="2_25" checked="checked" type="radio"></td><td><input name="etudiant_23" value="3_25" type="radio"></td><td><input name="etudiant_23" value="4_25" type="radio"></td><td><input name="etudiant_23" value="5_25" type="radio"></td><td><input name="etudiant_23" value="6_25" type="radio"></td><td><input name="etudiant_23" value="7_25" type="radio"></td><td><input name="etudiant_23" value="8_25" type="radio"></td><td><input name="etudiant_23" value="9_25" type="radio"></td><td><input name="etudiant_23" value="10_25" type="radio"></td><td><input name="etudiant_23" value="11_25" type="radio"></td><td><input name="etudiant_23" value="12_25" type="radio"></td><td><input name="etudiant_23" value="13_25" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Virginie Pinteau</td>
+			<td><input name="etudiant_24" value="1_26" type="radio"></td><td><input name="etudiant_24" value="2_26" checked="checked" type="radio"></td><td><input name="etudiant_24" value="3_26" type="radio"></td><td><input name="etudiant_24" value="4_26" type="radio"></td><td><input name="etudiant_24" value="5_26" type="radio"></td><td><input name="etudiant_24" value="6_26" type="radio"></td><td><input name="etudiant_24" value="7_26" type="radio"></td><td><input name="etudiant_24" value="8_26" type="radio"></td><td><input name="etudiant_24" value="9_26" type="radio"></td><td><input name="etudiant_24" value="10_26" type="radio"></td><td><input name="etudiant_24" value="11_26" type="radio"></td><td><input name="etudiant_24" value="12_26" type="radio"></td><td><input name="etudiant_24" value="13_26" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Romain Poirier</td>
+			<td><input name="etudiant_25" value="1_27" type="radio"></td><td><input name="etudiant_25" value="2_27" checked="checked" type="radio"></td><td><input name="etudiant_25" value="3_27" type="radio"></td><td><input name="etudiant_25" value="4_27" type="radio"></td><td><input name="etudiant_25" value="5_27" type="radio"></td><td><input name="etudiant_25" value="6_27" type="radio"></td><td><input name="etudiant_25" value="7_27" type="radio"></td><td><input name="etudiant_25" value="8_27" type="radio"></td><td><input name="etudiant_25" value="9_27" type="radio"></td><td><input name="etudiant_25" value="10_27" type="radio"></td><td><input name="etudiant_25" value="11_27" type="radio"></td><td><input name="etudiant_25" value="12_27" type="radio"></td><td><input name="etudiant_25" value="13_27" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Romain Simon</td>
+			<td><input name="etudiant_26" value="1_29" type="radio"></td><td><input name="etudiant_26" value="2_29" checked="checked" type="radio"></td><td><input name="etudiant_26" value="3_29" type="radio"></td><td><input name="etudiant_26" value="4_29" type="radio"></td><td><input name="etudiant_26" value="5_29" type="radio"></td><td><input name="etudiant_26" value="6_29" type="radio"></td><td><input name="etudiant_26" value="7_29" type="radio"></td><td><input name="etudiant_26" value="8_29" type="radio"></td><td><input name="etudiant_26" value="9_29" type="radio"></td><td><input name="etudiant_26" value="10_29" type="radio"></td><td><input name="etudiant_26" value="11_29" type="radio"></td><td><input name="etudiant_26" value="12_29" type="radio"></td><td><input name="etudiant_26" value="13_29" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Alice Steinmetz</td>
+			<td><input name="etudiant_27" value="1_30" type="radio"></td><td><input name="etudiant_27" value="2_30" checked="checked" type="radio"></td><td><input name="etudiant_27" value="3_30" type="radio"></td><td><input name="etudiant_27" value="4_30" type="radio"></td><td><input name="etudiant_27" value="5_30" type="radio"></td><td><input name="etudiant_27" value="6_30" type="radio"></td><td><input name="etudiant_27" value="7_30" type="radio"></td><td><input name="etudiant_27" value="8_30" type="radio"></td><td><input name="etudiant_27" value="9_30" type="radio"></td><td><input name="etudiant_27" value="10_30" type="radio"></td><td><input name="etudiant_27" value="11_30" type="radio"></td><td><input name="etudiant_27" value="12_30" type="radio"></td><td><input name="etudiant_27" value="13_30" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Tiffany Tirmant</td>
+			<td><input name="etudiant_28" value="1_31" type="radio"></td><td><input name="etudiant_28" value="2_31" checked="checked" type="radio"></td><td><input name="etudiant_28" value="3_31" type="radio"></td><td><input name="etudiant_28" value="4_31" type="radio"></td><td><input name="etudiant_28" value="5_31" type="radio"></td><td><input name="etudiant_28" value="6_31" type="radio"></td><td><input name="etudiant_28" value="7_31" type="radio"></td><td><input name="etudiant_28" value="8_31" type="radio"></td><td><input name="etudiant_28" value="9_31" type="radio"></td><td><input name="etudiant_28" value="10_31" type="radio"></td><td><input name="etudiant_28" value="11_31" type="radio"></td><td><input name="etudiant_28" value="12_31" type="radio"></td><td><input name="etudiant_28" value="13_31" type="radio"></td>
+		</tr>
+		<tr class="semestre">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+				<tr>
+			<td class="nom">Cyril Doche</td>
+			<td><input name="etudiant_29" value="1_37" type="radio"></td><td><input name="etudiant_29" value="2_37" type="radio"></td><td><input name="etudiant_29" value="3_37" checked="checked" type="radio"></td><td><input name="etudiant_29" value="4_37" type="radio"></td><td><input name="etudiant_29" value="5_37" type="radio"></td><td><input name="etudiant_29" value="6_37" type="radio"></td><td><input name="etudiant_29" value="7_37" type="radio"></td><td><input name="etudiant_29" value="8_37" type="radio"></td><td><input name="etudiant_29" value="9_37" type="radio"></td><td><input name="etudiant_29" value="10_37" type="radio"></td><td><input name="etudiant_29" value="11_37" type="radio"></td><td><input name="etudiant_29" value="12_37" type="radio"></td><td><input name="etudiant_29" value="13_37" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Nelly Dumez</td>
+			<td><input name="etudiant_30" value="1_38" type="radio"></td><td><input name="etudiant_30" value="2_38" type="radio"></td><td><input name="etudiant_30" value="3_38" checked="checked" type="radio"></td><td><input name="etudiant_30" value="4_38" type="radio"></td><td><input name="etudiant_30" value="5_38" type="radio"></td><td><input name="etudiant_30" value="6_38" type="radio"></td><td><input name="etudiant_30" value="7_38" type="radio"></td><td><input name="etudiant_30" value="8_38" type="radio"></td><td><input name="etudiant_30" value="9_38" type="radio"></td><td><input name="etudiant_30" value="10_38" type="radio"></td><td><input name="etudiant_30" value="11_38" type="radio"></td><td><input name="etudiant_30" value="12_38" type="radio"></td><td><input name="etudiant_30" value="13_38" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Antoine Kempa</td>
+			<td><input name="etudiant_31" value="1_46" type="radio"></td><td><input name="etudiant_31" value="2_46" type="radio"></td><td><input name="etudiant_31" value="3_46" checked="checked" type="radio"></td><td><input name="etudiant_31" value="4_46" type="radio"></td><td><input name="etudiant_31" value="5_46" type="radio"></td><td><input name="etudiant_31" value="6_46" type="radio"></td><td><input name="etudiant_31" value="7_46" type="radio"></td><td><input name="etudiant_31" value="8_46" type="radio"></td><td><input name="etudiant_31" value="9_46" type="radio"></td><td><input name="etudiant_31" value="10_46" type="radio"></td><td><input name="etudiant_31" value="11_46" type="radio"></td><td><input name="etudiant_31" value="12_46" type="radio"></td><td><input name="etudiant_31" value="13_46" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Nicolas Cousin</td>
+			<td><input name="etudiant_32" value="1_33" type="radio"></td><td><input name="etudiant_32" value="2_33" type="radio"></td><td><input name="etudiant_32" value="3_33" type="radio"></td><td><input name="etudiant_32" value="4_33" checked="checked" type="radio"></td><td><input name="etudiant_32" value="5_33" type="radio"></td><td><input name="etudiant_32" value="6_33" type="radio"></td><td><input name="etudiant_32" value="7_33" type="radio"></td><td><input name="etudiant_32" value="8_33" type="radio"></td><td><input name="etudiant_32" value="9_33" type="radio"></td><td><input name="etudiant_32" value="10_33" type="radio"></td><td><input name="etudiant_32" value="11_33" type="radio"></td><td><input name="etudiant_32" value="12_33" type="radio"></td><td><input name="etudiant_32" value="13_33" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marion Coville</td>
+			<td><input name="etudiant_33" value="1_34" type="radio"></td><td><input name="etudiant_33" value="2_34" type="radio"></td><td><input name="etudiant_33" value="3_34" type="radio"></td><td><input name="etudiant_33" value="4_34" checked="checked" type="radio"></td><td><input name="etudiant_33" value="5_34" type="radio"></td><td><input name="etudiant_33" value="6_34" type="radio"></td><td><input name="etudiant_33" value="7_34" type="radio"></td><td><input name="etudiant_33" value="8_34" type="radio"></td><td><input name="etudiant_33" value="9_34" type="radio"></td><td><input name="etudiant_33" value="10_34" type="radio"></td><td><input name="etudiant_33" value="11_34" type="radio"></td><td><input name="etudiant_33" value="12_34" type="radio"></td><td><input name="etudiant_33" value="13_34" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Aurélie Delaporte</td>
+			<td><input name="etudiant_34" value="1_35" type="radio"></td><td><input name="etudiant_34" value="2_35" type="radio"></td><td><input name="etudiant_34" value="3_35" type="radio"></td><td><input name="etudiant_34" value="4_35" checked="checked" type="radio"></td><td><input name="etudiant_34" value="5_35" type="radio"></td><td><input name="etudiant_34" value="6_35" type="radio"></td><td><input name="etudiant_34" value="7_35" type="radio"></td><td><input name="etudiant_34" value="8_35" type="radio"></td><td><input name="etudiant_34" value="9_35" type="radio"></td><td><input name="etudiant_34" value="10_35" type="radio"></td><td><input name="etudiant_34" value="11_35" type="radio"></td><td><input name="etudiant_34" value="12_35" type="radio"></td><td><input name="etudiant_34" value="13_35" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marie Dupont</td>
+			<td><input name="etudiant_35" value="1_39" type="radio"></td><td><input name="etudiant_35" value="2_39" type="radio"></td><td><input name="etudiant_35" value="3_39" type="radio"></td><td><input name="etudiant_35" value="4_39" checked="checked" type="radio"></td><td><input name="etudiant_35" value="5_39" type="radio"></td><td><input name="etudiant_35" value="6_39" type="radio"></td><td><input name="etudiant_35" value="7_39" type="radio"></td><td><input name="etudiant_35" value="8_39" type="radio"></td><td><input name="etudiant_35" value="9_39" type="radio"></td><td><input name="etudiant_35" value="10_39" type="radio"></td><td><input name="etudiant_35" value="11_39" type="radio"></td><td><input name="etudiant_35" value="12_39" type="radio"></td><td><input name="etudiant_35" value="13_39" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Baptiste Fichaux</td>
+			<td><input name="etudiant_36" value="1_40" type="radio"></td><td><input name="etudiant_36" value="2_40" type="radio"></td><td><input name="etudiant_36" value="3_40" type="radio"></td><td><input name="etudiant_36" value="4_40" checked="checked" type="radio"></td><td><input name="etudiant_36" value="5_40" type="radio"></td><td><input name="etudiant_36" value="6_40" type="radio"></td><td><input name="etudiant_36" value="7_40" type="radio"></td><td><input name="etudiant_36" value="8_40" type="radio"></td><td><input name="etudiant_36" value="9_40" type="radio"></td><td><input name="etudiant_36" value="10_40" type="radio"></td><td><input name="etudiant_36" value="11_40" type="radio"></td><td><input name="etudiant_36" value="12_40" type="radio"></td><td><input name="etudiant_36" value="13_40" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Quentin Fovet</td>
+			<td><input name="etudiant_37" value="1_42" type="radio"></td><td><input name="etudiant_37" value="2_42" type="radio"></td><td><input name="etudiant_37" value="3_42" type="radio"></td><td><input name="etudiant_37" value="4_42" checked="checked" type="radio"></td><td><input name="etudiant_37" value="5_42" type="radio"></td><td><input name="etudiant_37" value="6_42" type="radio"></td><td><input name="etudiant_37" value="7_42" type="radio"></td><td><input name="etudiant_37" value="8_42" type="radio"></td><td><input name="etudiant_37" value="9_42" type="radio"></td><td><input name="etudiant_37" value="10_42" type="radio"></td><td><input name="etudiant_37" value="11_42" type="radio"></td><td><input name="etudiant_37" value="12_42" type="radio"></td><td><input name="etudiant_37" value="13_42" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Emilie Heurteur</td>
+			<td><input name="etudiant_38" value="1_44" type="radio"></td><td><input name="etudiant_38" value="2_44" type="radio"></td><td><input name="etudiant_38" value="3_44" type="radio"></td><td><input name="etudiant_38" value="4_44" checked="checked" type="radio"></td><td><input name="etudiant_38" value="5_44" type="radio"></td><td><input name="etudiant_38" value="6_44" type="radio"></td><td><input name="etudiant_38" value="7_44" type="radio"></td><td><input name="etudiant_38" value="8_44" type="radio"></td><td><input name="etudiant_38" value="9_44" type="radio"></td><td><input name="etudiant_38" value="10_44" type="radio"></td><td><input name="etudiant_38" value="11_44" type="radio"></td><td><input name="etudiant_38" value="12_44" type="radio"></td><td><input name="etudiant_38" value="13_44" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Vanessa Jadoux</td>
+			<td><input name="etudiant_39" value="1_45" type="radio"></td><td><input name="etudiant_39" value="2_45" type="radio"></td><td><input name="etudiant_39" value="3_45" type="radio"></td><td><input name="etudiant_39" value="4_45" checked="checked" type="radio"></td><td><input name="etudiant_39" value="5_45" type="radio"></td><td><input name="etudiant_39" value="6_45" type="radio"></td><td><input name="etudiant_39" value="7_45" type="radio"></td><td><input name="etudiant_39" value="8_45" type="radio"></td><td><input name="etudiant_39" value="9_45" type="radio"></td><td><input name="etudiant_39" value="10_45" type="radio"></td><td><input name="etudiant_39" value="11_45" type="radio"></td><td><input name="etudiant_39" value="12_45" type="radio"></td><td><input name="etudiant_39" value="13_45" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Camille Lesouef</td>
+			<td><input name="etudiant_40" value="1_47" type="radio"></td><td><input name="etudiant_40" value="2_47" type="radio"></td><td><input name="etudiant_40" value="3_47" type="radio"></td><td><input name="etudiant_40" value="4_47" checked="checked" type="radio"></td><td><input name="etudiant_40" value="5_47" type="radio"></td><td><input name="etudiant_40" value="6_47" type="radio"></td><td><input name="etudiant_40" value="7_47" type="radio"></td><td><input name="etudiant_40" value="8_47" type="radio"></td><td><input name="etudiant_40" value="9_47" type="radio"></td><td><input name="etudiant_40" value="10_47" type="radio"></td><td><input name="etudiant_40" value="11_47" type="radio"></td><td><input name="etudiant_40" value="12_47" type="radio"></td><td><input name="etudiant_40" value="13_47" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">rebecca Lor</td>
+			<td><input name="etudiant_41" value="1_48" type="radio"></td><td><input name="etudiant_41" value="2_48" type="radio"></td><td><input name="etudiant_41" value="3_48" type="radio"></td><td><input name="etudiant_41" value="4_48" checked="checked" type="radio"></td><td><input name="etudiant_41" value="5_48" type="radio"></td><td><input name="etudiant_41" value="6_48" type="radio"></td><td><input name="etudiant_41" value="7_48" type="radio"></td><td><input name="etudiant_41" value="8_48" type="radio"></td><td><input name="etudiant_41" value="9_48" type="radio"></td><td><input name="etudiant_41" value="10_48" type="radio"></td><td><input name="etudiant_41" value="11_48" type="radio"></td><td><input name="etudiant_41" value="12_48" type="radio"></td><td><input name="etudiant_41" value="13_48" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Delphine Michaux</td>
+			<td><input name="etudiant_42" value="1_49" type="radio"></td><td><input name="etudiant_42" value="2_49" type="radio"></td><td><input name="etudiant_42" value="3_49" type="radio"></td><td><input name="etudiant_42" value="4_49" checked="checked" type="radio"></td><td><input name="etudiant_42" value="5_49" type="radio"></td><td><input name="etudiant_42" value="6_49" type="radio"></td><td><input name="etudiant_42" value="7_49" type="radio"></td><td><input name="etudiant_42" value="8_49" type="radio"></td><td><input name="etudiant_42" value="9_49" type="radio"></td><td><input name="etudiant_42" value="10_49" type="radio"></td><td><input name="etudiant_42" value="11_49" type="radio"></td><td><input name="etudiant_42" value="12_49" type="radio"></td><td><input name="etudiant_42" value="13_49" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Cécilia Philippe</td>
+			<td><input name="etudiant_43" value="1_51" type="radio"></td><td><input name="etudiant_43" value="2_51" type="radio"></td><td><input name="etudiant_43" value="3_51" type="radio"></td><td><input name="etudiant_43" value="4_51" checked="checked" type="radio"></td><td><input name="etudiant_43" value="5_51" type="radio"></td><td><input name="etudiant_43" value="6_51" type="radio"></td><td><input name="etudiant_43" value="7_51" type="radio"></td><td><input name="etudiant_43" value="8_51" type="radio"></td><td><input name="etudiant_43" value="9_51" type="radio"></td><td><input name="etudiant_43" value="10_51" type="radio"></td><td><input name="etudiant_43" value="11_51" type="radio"></td><td><input name="etudiant_43" value="12_51" type="radio"></td><td><input name="etudiant_43" value="13_51" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Ulysse Pujo</td>
+			<td><input name="etudiant_44" value="1_53" type="radio"></td><td><input name="etudiant_44" value="2_53" type="radio"></td><td><input name="etudiant_44" value="3_53" type="radio"></td><td><input name="etudiant_44" value="4_53" checked="checked" type="radio"></td><td><input name="etudiant_44" value="5_53" type="radio"></td><td><input name="etudiant_44" value="6_53" type="radio"></td><td><input name="etudiant_44" value="7_53" type="radio"></td><td><input name="etudiant_44" value="8_53" type="radio"></td><td><input name="etudiant_44" value="9_53" type="radio"></td><td><input name="etudiant_44" value="10_53" type="radio"></td><td><input name="etudiant_44" value="11_53" type="radio"></td><td><input name="etudiant_44" value="12_53" type="radio"></td><td><input name="etudiant_44" value="13_53" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Clémence Richard</td>
+			<td><input name="etudiant_45" value="1_52" type="radio"></td><td><input name="etudiant_45" value="2_52" type="radio"></td><td><input name="etudiant_45" value="3_52" type="radio"></td><td><input name="etudiant_45" value="4_52" checked="checked" type="radio"></td><td><input name="etudiant_45" value="5_52" type="radio"></td><td><input name="etudiant_45" value="6_52" type="radio"></td><td><input name="etudiant_45" value="7_52" type="radio"></td><td><input name="etudiant_45" value="8_52" type="radio"></td><td><input name="etudiant_45" value="9_52" type="radio"></td><td><input name="etudiant_45" value="10_52" type="radio"></td><td><input name="etudiant_45" value="11_52" type="radio"></td><td><input name="etudiant_45" value="12_52" type="radio"></td><td><input name="etudiant_45" value="13_52" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Pierre Sauvage</td>
+			<td><input name="etudiant_46" value="1_54" type="radio"></td><td><input name="etudiant_46" value="2_54" type="radio"></td><td><input name="etudiant_46" value="3_54" type="radio"></td><td><input name="etudiant_46" value="4_54" checked="checked" type="radio"></td><td><input name="etudiant_46" value="5_54" type="radio"></td><td><input name="etudiant_46" value="6_54" type="radio"></td><td><input name="etudiant_46" value="7_54" type="radio"></td><td><input name="etudiant_46" value="8_54" type="radio"></td><td><input name="etudiant_46" value="9_54" type="radio"></td><td><input name="etudiant_46" value="10_54" type="radio"></td><td><input name="etudiant_46" value="11_54" type="radio"></td><td><input name="etudiant_46" value="12_54" type="radio"></td><td><input name="etudiant_46" value="13_54" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Roman Seban</td>
+			<td><input name="etudiant_47" value="1_55" type="radio"></td><td><input name="etudiant_47" value="2_55" type="radio"></td><td><input name="etudiant_47" value="3_55" type="radio"></td><td><input name="etudiant_47" value="4_55" checked="checked" type="radio"></td><td><input name="etudiant_47" value="5_55" type="radio"></td><td><input name="etudiant_47" value="6_55" type="radio"></td><td><input name="etudiant_47" value="7_55" type="radio"></td><td><input name="etudiant_47" value="8_55" type="radio"></td><td><input name="etudiant_47" value="9_55" type="radio"></td><td><input name="etudiant_47" value="10_55" type="radio"></td><td><input name="etudiant_47" value="11_55" type="radio"></td><td><input name="etudiant_47" value="12_55" type="radio"></td><td><input name="etudiant_47" value="13_55" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Jane Secret</td>
+			<td><input name="etudiant_48" value="1_56" type="radio"></td><td><input name="etudiant_48" value="2_56" type="radio"></td><td><input name="etudiant_48" value="3_56" type="radio"></td><td><input name="etudiant_48" value="4_56" checked="checked" type="radio"></td><td><input name="etudiant_48" value="5_56" type="radio"></td><td><input name="etudiant_48" value="6_56" type="radio"></td><td><input name="etudiant_48" value="7_56" type="radio"></td><td><input name="etudiant_48" value="8_56" type="radio"></td><td><input name="etudiant_48" value="9_56" type="radio"></td><td><input name="etudiant_48" value="10_56" type="radio"></td><td><input name="etudiant_48" value="11_56" type="radio"></td><td><input name="etudiant_48" value="12_56" type="radio"></td><td><input name="etudiant_48" value="13_56" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Hirgen Taraku</td>
+			<td><input name="etudiant_49" value="1_57" type="radio"></td><td><input name="etudiant_49" value="2_57" type="radio"></td><td><input name="etudiant_49" value="3_57" type="radio"></td><td><input name="etudiant_49" value="4_57" checked="checked" type="radio"></td><td><input name="etudiant_49" value="5_57" type="radio"></td><td><input name="etudiant_49" value="6_57" type="radio"></td><td><input name="etudiant_49" value="7_57" type="radio"></td><td><input name="etudiant_49" value="8_57" type="radio"></td><td><input name="etudiant_49" value="9_57" type="radio"></td><td><input name="etudiant_49" value="10_57" type="radio"></td><td><input name="etudiant_49" value="11_57" type="radio"></td><td><input name="etudiant_49" value="12_57" type="radio"></td><td><input name="etudiant_49" value="13_57" type="radio"></td>
+		</tr>
+				<tr class="semestre">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="nom">Caroline Deroo</td>
+			<td><input name="etudiant_50" value="1_36" type="radio"></td><td><input name="etudiant_50" value="2_36" type="radio"></td><td><input name="etudiant_50" value="3_36" type="radio"></td><td><input name="etudiant_50" value="4_36" type="radio"></td><td><input name="etudiant_50" value="5_36" checked="checked" type="radio"></td><td><input name="etudiant_50" value="6_36" type="radio"></td><td><input name="etudiant_50" value="7_36" type="radio"></td><td><input name="etudiant_50" value="8_36" type="radio"></td><td><input name="etudiant_50" value="9_36" type="radio"></td><td><input name="etudiant_50" value="10_36" type="radio"></td><td><input name="etudiant_50" value="11_36" type="radio"></td><td><input name="etudiant_50" value="12_36" type="radio"></td><td><input name="etudiant_50" value="13_36" type="radio"></td>
+		</tr>
+		
+				<tr>
+			<td class="nom">Pauline Gourdet</td>
+			<td><input name="etudiant_51" value="1_43" type="radio"></td><td><input name="etudiant_51" value="2_43" type="radio"></td><td><input name="etudiant_51" value="3_43" type="radio"></td><td><input name="etudiant_51" value="4_43" type="radio"></td><td><input name="etudiant_51" value="5_43" checked="checked" type="radio"></td><td><input name="etudiant_51" value="6_43" type="radio"></td><td><input name="etudiant_51" value="7_43" type="radio"></td><td><input name="etudiant_51" value="8_43" type="radio"></td><td><input name="etudiant_51" value="9_43" type="radio"></td><td><input name="etudiant_51" value="10_43" type="radio"></td><td><input name="etudiant_51" value="11_43" type="radio"></td><td><input name="etudiant_51" value="12_43" type="radio"></td><td><input name="etudiant_51" value="13_43" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">François Nataf</td>
+			<td><input name="etudiant_52" value="1_50" type="radio"></td><td><input name="etudiant_52" value="2_50" type="radio"></td><td><input name="etudiant_52" value="3_50" type="radio"></td><td><input name="etudiant_52" value="4_50" type="radio"></td><td><input name="etudiant_52" value="5_50" checked="checked" type="radio"></td><td><input name="etudiant_52" value="6_50" type="radio"></td><td><input name="etudiant_52" value="7_50" type="radio"></td><td><input name="etudiant_52" value="8_50" type="radio"></td><td><input name="etudiant_52" value="9_50" type="radio"></td><td><input name="etudiant_52" value="10_50" type="radio"></td><td><input name="etudiant_52" value="11_50" type="radio"></td><td><input name="etudiant_52" value="12_50" type="radio"></td><td><input name="etudiant_52" value="13_50" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Thibault Brassart</td>
+			<td><input name="etudiant_53" value="1_58" type="radio"></td><td><input name="etudiant_53" value="2_58" type="radio"></td><td><input name="etudiant_53" value="3_58" type="radio"></td><td><input name="etudiant_53" value="4_58" type="radio"></td><td><input name="etudiant_53" value="5_58" type="radio"></td><td><input name="etudiant_53" value="6_58" checked="checked" type="radio"></td><td><input name="etudiant_53" value="7_58" type="radio"></td><td><input name="etudiant_53" value="8_58" type="radio"></td><td><input name="etudiant_53" value="9_58" type="radio"></td><td><input name="etudiant_53" value="10_58" type="radio"></td><td><input name="etudiant_53" value="11_58" type="radio"></td><td><input name="etudiant_53" value="12_58" type="radio"></td><td><input name="etudiant_53" value="13_58" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Claire Cencig</td>
+			<td><input name="etudiant_54" value="1_59" type="radio"></td><td><input name="etudiant_54" value="2_59" type="radio"></td><td><input name="etudiant_54" value="3_59" type="radio"></td><td><input name="etudiant_54" value="4_59" type="radio"></td><td><input name="etudiant_54" value="5_59" type="radio"></td><td><input name="etudiant_54" value="6_59" checked="checked" type="radio"></td><td><input name="etudiant_54" value="7_59" type="radio"></td><td><input name="etudiant_54" value="8_59" type="radio"></td><td><input name="etudiant_54" value="9_59" type="radio"></td><td><input name="etudiant_54" value="10_59" type="radio"></td><td><input name="etudiant_54" value="11_59" type="radio"></td><td><input name="etudiant_54" value="12_59" type="radio"></td><td><input name="etudiant_54" value="13_59" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Valérie Degousée</td>
+			<td><input name="etudiant_55" value="1_60" type="radio"></td><td><input name="etudiant_55" value="2_60" type="radio"></td><td><input name="etudiant_55" value="3_60" type="radio"></td><td><input name="etudiant_55" value="4_60" type="radio"></td><td><input name="etudiant_55" value="5_60" type="radio"></td><td><input name="etudiant_55" value="6_60" checked="checked" type="radio"></td><td><input name="etudiant_55" value="7_60" type="radio"></td><td><input name="etudiant_55" value="8_60" type="radio"></td><td><input name="etudiant_55" value="9_60" type="radio"></td><td><input name="etudiant_55" value="10_60" type="radio"></td><td><input name="etudiant_55" value="11_60" type="radio"></td><td><input name="etudiant_55" value="12_60" type="radio"></td><td><input name="etudiant_55" value="13_60" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Laureen Degrond</td>
+			<td><input name="etudiant_56" value="1_61" type="radio"></td><td><input name="etudiant_56" value="2_61" type="radio"></td><td><input name="etudiant_56" value="3_61" type="radio"></td><td><input name="etudiant_56" value="4_61" type="radio"></td><td><input name="etudiant_56" value="5_61" type="radio"></td><td><input name="etudiant_56" value="6_61" checked="checked" type="radio"></td><td><input name="etudiant_56" value="7_61" type="radio"></td><td><input name="etudiant_56" value="8_61" type="radio"></td><td><input name="etudiant_56" value="9_61" type="radio"></td><td><input name="etudiant_56" value="10_61" type="radio"></td><td><input name="etudiant_56" value="11_61" type="radio"></td><td><input name="etudiant_56" value="12_61" type="radio"></td><td><input name="etudiant_56" value="13_61" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Mickael Douliez</td>
+			<td><input name="etudiant_57" value="1_62" type="radio"></td><td><input name="etudiant_57" value="2_62" type="radio"></td><td><input name="etudiant_57" value="3_62" type="radio"></td><td><input name="etudiant_57" value="4_62" type="radio"></td><td><input name="etudiant_57" value="5_62" type="radio"></td><td><input name="etudiant_57" value="6_62" checked="checked" type="radio"></td><td><input name="etudiant_57" value="7_62" type="radio"></td><td><input name="etudiant_57" value="8_62" type="radio"></td><td><input name="etudiant_57" value="9_62" type="radio"></td><td><input name="etudiant_57" value="10_62" type="radio"></td><td><input name="etudiant_57" value="11_62" type="radio"></td><td><input name="etudiant_57" value="12_62" type="radio"></td><td><input name="etudiant_57" value="13_62" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marjorie Dublicq</td>
+			<td><input name="etudiant_58" value="1_63" type="radio"></td><td><input name="etudiant_58" value="2_63" type="radio"></td><td><input name="etudiant_58" value="3_63" type="radio"></td><td><input name="etudiant_58" value="4_63" type="radio"></td><td><input name="etudiant_58" value="5_63" type="radio"></td><td><input name="etudiant_58" value="6_63" checked="checked" type="radio"></td><td><input name="etudiant_58" value="7_63" type="radio"></td><td><input name="etudiant_58" value="8_63" type="radio"></td><td><input name="etudiant_58" value="9_63" type="radio"></td><td><input name="etudiant_58" value="10_63" type="radio"></td><td><input name="etudiant_58" value="11_63" type="radio"></td><td><input name="etudiant_58" value="12_63" type="radio"></td><td><input name="etudiant_58" value="13_63" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Mickael Gondre</td>
+			<td><input name="etudiant_59" value="1_64" type="radio"></td><td><input name="etudiant_59" value="2_64" type="radio"></td><td><input name="etudiant_59" value="3_64" type="radio"></td><td><input name="etudiant_59" value="4_64" type="radio"></td><td><input name="etudiant_59" value="5_64" type="radio"></td><td><input name="etudiant_59" value="6_64" checked="checked" type="radio"></td><td><input name="etudiant_59" value="7_64" type="radio"></td><td><input name="etudiant_59" value="8_64" type="radio"></td><td><input name="etudiant_59" value="9_64" type="radio"></td><td><input name="etudiant_59" value="10_64" type="radio"></td><td><input name="etudiant_59" value="11_64" type="radio"></td><td><input name="etudiant_59" value="12_64" type="radio"></td><td><input name="etudiant_59" value="13_64" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Philippe Gras</td>
+			<td><input name="etudiant_60" value="1_65" type="radio"></td><td><input name="etudiant_60" value="2_65" type="radio"></td><td><input name="etudiant_60" value="3_65" type="radio"></td><td><input name="etudiant_60" value="4_65" type="radio"></td><td><input name="etudiant_60" value="5_65" type="radio"></td><td><input name="etudiant_60" value="6_65" checked="checked" type="radio"></td><td><input name="etudiant_60" value="7_65" type="radio"></td><td><input name="etudiant_60" value="8_65" type="radio"></td><td><input name="etudiant_60" value="9_65" type="radio"></td><td><input name="etudiant_60" value="10_65" type="radio"></td><td><input name="etudiant_60" value="11_65" type="radio"></td><td><input name="etudiant_60" value="12_65" type="radio"></td><td><input name="etudiant_60" value="13_65" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Gerald Guerella</td>
+			<td><input name="etudiant_61" value="1_66" type="radio"></td><td><input name="etudiant_61" value="2_66" type="radio"></td><td><input name="etudiant_61" value="3_66" type="radio"></td><td><input name="etudiant_61" value="4_66" type="radio"></td><td><input name="etudiant_61" value="5_66" type="radio"></td><td><input name="etudiant_61" value="6_66" checked="checked" type="radio"></td><td><input name="etudiant_61" value="7_66" type="radio"></td><td><input name="etudiant_61" value="8_66" type="radio"></td><td><input name="etudiant_61" value="9_66" type="radio"></td><td><input name="etudiant_61" value="10_66" type="radio"></td><td><input name="etudiant_61" value="11_66" type="radio"></td><td><input name="etudiant_61" value="12_66" type="radio"></td><td><input name="etudiant_61" value="13_66" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marie Guillaume</td>
+			<td><input name="etudiant_62" value="1_67" type="radio"></td><td><input name="etudiant_62" value="2_67" type="radio"></td><td><input name="etudiant_62" value="3_67" type="radio"></td><td><input name="etudiant_62" value="4_67" type="radio"></td><td><input name="etudiant_62" value="5_67" type="radio"></td><td><input name="etudiant_62" value="6_67" checked="checked" type="radio"></td><td><input name="etudiant_62" value="7_67" type="radio"></td><td><input name="etudiant_62" value="8_67" type="radio"></td><td><input name="etudiant_62" value="9_67" type="radio"></td><td><input name="etudiant_62" value="10_67" type="radio"></td><td><input name="etudiant_62" value="11_67" type="radio"></td><td><input name="etudiant_62" value="12_67" type="radio"></td><td><input name="etudiant_62" value="13_67" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Cécile Hecquet</td>
+			<td><input name="etudiant_63" value="1_68" type="radio"></td><td><input name="etudiant_63" value="2_68" type="radio"></td><td><input name="etudiant_63" value="3_68" type="radio"></td><td><input name="etudiant_63" value="4_68" type="radio"></td><td><input name="etudiant_63" value="5_68" type="radio"></td><td><input name="etudiant_63" value="6_68" checked="checked" type="radio"></td><td><input name="etudiant_63" value="7_68" type="radio"></td><td><input name="etudiant_63" value="8_68" type="radio"></td><td><input name="etudiant_63" value="9_68" type="radio"></td><td><input name="etudiant_63" value="10_68" type="radio"></td><td><input name="etudiant_63" value="11_68" type="radio"></td><td><input name="etudiant_63" value="12_68" type="radio"></td><td><input name="etudiant_63" value="13_68" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Julie Linder</td>
+			<td><input name="etudiant_64" value="1_69" type="radio"></td><td><input name="etudiant_64" value="2_69" type="radio"></td><td><input name="etudiant_64" value="3_69" type="radio"></td><td><input name="etudiant_64" value="4_69" type="radio"></td><td><input name="etudiant_64" value="5_69" type="radio"></td><td><input name="etudiant_64" value="6_69" checked="checked" type="radio"></td><td><input name="etudiant_64" value="7_69" type="radio"></td><td><input name="etudiant_64" value="8_69" type="radio"></td><td><input name="etudiant_64" value="9_69" type="radio"></td><td><input name="etudiant_64" value="10_69" type="radio"></td><td><input name="etudiant_64" value="11_69" type="radio"></td><td><input name="etudiant_64" value="12_69" type="radio"></td><td><input name="etudiant_64" value="13_69" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Samuel Markiewicz</td>
+			<td><input name="etudiant_65" value="1_70" type="radio"></td><td><input name="etudiant_65" value="2_70" type="radio"></td><td><input name="etudiant_65" value="3_70" type="radio"></td><td><input name="etudiant_65" value="4_70" type="radio"></td><td><input name="etudiant_65" value="5_70" type="radio"></td><td><input name="etudiant_65" value="6_70" checked="checked" type="radio"></td><td><input name="etudiant_65" value="7_70" type="radio"></td><td><input name="etudiant_65" value="8_70" type="radio"></td><td><input name="etudiant_65" value="9_70" type="radio"></td><td><input name="etudiant_65" value="10_70" type="radio"></td><td><input name="etudiant_65" value="11_70" type="radio"></td><td><input name="etudiant_65" value="12_70" type="radio"></td><td><input name="etudiant_65" value="13_70" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Juliette Martin</td>
+			<td><input name="etudiant_66" value="1_71" type="radio"></td><td><input name="etudiant_66" value="2_71" type="radio"></td><td><input name="etudiant_66" value="3_71" type="radio"></td><td><input name="etudiant_66" value="4_71" type="radio"></td><td><input name="etudiant_66" value="5_71" type="radio"></td><td><input name="etudiant_66" value="6_71" checked="checked" type="radio"></td><td><input name="etudiant_66" value="7_71" type="radio"></td><td><input name="etudiant_66" value="8_71" type="radio"></td><td><input name="etudiant_66" value="9_71" type="radio"></td><td><input name="etudiant_66" value="10_71" type="radio"></td><td><input name="etudiant_66" value="11_71" type="radio"></td><td><input name="etudiant_66" value="12_71" type="radio"></td><td><input name="etudiant_66" value="13_71" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Nicolas Millot</td>
+			<td><input name="etudiant_67" value="1_72" type="radio"></td><td><input name="etudiant_67" value="2_72" type="radio"></td><td><input name="etudiant_67" value="3_72" type="radio"></td><td><input name="etudiant_67" value="4_72" type="radio"></td><td><input name="etudiant_67" value="5_72" type="radio"></td><td><input name="etudiant_67" value="6_72" checked="checked" type="radio"></td><td><input name="etudiant_67" value="7_72" type="radio"></td><td><input name="etudiant_67" value="8_72" type="radio"></td><td><input name="etudiant_67" value="9_72" type="radio"></td><td><input name="etudiant_67" value="10_72" type="radio"></td><td><input name="etudiant_67" value="11_72" type="radio"></td><td><input name="etudiant_67" value="12_72" type="radio"></td><td><input name="etudiant_67" value="13_72" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Elsa Mora</td>
+			<td><input name="etudiant_68" value="1_73" type="radio"></td><td><input name="etudiant_68" value="2_73" type="radio"></td><td><input name="etudiant_68" value="3_73" type="radio"></td><td><input name="etudiant_68" value="4_73" type="radio"></td><td><input name="etudiant_68" value="5_73" type="radio"></td><td><input name="etudiant_68" value="6_73" checked="checked" type="radio"></td><td><input name="etudiant_68" value="7_73" type="radio"></td><td><input name="etudiant_68" value="8_73" type="radio"></td><td><input name="etudiant_68" value="9_73" type="radio"></td><td><input name="etudiant_68" value="10_73" type="radio"></td><td><input name="etudiant_68" value="11_73" type="radio"></td><td><input name="etudiant_68" value="12_73" type="radio"></td><td><input name="etudiant_68" value="13_73" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Maureen Morel</td>
+			<td><input name="etudiant_69" value="1_74" type="radio"></td><td><input name="etudiant_69" value="2_74" type="radio"></td><td><input name="etudiant_69" value="3_74" type="radio"></td><td><input name="etudiant_69" value="4_74" type="radio"></td><td><input name="etudiant_69" value="5_74" type="radio"></td><td><input name="etudiant_69" value="6_74" checked="checked" type="radio"></td><td><input name="etudiant_69" value="7_74" type="radio"></td><td><input name="etudiant_69" value="8_74" type="radio"></td><td><input name="etudiant_69" value="9_74" type="radio"></td><td><input name="etudiant_69" value="10_74" type="radio"></td><td><input name="etudiant_69" value="11_74" type="radio"></td><td><input name="etudiant_69" value="12_74" type="radio"></td><td><input name="etudiant_69" value="13_74" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Sebastien Plaignaud</td>
+			<td><input name="etudiant_70" value="1_75" type="radio"></td><td><input name="etudiant_70" value="2_75" type="radio"></td><td><input name="etudiant_70" value="3_75" type="radio"></td><td><input name="etudiant_70" value="4_75" type="radio"></td><td><input name="etudiant_70" value="5_75" type="radio"></td><td><input name="etudiant_70" value="6_75" checked="checked" type="radio"></td><td><input name="etudiant_70" value="7_75" type="radio"></td><td><input name="etudiant_70" value="8_75" type="radio"></td><td><input name="etudiant_70" value="9_75" type="radio"></td><td><input name="etudiant_70" value="10_75" type="radio"></td><td><input name="etudiant_70" value="11_75" type="radio"></td><td><input name="etudiant_70" value="12_75" type="radio"></td><td><input name="etudiant_70" value="13_75" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Clothilde Potron</td>
+			<td><input name="etudiant_71" value="1_76" type="radio"></td><td><input name="etudiant_71" value="2_76" type="radio"></td><td><input name="etudiant_71" value="3_76" type="radio"></td><td><input name="etudiant_71" value="4_76" type="radio"></td><td><input name="etudiant_71" value="5_76" type="radio"></td><td><input name="etudiant_71" value="6_76" checked="checked" type="radio"></td><td><input name="etudiant_71" value="7_76" type="radio"></td><td><input name="etudiant_71" value="8_76" type="radio"></td><td><input name="etudiant_71" value="9_76" type="radio"></td><td><input name="etudiant_71" value="10_76" type="radio"></td><td><input name="etudiant_71" value="11_76" type="radio"></td><td><input name="etudiant_71" value="12_76" type="radio"></td><td><input name="etudiant_71" value="13_76" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Orane Preux</td>
+			<td><input name="etudiant_72" value="1_77" type="radio"></td><td><input name="etudiant_72" value="2_77" type="radio"></td><td><input name="etudiant_72" value="3_77" type="radio"></td><td><input name="etudiant_72" value="4_77" type="radio"></td><td><input name="etudiant_72" value="5_77" type="radio"></td><td><input name="etudiant_72" value="6_77" checked="checked" type="radio"></td><td><input name="etudiant_72" value="7_77" type="radio"></td><td><input name="etudiant_72" value="8_77" type="radio"></td><td><input name="etudiant_72" value="9_77" type="radio"></td><td><input name="etudiant_72" value="10_77" type="radio"></td><td><input name="etudiant_72" value="11_77" type="radio"></td><td><input name="etudiant_72" value="12_77" type="radio"></td><td><input name="etudiant_72" value="13_77" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Olivier Samyde</td>
+			<td><input name="etudiant_73" value="1_78" type="radio"></td><td><input name="etudiant_73" value="2_78" type="radio"></td><td><input name="etudiant_73" value="3_78" type="radio"></td><td><input name="etudiant_73" value="4_78" type="radio"></td><td><input name="etudiant_73" value="5_78" type="radio"></td><td><input name="etudiant_73" value="6_78" checked="checked" type="radio"></td><td><input name="etudiant_73" value="7_78" type="radio"></td><td><input name="etudiant_73" value="8_78" type="radio"></td><td><input name="etudiant_73" value="9_78" type="radio"></td><td><input name="etudiant_73" value="10_78" type="radio"></td><td><input name="etudiant_73" value="11_78" type="radio"></td><td><input name="etudiant_73" value="12_78" type="radio"></td><td><input name="etudiant_73" value="13_78" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Marc-André Sauraye</td>
+			<td><input name="etudiant_74" value="1_79" type="radio"></td><td><input name="etudiant_74" value="2_79" type="radio"></td><td><input name="etudiant_74" value="3_79" type="radio"></td><td><input name="etudiant_74" value="4_79" type="radio"></td><td><input name="etudiant_74" value="5_79" type="radio"></td><td><input name="etudiant_74" value="6_79" checked="checked" type="radio"></td><td><input name="etudiant_74" value="7_79" type="radio"></td><td><input name="etudiant_74" value="8_79" type="radio"></td><td><input name="etudiant_74" value="9_79" type="radio"></td><td><input name="etudiant_74" value="10_79" type="radio"></td><td><input name="etudiant_74" value="11_79" type="radio"></td><td><input name="etudiant_74" value="12_79" type="radio"></td><td><input name="etudiant_74" value="13_79" type="radio"></td>
+		</tr>
+		<tr class="semestre">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+				<tr>
+			<td class="nom">Claire Chaboud</td>
+			<td><input name="etudiant_75" value="1_84" type="radio"></td><td><input name="etudiant_75" value="2_84" type="radio"></td><td><input name="etudiant_75" value="3_84" type="radio"></td><td><input name="etudiant_75" value="4_84" type="radio"></td><td><input name="etudiant_75" value="5_84" type="radio"></td><td><input name="etudiant_75" value="6_84" type="radio"></td><td><input name="etudiant_75" value="7_84" checked="checked" type="radio"></td><td><input name="etudiant_75" value="8_84" type="radio"></td><td><input name="etudiant_75" value="9_84" type="radio"></td><td><input name="etudiant_75" value="10_84" type="radio"></td><td><input name="etudiant_75" value="11_84" type="radio"></td><td><input name="etudiant_75" value="12_84" type="radio"></td><td><input name="etudiant_75" value="13_84" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Alexandre Alvarez</td>
+			<td><input name="etudiant_76" value="1_81" type="radio"></td><td><input name="etudiant_76" value="2_81" type="radio"></td><td><input name="etudiant_76" value="3_81" type="radio"></td><td><input name="etudiant_76" value="4_81" type="radio"></td><td><input name="etudiant_76" value="5_81" type="radio"></td><td><input name="etudiant_76" value="6_81" type="radio"></td><td><input name="etudiant_76" value="7_81" type="radio"></td><td><input name="etudiant_76" value="8_81" checked="checked" type="radio"></td><td><input name="etudiant_76" value="9_81" type="radio"></td><td><input name="etudiant_76" value="10_81" type="radio"></td><td><input name="etudiant_76" value="11_81" type="radio"></td><td><input name="etudiant_76" value="12_81" type="radio"></td><td><input name="etudiant_76" value="13_81" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Adrien Berthe</td>
+			<td><input name="etudiant_77" value="1_82" type="radio"></td><td><input name="etudiant_77" value="2_82" type="radio"></td><td><input name="etudiant_77" value="3_82" type="radio"></td><td><input name="etudiant_77" value="4_82" type="radio"></td><td><input name="etudiant_77" value="5_82" type="radio"></td><td><input name="etudiant_77" value="6_82" type="radio"></td><td><input name="etudiant_77" value="7_82" type="radio"></td><td><input name="etudiant_77" value="8_82" checked="checked" type="radio"></td><td><input name="etudiant_77" value="9_82" type="radio"></td><td><input name="etudiant_77" value="10_82" type="radio"></td><td><input name="etudiant_77" value="11_82" type="radio"></td><td><input name="etudiant_77" value="12_82" type="radio"></td><td><input name="etudiant_77" value="13_82" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Emir Cerimovic</td>
+			<td><input name="etudiant_78" value="1_83" type="radio"></td><td><input name="etudiant_78" value="2_83" type="radio"></td><td><input name="etudiant_78" value="3_83" type="radio"></td><td><input name="etudiant_78" value="4_83" type="radio"></td><td><input name="etudiant_78" value="5_83" type="radio"></td><td><input name="etudiant_78" value="6_83" type="radio"></td><td><input name="etudiant_78" value="7_83" type="radio"></td><td><input name="etudiant_78" value="8_83" checked="checked" type="radio"></td><td><input name="etudiant_78" value="9_83" type="radio"></td><td><input name="etudiant_78" value="10_83" type="radio"></td><td><input name="etudiant_78" value="11_83" type="radio"></td><td><input name="etudiant_78" value="12_83" type="radio"></td><td><input name="etudiant_78" value="13_83" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Bastien Charpy</td>
+			<td><input name="etudiant_79" value="1_85" type="radio"></td><td><input name="etudiant_79" value="2_85" type="radio"></td><td><input name="etudiant_79" value="3_85" type="radio"></td><td><input name="etudiant_79" value="4_85" type="radio"></td><td><input name="etudiant_79" value="5_85" type="radio"></td><td><input name="etudiant_79" value="6_85" type="radio"></td><td><input name="etudiant_79" value="7_85" type="radio"></td><td><input name="etudiant_79" value="8_85" checked="checked" type="radio"></td><td><input name="etudiant_79" value="9_85" type="radio"></td><td><input name="etudiant_79" value="10_85" type="radio"></td><td><input name="etudiant_79" value="11_85" type="radio"></td><td><input name="etudiant_79" value="12_85" type="radio"></td><td><input name="etudiant_79" value="13_85" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Gaetan Colpart</td>
+			<td><input name="etudiant_80" value="1_86" type="radio"></td><td><input name="etudiant_80" value="2_86" type="radio"></td><td><input name="etudiant_80" value="3_86" type="radio"></td><td><input name="etudiant_80" value="4_86" type="radio"></td><td><input name="etudiant_80" value="5_86" type="radio"></td><td><input name="etudiant_80" value="6_86" type="radio"></td><td><input name="etudiant_80" value="7_86" type="radio"></td><td><input name="etudiant_80" value="8_86" checked="checked" type="radio"></td><td><input name="etudiant_80" value="9_86" type="radio"></td><td><input name="etudiant_80" value="10_86" type="radio"></td><td><input name="etudiant_80" value="11_86" type="radio"></td><td><input name="etudiant_80" value="12_86" type="radio"></td><td><input name="etudiant_80" value="13_86" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Joseph David</td>
+			<td><input name="etudiant_81" value="1_87" type="radio"></td><td><input name="etudiant_81" value="2_87" type="radio"></td><td><input name="etudiant_81" value="3_87" type="radio"></td><td><input name="etudiant_81" value="4_87" type="radio"></td><td><input name="etudiant_81" value="5_87" type="radio"></td><td><input name="etudiant_81" value="6_87" type="radio"></td><td><input name="etudiant_81" value="7_87" type="radio"></td><td><input name="etudiant_81" value="8_87" checked="checked" type="radio"></td><td><input name="etudiant_81" value="9_87" type="radio"></td><td><input name="etudiant_81" value="10_87" type="radio"></td><td><input name="etudiant_81" value="11_87" type="radio"></td><td><input name="etudiant_81" value="12_87" type="radio"></td><td><input name="etudiant_81" value="13_87" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Antoine Humbert</td>
+			<td><input name="etudiant_82" value="1_88" type="radio"></td><td><input name="etudiant_82" value="2_88" type="radio"></td><td><input name="etudiant_82" value="3_88" type="radio"></td><td><input name="etudiant_82" value="4_88" type="radio"></td><td><input name="etudiant_82" value="5_88" type="radio"></td><td><input name="etudiant_82" value="6_88" type="radio"></td><td><input name="etudiant_82" value="7_88" type="radio"></td><td><input name="etudiant_82" value="8_88" checked="checked" type="radio"></td><td><input name="etudiant_82" value="9_88" type="radio"></td><td><input name="etudiant_82" value="10_88" type="radio"></td><td><input name="etudiant_82" value="11_88" type="radio"></td><td><input name="etudiant_82" value="12_88" type="radio"></td><td><input name="etudiant_82" value="13_88" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Benjamin Jehl</td>
+			<td><input name="etudiant_83" value="1_89" type="radio"></td><td><input name="etudiant_83" value="2_89" type="radio"></td><td><input name="etudiant_83" value="3_89" type="radio"></td><td><input name="etudiant_83" value="4_89" type="radio"></td><td><input name="etudiant_83" value="5_89" type="radio"></td><td><input name="etudiant_83" value="6_89" type="radio"></td><td><input name="etudiant_83" value="7_89" type="radio"></td><td><input name="etudiant_83" value="8_89" checked="checked" type="radio"></td><td><input name="etudiant_83" value="9_89" type="radio"></td><td><input name="etudiant_83" value="10_89" type="radio"></td><td><input name="etudiant_83" value="11_89" type="radio"></td><td><input name="etudiant_83" value="12_89" type="radio"></td><td><input name="etudiant_83" value="13_89" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Virginie Lefevre</td>
+			<td><input name="etudiant_84" value="1_90" type="radio"></td><td><input name="etudiant_84" value="2_90" type="radio"></td><td><input name="etudiant_84" value="3_90" type="radio"></td><td><input name="etudiant_84" value="4_90" type="radio"></td><td><input name="etudiant_84" value="5_90" type="radio"></td><td><input name="etudiant_84" value="6_90" type="radio"></td><td><input name="etudiant_84" value="7_90" type="radio"></td><td><input name="etudiant_84" value="8_90" checked="checked" type="radio"></td><td><input name="etudiant_84" value="9_90" type="radio"></td><td><input name="etudiant_84" value="10_90" type="radio"></td><td><input name="etudiant_84" value="11_90" type="radio"></td><td><input name="etudiant_84" value="12_90" type="radio"></td><td><input name="etudiant_84" value="13_90" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Cyril Piquet</td>
+			<td><input name="etudiant_85" value="1_91" type="radio"></td><td><input name="etudiant_85" value="2_91" type="radio"></td><td><input name="etudiant_85" value="3_91" type="radio"></td><td><input name="etudiant_85" value="4_91" type="radio"></td><td><input name="etudiant_85" value="5_91" type="radio"></td><td><input name="etudiant_85" value="6_91" type="radio"></td><td><input name="etudiant_85" value="7_91" type="radio"></td><td><input name="etudiant_85" value="8_91" checked="checked" type="radio"></td><td><input name="etudiant_85" value="9_91" type="radio"></td><td><input name="etudiant_85" value="10_91" type="radio"></td><td><input name="etudiant_85" value="11_91" type="radio"></td><td><input name="etudiant_85" value="12_91" type="radio"></td><td><input name="etudiant_85" value="13_91" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Damien Prud'homme</td>
+			<td><input name="etudiant_86" value="1_92" type="radio"></td><td><input name="etudiant_86" value="2_92" type="radio"></td><td><input name="etudiant_86" value="3_92" type="radio"></td><td><input name="etudiant_86" value="4_92" type="radio"></td><td><input name="etudiant_86" value="5_92" type="radio"></td><td><input name="etudiant_86" value="6_92" type="radio"></td><td><input name="etudiant_86" value="7_92" type="radio"></td><td><input name="etudiant_86" value="8_92" checked="checked" type="radio"></td><td><input name="etudiant_86" value="9_92" type="radio"></td><td><input name="etudiant_86" value="10_92" type="radio"></td><td><input name="etudiant_86" value="11_92" type="radio"></td><td><input name="etudiant_86" value="12_92" type="radio"></td><td><input name="etudiant_86" value="13_92" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Aurélie Salmon</td>
+			<td><input name="etudiant_87" value="1_93" type="radio"></td><td><input name="etudiant_87" value="2_93" type="radio"></td><td><input name="etudiant_87" value="3_93" type="radio"></td><td><input name="etudiant_87" value="4_93" type="radio"></td><td><input name="etudiant_87" value="5_93" type="radio"></td><td><input name="etudiant_87" value="6_93" type="radio"></td><td><input name="etudiant_87" value="7_93" type="radio"></td><td><input name="etudiant_87" value="8_93" checked="checked" type="radio"></td><td><input name="etudiant_87" value="9_93" type="radio"></td><td><input name="etudiant_87" value="10_93" type="radio"></td><td><input name="etudiant_87" value="11_93" type="radio"></td><td><input name="etudiant_87" value="12_93" type="radio"></td><td><input name="etudiant_87" value="13_93" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Subo Zhou</td>
+			<td><input name="etudiant_88" value="1_94" type="radio"></td><td><input name="etudiant_88" value="2_94" type="radio"></td><td><input name="etudiant_88" value="3_94" type="radio"></td><td><input name="etudiant_88" value="4_94" type="radio"></td><td><input name="etudiant_88" value="5_94" type="radio"></td><td><input name="etudiant_88" value="6_94" type="radio"></td><td><input name="etudiant_88" value="7_94" type="radio"></td><td><input name="etudiant_88" value="8_94" checked="checked" type="radio"></td><td><input name="etudiant_88" value="9_94" type="radio"></td><td><input name="etudiant_88" value="10_94" type="radio"></td><td><input name="etudiant_88" value="11_94" type="radio"></td><td><input name="etudiant_88" value="12_94" type="radio"></td><td><input name="etudiant_88" value="13_94" type="radio"></td>
+		</tr>
+		<tr class="semestre">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+				<tr>
+			<td class="nom">Maxime Chapelet</td>
+			<td><input name="etudiant_89" value="1_95" type="radio"></td><td><input name="etudiant_89" value="2_95" type="radio"></td><td><input name="etudiant_89" value="3_95" type="radio"></td><td><input name="etudiant_89" value="4_95" type="radio"></td><td><input name="etudiant_89" value="5_95" type="radio"></td><td><input name="etudiant_89" value="6_95" type="radio"></td><td><input name="etudiant_89" value="7_95" type="radio"></td><td><input name="etudiant_89" value="8_95" type="radio"></td><td><input name="etudiant_89" value="9_95" type="radio"></td><td><input name="etudiant_89" value="10_95" checked="checked" type="radio"></td><td><input name="etudiant_89" value="11_95" type="radio"></td><td><input name="etudiant_89" value="12_95" type="radio"></td><td><input name="etudiant_89" value="13_95" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Audrey Charlet</td>
+			<td><input name="etudiant_90" value="1_96" type="radio"></td><td><input name="etudiant_90" value="2_96" type="radio"></td><td><input name="etudiant_90" value="3_96" type="radio"></td><td><input name="etudiant_90" value="4_96" type="radio"></td><td><input name="etudiant_90" value="5_96" type="radio"></td><td><input name="etudiant_90" value="6_96" type="radio"></td><td><input name="etudiant_90" value="7_96" type="radio"></td><td><input name="etudiant_90" value="8_96" type="radio"></td><td><input name="etudiant_90" value="9_96" type="radio"></td><td><input name="etudiant_90" value="10_96" checked="checked" type="radio"></td><td><input name="etudiant_90" value="11_96" type="radio"></td><td><input name="etudiant_90" value="12_96" type="radio"></td><td><input name="etudiant_90" value="13_96" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Julien Delille</td>
+			<td><input name="etudiant_91" value="1_98" type="radio"></td><td><input name="etudiant_91" value="2_98" type="radio"></td><td><input name="etudiant_91" value="3_98" type="radio"></td><td><input name="etudiant_91" value="4_98" type="radio"></td><td><input name="etudiant_91" value="5_98" type="radio"></td><td><input name="etudiant_91" value="6_98" type="radio"></td><td><input name="etudiant_91" value="7_98" type="radio"></td><td><input name="etudiant_91" value="8_98" type="radio"></td><td><input name="etudiant_91" value="9_98" type="radio"></td><td><input name="etudiant_91" value="10_98" checked="checked" type="radio"></td><td><input name="etudiant_91" value="11_98" type="radio"></td><td><input name="etudiant_91" value="12_98" type="radio"></td><td><input name="etudiant_91" value="13_98" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Sebastien Desplat</td>
+			<td><input name="etudiant_92" value="1_99" type="radio"></td><td><input name="etudiant_92" value="2_99" type="radio"></td><td><input name="etudiant_92" value="3_99" type="radio"></td><td><input name="etudiant_92" value="4_99" type="radio"></td><td><input name="etudiant_92" value="5_99" type="radio"></td><td><input name="etudiant_92" value="6_99" type="radio"></td><td><input name="etudiant_92" value="7_99" type="radio"></td><td><input name="etudiant_92" value="8_99" type="radio"></td><td><input name="etudiant_92" value="9_99" type="radio"></td><td><input name="etudiant_92" value="10_99" checked="checked" type="radio"></td><td><input name="etudiant_92" value="11_99" type="radio"></td><td><input name="etudiant_92" value="12_99" type="radio"></td><td><input name="etudiant_92" value="13_99" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Alexandre Leguedey</td>
+			<td><input name="etudiant_93" value="1_100" type="radio"></td><td><input name="etudiant_93" value="2_100" type="radio"></td><td><input name="etudiant_93" value="3_100" type="radio"></td><td><input name="etudiant_93" value="4_100" type="radio"></td><td><input name="etudiant_93" value="5_100" type="radio"></td><td><input name="etudiant_93" value="6_100" type="radio"></td><td><input name="etudiant_93" value="7_100" type="radio"></td><td><input name="etudiant_93" value="8_100" type="radio"></td><td><input name="etudiant_93" value="9_100" type="radio"></td><td><input name="etudiant_93" value="10_100" checked="checked" type="radio"></td><td><input name="etudiant_93" value="11_100" type="radio"></td><td><input name="etudiant_93" value="12_100" type="radio"></td><td><input name="etudiant_93" value="13_100" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Ludivine Leoty</td>
+			<td><input name="etudiant_94" value="1_101" type="radio"></td><td><input name="etudiant_94" value="2_101" type="radio"></td><td><input name="etudiant_94" value="3_101" type="radio"></td><td><input name="etudiant_94" value="4_101" type="radio"></td><td><input name="etudiant_94" value="5_101" type="radio"></td><td><input name="etudiant_94" value="6_101" type="radio"></td><td><input name="etudiant_94" value="7_101" type="radio"></td><td><input name="etudiant_94" value="8_101" type="radio"></td><td><input name="etudiant_94" value="9_101" type="radio"></td><td><input name="etudiant_94" value="10_101" checked="checked" type="radio"></td><td><input name="etudiant_94" value="11_101" type="radio"></td><td><input name="etudiant_94" value="12_101" type="radio"></td><td><input name="etudiant_94" value="13_101" type="radio"></td>
+		</tr>
+				<tr>
+			<td class="nom">Stéphane Markwitz</td>
+			<td><input name="etudiant_95" value="1_102" type="radio"></td><td><input name="etudiant_95" value="2_102" type="radio"></td><td><input name="etudiant_95" value="3_102" type="radio"></td><td><input name="etudiant_95" value="4_102" type="radio"></td><td><input name="etudiant_95" value="5_102" type="radio"></td><td><input name="etudiant_95" value="6_102" type="radio"></td><td><input name="etudiant_95" value="7_102" type="radio"></td><td><input name="etudiant_95" value="8_102" type="radio"></td><td><input name="etudiant_95" value="9_102" type="radio"></td><td><input name="etudiant_95" value="10_102" checked="checked" type="radio"></td><td><input name="etudiant_95" value="11_102" type="radio"></td><td><input name="etudiant_95" value="12_102" type="radio"></td><td><input name="etudiant_95" value="13_102" type="radio"></td>
+		</tr>
+			</tbody>
+</table>
+<br>
+<input name="action" value="
+Valider les modifications" type="submit">
+
+</form>
+
+	
+</div>
+</body></html>

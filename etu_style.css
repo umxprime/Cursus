@@ -1,0 +1,189 @@
+	/**
+	 * 
+	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 *
+	 * This file is a part of Cursus
+	 *
+	 * Cursus is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * Cursus is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+	 * originally released under the LGPL <http://www.gnu.org/licenses/>
+	 * by Olivier LOYNET (tbsooo@free.fr)
+	 *
+	 * Cursus uses Potajx
+	 * released under the GPL <http://www.gnu.org/licenses/>
+	 * by Maxime CHAPELET (umxprime@umxprime.com)
+	 * 
+	 **/
+
+	.bulletinNom {
+		font: 13px Georgia, serif;
+		position: relative;
+		top: 15px;
+	}
+	.bulletinNom li {
+		display: inline;
+		height: 20px;
+		padding: 5px 10px 5px 10px;
+	}
+	.bulletinNom li.titre {
+		text-transform: uppercase;
+		font-size: 10px;
+		background-color: #fff;
+		padding: 8px 10px 6px 13px;
+		color: inherit;
+	}
+	.bulletinNom li.titreReponse {
+	font: 13px Georgia, "Trebuchet MS", Verdana, sans-serif;
+	text-transform: capitalize;
+	background-color: #eee;
+	color: #60acbf;
+	margin: 0px 10px 0px -3px;
+	border-right: 1px dotted #ddd;
+	border-left: 1px dotted #ddd;
+	border-top: 1px dotted #ddd;
+	}
+	#BulletinEntete {
+	position: relative;
+	left: 11px;
+	padding-left: 10px;
+	width: 728px;
+	background-color: #fff;
+	color: inherit;
+	height: 35px;
+	margin-top: -20px;
+	border-bottom: 1px dotted #ddd;
+}
+.bulletinSeul li.traitNom {
+	padding-bottom: 20px;
+	border-bottom: 1px dotted #ddd;
+	padding-left: 10px;
+	margin: 0 11px 0 11px;
+	background: url(img/ombre.png) repeat-x;
+	padding-top: 20px;
+}
+.bulletinSeul li.traitseul{
+	padding-bottom: 20px;
+	border-bottom: 1px dotted #ddd;
+	padding-left: 10px;
+	margin: 0px 11px 0 11px;
+	padding-top: 10px;
+}
+.bulletinSeul li {
+	position: relative;
+	list-style: none;
+}
+.bulletinAppreciation {
+	font: 12px Georgia, serif;
+	color: #404040;
+	font-style: italic;
+	background-color: inherit;
+}
+.bulletinComplement .noteOui {
+	margin-left: -10px;
+	margin-top: -10px;
+	font: 50px Georgia, serif;
+	color: #fff;
+	text-align: center;
+	width: 60px;
+	height: 60px;
+	background: url(img/ombre-ptt.png) repeat-x;
+	background-color: #80B711;
+}
+.bulletinComplement .noteNon {
+	margin-left: -10px;
+	margin-top: -10px;
+	font: 50px Georgia, serif;
+	color: #fff;
+	text-align: center;
+	width: 60px;
+	height: 60px;
+	background: url(img/ombre-ptt.png) repeat-x;
+	background-color: #FF8500;
+}
+.bulletinComplement .titre {
+	position: absolute;
+	left: 71px;
+	top: 0px;
+	text-indent: 15px;
+	font: 10px Georgia, "Trebuchet MS", serif;
+	padding-top: 8px;
+	text-transform: uppercase;
+}
+.bulletinComplement .bulletinCreditsOui {
+	font: 20px Georgia, "Trebuchet MS", Verdana, sans-serif;
+	color: #80B711;
+	text-align: center;
+	background-color:#fff;
+	width: 60px;
+	height: 40px;
+	margin-left: -10px;
+	margin-bottom: -20px;
+}
+.bulletinComplement .bulletinCreditsNon {
+	font: 20px Georgia, "Trebuchet MS", Verdana, sans-serif;
+	color: #FF8500;
+	text-align: center;
+	background-color:#fff;
+	width: 60px;
+	height: 40px;
+	margin-left: -10px;
+	margin-bottom: -20px;
+}
+.bulletinComplement .bulletinCreditsOui strong {
+	line-height: 26px;
+	font-size: 40px;
+}
+.bulletinComplement .bulletinCreditsNon strong {
+	line-height: 26px;
+	font-size: 40px;
+}
+
+#creditsObtenus {
+	margin-left: 11px;
+	margin-right: 11px;
+	margin-top: 30px;
+	color: #ccc;
+	height: 60px;
+	font: 30px Georgia, serif;
+	background: #eee url(img/ombre.png) 1px 0 repeat-x;
+	border-top: 1px dotted #ddd;
+	border-bottom: 1px dotted #ddd;
+	text-align: right;
+	line-height: 40px;
+	padding-right: 20px;
+}
+#creditsObtenus strong {
+	font-size: 50px;
+	color: #aaa;
+	background-color: none;
+}
+
+.bulletinComplement {
+    background: #f8f8f8 url(img/ombre-ptt.png) repeat-x;
+    color: inherit;
+    margin-bottom: -20px;
+    height: 100px;
+}
+.bulletinComplement .bulletinAppreciation {
+    position: relative;
+    left: 58px;
+    top: -50px;
+    margin: 0 58px -20px 10px;
+    color: #666;
+    padding-right: 100px;
+    height: 70px;
+    overflow: auto;
+} 

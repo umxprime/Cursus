@@ -1,0 +1,160 @@
+	/**
+	 * 
+	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 *
+	 * This file is a part of Cursus
+	 *
+	 * Cursus is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * Cursus is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+	 * originally released under the LGPL <http://www.gnu.org/licenses/>
+	 * by Olivier LOYNET (tbsooo@free.fr)
+	 *
+	 * Cursus uses Potajx
+	 * released under the GPL <http://www.gnu.org/licenses/>
+	 * by Maxime CHAPELET (umxprime@umxprime.com)
+	 * 
+	 **/
+	
+#content {	
+}
+#footer {
+clear: both;
+}
+
+	table {
+		font-size: 9px;
+	}
+	td {
+		white-space: nowrap;
+	}
+	table a {
+		text-decoration: none;
+		color: #808080;
+	}
+	.centre {
+		text-align: center;
+	}
+	.bulletin {
+		width: 152px;
+		margin-left: 30px;
+		margin-right: -0px;
+		float: left;
+		/*border: 1px solid red;*/
+		/*background: url(img/trame-gris.gif);*/
+	}
+	.bulletin li {
+		font : 10px "Trebuchet MS", Verdana, Helvetica, sans-serif;
+		/*display: inline;*/
+		list-style: none;
+		padding: 2px 5px 2px 0px;
+		border-bottom: 1px dotted #ccc;
+		text-align: right
+	}
+	.bulletin a {
+		text-decoration: none;
+		color: #808080;
+		color: #404040;
+		color: inherit;
+	}
+.bulletin li.nomBulletin a {
+	color: #fff;
+	font-size: 13px;
+	text-transform: capitalize;
+	
+	/*border-top: 1px dotted #ccc;*/
+	/*border: 1px solid red;*/
+	padding: 2px 0px 2px 5px;
+}
+.bulletin li.nomBulletin {
+	width: 147px;
+	background-color: #60acbf;
+	padding-top: 5px;
+}
+ul li.credits {
+	font-weight: bold;
+	font-size: 15px;
+	margin-bottom: 30px;
+	background-color: #f8f8f8;
+}
+.bleu {
+	color: #60acbf;
+}
+.bulletin a .vert {
+	color: #80B711;
+}
+.bulletin li.ok {
+	/*background: url(img/trame-vert.gif);*/
+	/*background-color: #80B711;*/
+	color: #80B711;
+}
+.bulletin li.pasok {
+	/*background: url(img/trame-rose.gif);*/
+	background-color: #FF8500;
+	color: #FFF;
+}
+.bulletin li.noneval {
+	background: url(img/trame-gris.gif);
+	/*background-color: #eee;*/
+}
+#choixSemestre {
+                width: 738px;
+        position: relative;
+        font: 13px Georgia, serif;
+        position: relative;
+        height: 35px;
+        margin: -20px 11px 30px 11px;
+       /*background-color: yellow;*/
+       border-top: 1px dotted #ddd;
+      }
+#choixSemestre ul {
+        position: relative;
+       margin-top: 6px;
+       margin-left: 170px;
+      }
+#choixSemestre li {
+    list-style: none;
+    display: inline;
+    
+}
+#choixSemestre li a {
+    text-decoration: none;
+    /* bleu #60acbf */
+  /* vert #80B711 */
+    color: #808080;
+    text-transform: uppercase;
+    padding: 6px 10px 6px 10px;
+    border-right: 1px dotted #ddd;
+  border-left: 1px dotted #ddd;
+  border-bottom: 1px dotted #ddd;
+  border-top: 1px solid #f8f8f8;
+  background-color: #f8f8f8;
+  margin-right: 5px;
+}
+#choixSemestre li a:hover {
+    color: #60acbf;
+  background-color: #fff;
+} 
+#choixSemestre #courant {
+    /* bleu #60acbf */
+  /* vert #80B711 */
+    text-transform: uppercase;
+    padding: 6px 10px 6px 10px;
+  color: #60acbf;
+  background-color: #none;
+  font-size: 20px;
+  line-height: 10px;
+  margin-right: 5px;
+} 

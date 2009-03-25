@@ -29,20 +29,23 @@
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			<table>
 				<tr><td>
-				<span id="ajx_liste_types">Liste des types d'utilisateurs</span>
-				<span id="ajx_liste_utilisateurs">Liste des utilisateurs</span>
+					<span id="ajx_liste_types">Liste des types d'utilisateurs</span>
+					<span id="ajx_liste_utilisateurs">Liste des utilisateurs</span>
 				</td></tr>
 				<tr><td>
-				Nom <span id="ajx_nom">Nom de l'utilisateur</span>
-				Prénom <span id="ajx_prenom">Prénom de l'utilisateur</span>
+					Nom <span id="ajx_nom">Nom de l'utilisateur</span>
+					Prénom <span id="ajx_prenom">Prénom de l'utilisateur</span>
 				</td></tr>
 				<tr><td>
-				Mot de passe <span id="ajx_passw">Mot de passe de l'utilisateur</span>
+					Mot de passe <span id="ajx_passw">Mot de passe de l'utilisateur</span>
 				</td></tr>
 				<tr><td>
-				<span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>
-				<span id="ajx_liste_semestres">Semestre de l'utilisateur</span>
-				<span id="ajx_liste_cycles">Cycle de l'utilisateur</span>
+					<span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>
+					<span id="ajx_liste_semestres">Semestre de l'utilisateur</span>
+					<span id="ajx_liste_cycles">Cycle de l'utilisateur</span>
+				</td></tr>
+				<tr><td>
+					<span id="potajx_loader"></span>
 				</td></tr>
 			</table>
 			<script type="text/javascript">

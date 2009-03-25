@@ -29,10 +29,17 @@ function ajx(page,action,params,evaluate){
 	else { // XMLHttpRequest non supporté par le navigateur
 		alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 	}
-	
+	if(ajx_get_id("potajx_loader"))
+	{
+		ajx_get_id("potajx_loader").innerHTML = "Loading";
+	}
 	xhr_object.open("GET", "potajx/potajx.php?page="+page+"&action="+action+"&params="+params, false);
 	xhr_object.send(null);
 	if (xhr_object.readyState == 4) {
+		if(ajx_get_id("potajx_loader"))
+		{
+			ajx_get_id("potajx_loader").innerHTML = "";
+		}
 		if (evaluate){
 			eval(xhr_object.responseText);
 			return 0;

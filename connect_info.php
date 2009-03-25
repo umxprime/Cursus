@@ -28,8 +28,8 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-
-	$conffile = "cursus.conf";
+	if(!isset($rootpath)) $rootpath="";
+	$conffile = $rootpath."cursus.conf";
 	$conf = fopen($conffile,"r");
 	$data = fread($conf, filesize($conffile));
 	fclose($conf);

@@ -18,12 +18,9 @@
 	 * along with Potajx.  If not, see <http://www.gnu.org/licenses/>.
 	 * 
 	 */
-	include("../connect_info.php");
-	$connexion = mysql_connect(SERVEUR,NOM,PASSE);
-	if (!$connexion) {
-		echo "impossible de se connecter";
-		exit;
-	}
+	$rootpath="../";
+	include($rootpath."connect_info.php");
+	include($rootpath."connexion.php");
 	$action = $_GET["action"];
 	$getparams = explode(",",$_GET["params"]);
 	$params = array();

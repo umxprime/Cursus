@@ -32,15 +32,17 @@
 	include_once("conf.php");
 	
 	$host = $_SERVER['HTTP_HOST'];
-	$host = explode($confHost,$host);
+	$host = explode($conf["WebHost"],$host);
 	
 	if (count($host)>1){
-		define(NOM, $confHostSqlLog);
-		define(PASSE, $confHostSqlPassw);	
+		define(NOM, $conf["WebHostSqlLog"]);
+		define(PASSE, $conf["WebHostSqlPassw"]);
+		define(BASE, $conf["WebHostDatabase"]);	
 	} else {
-		define(NOM, $confLocalSqlLog);
-		define(PASSE, $confLocalSqlPassw);
+		define(NOM, $conf["LocalSqlLog"]);
+		define(PASSE, $conf["LocalSqlPassw"]);
+		define(BASE, $conf["LocalDatabase"]);
 	}
 	define(SERVEUR, "localhost");
-	define(BASE, "cursus_share");
+	
 ?>

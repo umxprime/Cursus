@@ -30,19 +30,26 @@
 	 **/
 	
     // Cursus configuration file template
-
+	$conf=array();
+	
 	// Host
-	$Host="esa-npdc.net";
+	$conf["WebHost"]="esa-npdc.net";
 	
 	// Local Login
-	$LocalSqlLog="root";
+	$conf["LocalSqlLog"]="root";
 	
 	// Local Password
-	$LocalSqlPassw="root";
+	$conf["LocalSqlPassw"]="root";
 	
 	// Host Login
-	$HostSqlLog="root";
+	$conf["WebHostSqlLog"]="root";
 	
 	// Host Password
-	$HostSqlPassw="root";
+	$conf["WebHostSqlPassw"]="root";
+	
+	// MySQL Database
+	$conf["LocalDatabase"]="cursus";
+	
+	// MySQL Database
+	$conf["WebHostDatabase"]="cursus";
 ?>

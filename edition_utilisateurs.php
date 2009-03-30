@@ -1,4 +1,34 @@
 <?php
+	/**
+	 * 
+	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 *
+	 * This file is a part of Cursus
+	 *
+	 * Cursus is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * Cursus is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+	 * originally released under the LGPL <http://www.gnu.org/licenses/>
+	 * by Olivier LOYNET (tbsooo@free.fr)
+	 *
+	 * Cursus uses Potajx
+	 * released under the GPL <http://www.gnu.org/licenses/>
+	 * by Maxime CHAPELET (umxprime@umxprime.com)
+	 * 
+	 **/
+
     include("lesotho.php");
 	include("fonctions.php");
 	//on requiert les variables de connexion;
@@ -19,8 +49,9 @@
 			include("inc_css_thing.php");
 		?>
 		<title><?php echo $periode['nom']?></title>
-		<script type="text/javascript" src="potajx/potajx.js"></script>
-		<script type="text/javascript" src="potajx/modules/ajx_edition_utilisateurs.js"></script>
+		<?php
+			include("potajx/incpotajx.php");
+		?>
 	</head>
 	<body>
 		<div id="global">
@@ -31,6 +62,7 @@
 				<tr><td>
 					<span id="ajx_liste_types">Liste des types d'utilisateurs</span>
 					<span id="ajx_liste_utilisateurs">Liste des utilisateurs</span>
+					<a href="javascript:chg_utilisateur()" onclick="this.blur()">Recharger</a>
 				</td></tr>
 				<tr><td>
 					Nom <span id="ajx_nom">Nom de l'utilisateur</span>
@@ -38,6 +70,7 @@
 				</td></tr>
 				<tr><td>
 					Mot de passe <span id="ajx_passw">Mot de passe de l'utilisateur</span>
+					<span id="ajx_passwgen"><a href="javascript:ajx_genMotDePasse('passw');" onclick="this.blur();" >Générer</a></span>
 				</td></tr>
 				<tr><td>
 					<span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>

@@ -28,38 +28,8 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-	if(!isset($rootpath)) $rootpath="";
-	$conffile = $rootpath."cursus.conf";
-	$conf = fopen($conffile,"r");
-	$data = fread($conf, filesize($conffile));
-	fclose($conf);
-	$data = explode("\n", $data);
-	for($i=0;$i<sizeof($data);$i++)
-	{
-		if (count(explode("#",$data[$i]))>1 or count($line=explode("=",$data[$i]))<2) continue;
-		switch ($line[0]){
-			case "Host" :
-				//echo "Host : ".$line[1]."<br/>";
-				$confHost = $line[1];
-				break;
-			case "LocalSqlLog" :
-				//echo "Login Local SQL : ".$line[1]."<br/>";
-				$confLocalSqlLog = $line[1];
-				break;
-			case "LocalSqlPassw" :
-				//echo "Pass Local SQL : ".$line[1]."<br/>";
-				$confLocalSqlPassw = $line[1];
-				break;
-			case "HostSqlLog" :
-				//echo "Login Host SQL : ".$line[1]."<br/>";
-				$confHostSqlLog = $line[1];
-				break;
-			case "HostSqlPassw" :
-				//echo "Pass Host SQL : ".$line[1]."<br/>";
-				$confHostSqlPassw = $line[1];
-				break;
-		}
-	}
+	
+	include_once("conf.php");
 	
 	$host = $_SERVER['HTTP_HOST'];
 	$host = explode($confHost,$host);

@@ -21,7 +21,6 @@
 
 function ajx(page,action,params,evaluate){
 	var xhr_object = null;
-	
 	if (window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if (window.ActiveXObject) // Internet Explorer
@@ -127,7 +126,37 @@ function ajx_inputTexts(fields,page,action,params)
 		var element = ajx_get_id("ajx_"+a_fields[i]);
 		var content = "";
 		if (!values[i]) values[i]="";
-		content += "<input type=\"text\" value=\""+values[i]+"\"/>";
+		content += "<input id=\""+a_fields[i]+"\" type=\"text\" value=\""+values[i]+"\"/>";
 		element.innerHTML = content;
 	}
+}
+
+function ajx_genMotDePasse(field)
+{
+	var element = ajx_get_id(field);
+	var patterns = ["xyxyxzzz","yxyxyzzz","xyzxyzyy"]
+	var pattern = patterns[Math.floor(Math.random()*patterns.length)];
+	var x = "aeiouy";
+	var y = "zrtpqsdfghjklmwxcvbn";
+	var z = "1234567890";
+	var i;
+	var passw = "";
+	var chr;
+	for (i=0; i<pattern.length; i++)
+	{
+		switch (pattern.substr(i,1))
+		{
+			case "x":
+				chr = x.substr(Math.floor(Math.random()*x.length),1);
+				break;
+			case "y":
+				chr = y.substr(Math.floor(Math.random()*y.length),1);
+				break;
+			case "z":
+				chr = z.substr(Math.floor(Math.random()*z.length),1);
+				break;
+		}
+		passw += chr;
+	}
+	element.value = passw;
 }

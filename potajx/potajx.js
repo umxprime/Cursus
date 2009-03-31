@@ -28,16 +28,16 @@ function ajx(page,action,params,evaluate){
 	else { // XMLHttpRequest non supporté par le navigateur
 		alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 	}
-	if(ajx_get_id("potajx_loader"))
+	if(ajx_get_id("ajx_loader"))
 	{
-		ajx_get_id("potajx_loader").innerHTML = "Loading";
+		ajx_get_id("ajx_loader").innerHTML = "Loading";
 	}
 	xhr_object.open("GET", "potajx/potajx.php?page="+page+"&action="+action+"&params="+params, false);
 	xhr_object.send(null);
 	if (xhr_object.readyState == 4) {
-		if(ajx_get_id("potajx_loader"))
+		if(ajx_get_id("ajx_loader"))
 		{
-			ajx_get_id("potajx_loader").innerHTML = "";
+			ajx_get_id("ajx_loader").innerHTML = "";
 		}
 		if (evaluate){
 			eval(xhr_object.responseText);
@@ -60,6 +60,11 @@ function ajx_get_value(id)
 function ajx_vide(id)
 {
 	ajx_get_id("ajx_"+id).innerHTML="";
+}
+
+function ajx_content(id,content)
+{
+	ajx_get_id("ajx_"+id).innerHTML=content;
 }
 
 function ajx_select(id,onchangefunc,values,page,action,params,addnew,baseselected)
@@ -159,4 +164,10 @@ function ajx_genMotDePasse(field)
 		passw += chr;
 	}
 	element.value = passw;
+}
+
+function ajx_submit(page,action,params)
+{
+	var message = ajx(page,action,params);
+	return message;
 }

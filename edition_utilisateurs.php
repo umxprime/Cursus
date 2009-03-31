@@ -73,12 +73,16 @@
 					<span id="ajx_passwgen"><a href="javascript:ajx_genMotDePasse('passw');" onclick="this.blur();" >Générer</a></span>
 				</td></tr>
 				<tr><td>
-					<span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>
-					<span id="ajx_liste_semestres">Semestre de l'utilisateur</span>
-					<span id="ajx_liste_cycles">Cycle de l'utilisateur</span>
+					<span id="ajx_txt_ecoles"></span> <span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>
+					<span id="ajx_txt_semestres"></span> <span id="ajx_liste_semestres">Semestre de l'utilisateur</span>
 				</td></tr>
 				<tr><td>
-					<span id="potajx_loader"></span>
+					<span id="ajx_txt_cycles"></span> <span id="ajx_liste_cycles">Cycle de l'utilisateur</span>
+				</td></tr>
+				<tr><td>
+					<a href="javascript:submit()">Valider</a></span>
+				</td></tr><tr><td>
+					<span id="ajx_loader"></span>
 				</td></tr>
 			</table>
 			<script type="text/javascript">

@@ -103,5 +103,37 @@
 			}
 			echo implode(",",$out);
 			break;
+		case "set_etudiants" :
+			$base = $params["base"];
+			$id = $params["id"];
+			$nom = utf8_decode($params["nom"]);
+			$prenom = utf8_decode($params["prenom"]);
+			$passw = $params["passw"];
+			$cycle = $params["cycle"];
+			$niveau = $params["niveau"];
+			$periode = $params["periode"];
+			if ($id == "new")
+			{
+				$req = "INSERT INTO $base (`nom`,`prenom`,`passw`) VALUES";
+				$req .= "('$nom','$prenom','$passw')";
+				mysql_query($req);
+				$req = "SELECT `id` FROM $base ORDER BY `id` DESC;";
+				$newuser = mysql_fetch_array(mysql_query($req));
+				$newid = $newuser["id"];
+			} else {
+				$req = "UPDATE $base SET ";
+				$req .= "nom='$nom'";
+				$req .= ",prenom='$prenom'";
+				$req .= ",passw='$passw'";
+				$req .= " WHERE id='$id';";
+				mysql_query($req);
+				$req = "DELETE FROM `niveaux` WHERE `cycle`='$cycle' AND `etudiant`='$id' AND `periode`='$periode';";
+				mysql_query($req);
+				$newid=$id;
+			}
+			$req = "INSERT INTO niveaux (`cycle`,`niveau`,`etudiant`,`periode`) VALUES('$cycle','$niveau','$newid','$periode');";
+			mysql_query($req);
+			echo $newid;
+			break;
 	}
 ?>

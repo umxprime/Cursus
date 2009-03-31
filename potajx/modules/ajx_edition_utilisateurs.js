@@ -24,13 +24,7 @@ function init()
 				"init",
 				"etudiants:Étudiants,professeurs:Professeurs",
 				null, null, null, false);
-	ajx_select(	"liste_utilisateurs",
-				"chg_utilisateur",
-				"ajx",
-				"edition_utilisateurs",
-				"get_utilisateurs",
-				"base:"+ajx_get_value("liste_types"),
-				true);
+	update_utilisateurs()
 	if (ajx_get_value("liste_types")=="professeurs")
 	{
 		ajx_select(	"liste_ecoles",
@@ -42,6 +36,9 @@ function init()
 					false, true);
 		ajx_vide("liste_cycles");
 		ajx_vide("liste_semestres");
+		ajx_vide("txt_cycles");
+		ajx_vide("txt_semestres");
+		ajx_content("txt_ecoles","École");
 	}
 	if (ajx_get_value("liste_types")=="etudiants")
 	{
@@ -60,6 +57,9 @@ function init()
 					"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 					false, true);
 		ajx_vide("liste_ecoles");
+		ajx_vide("txt_ecoles");
+		ajx_content("txt_cycles","Cycle");
+		ajx_content("txt_semestres","Niveau");
 	}
 	ajx_get_id("liste_utilisateurs").value="new";
 	ajx_inputTexts(	"nom:nom,prenom:prenom,passw:passw",
@@ -68,7 +68,7 @@ function init()
 					"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"));
 }
 
-function chg_utilisateur()
+function update_utilisateurs()
 {
 	ajx_select(	"liste_utilisateurs",
 				"chg_utilisateur",
@@ -77,6 +77,11 @@ function chg_utilisateur()
 				"get_utilisateurs",
 				"base:"+ajx_get_value("liste_types"),
 				true);
+}
+
+function chg_utilisateur()
+{
+	update_utilisateurs()
 	if (ajx_get_value("liste_types")=="professeurs")
 	{
 		ajx_select(	"liste_ecoles",
@@ -88,6 +93,9 @@ function chg_utilisateur()
 					false, true);
 		ajx_vide("liste_cycles");
 		ajx_vide("liste_semestres");
+		ajx_vide("txt_cycles");
+		ajx_vide("txt_semestres");
+		ajx_content("txt_ecoles","École");
 	}
 	if (ajx_get_value("liste_types")=="etudiants")
 	{
@@ -106,6 +114,9 @@ function chg_utilisateur()
 					"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 					false, true);
 		ajx_vide("liste_ecoles");
+		ajx_vide("txt_ecoles");
+		ajx_content("txt_cycles","Cycle");
+		ajx_content("txt_semestres","Niveau");
 	}
 	ajx_inputTexts(	"nom:nom,prenom:prenom,passw:passw",
 					"edition_utilisateurs",
@@ -129,4 +140,41 @@ function chg_semestre()
 					"get_semestres_selon_etudiant",
 					"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 					false);
+}
+
+function submit()
+{
+	var base = ajx_get_value("liste_types");
+	var user = ajx_get_value("liste_utilisateurs");
+	if (base == "etudiants") {
+		var form = "nom:"+ajx_get_value("nom");
+		form += ",prenom:"+ajx_get_value("prenom");
+		form += ",passw:"+ajx_get_value("passw");
+		form += ",cycle:"+ajx_get_value("liste_cycles");
+		form += ",niveau:"+ajx_get_value("liste_semestres");
+		form += ",periode:"+ajx_get_value("semestre_courant")
+		var newuser = ajx_submit(	"edition_utilisateurs",
+									"set_etudiants",
+									"base:"+base+",id:"+user+","+form);
+	}
+	if (base == "professeurs") {
+		var form = "nom:"+ajx_get_value("nom");
+		form += ",prenom:"+ajx_get_value("prenom");
+		form += ",passw:"+ajx_get_value("passw");
+		form += ",ecole:"+ajx_get_value("liste_ecoles");
+		var newuser = ajx_submit(	"edition_utilisateurs",
+									"set_professeurs",
+									"base:"+base+",id:"+user+","+form);
+	}
+	update_utilisateurs()
+	users = ajx_get_id("liste_utilisateurs");
+	for (var i = 0 ; i < users.length; i++)
+	{
+		if (users.options[i].value==String(newuser))
+		{
+			users.options[i].selected = true;
+			break;
+		}
+	}
+	chg_utilisateur();
 }

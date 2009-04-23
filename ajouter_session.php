@@ -33,7 +33,7 @@ include ("lesotho.php");
 require("connect_info.php");
 require("connexion.php");
 if($_POST["nPeriode"] && $_POST["module"]){
-$req= "INSERT INTO session (id,semestre, module, titre) VALUES ('', ".$_POST["nPeriode"];
+$req= "INSERT INTO session (id, periode, module, titre) VALUES ('', ".$_POST["nPeriode"];
 $req .= ",".$_POST["module"].",'".$_POST["titre"]."')";
 //echo $req;
 $res = mysql_query($req);

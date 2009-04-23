@@ -31,7 +31,7 @@
 	
 function verif($n){
 $r = (strlen($n)>=1)?$n:"-";
-return $r;
+return utf8_encode($r);
 }
 
 function valide_eval($n1, $n2, $creds)

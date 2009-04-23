@@ -31,8 +31,7 @@
 	
 function verif($n){
 $r = (strlen($n)>=1)?$n:"-";
-//stupid comment;
-return utf8_encode($r);
+return $r;
 }
 
 function valide_eval($n1, $n2, $creds)

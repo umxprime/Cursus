@@ -122,7 +122,7 @@ $etudiant = mysql_fetch_array($resreq);
 include("inc_css_thing.php");
 ?>
 <link rel="stylesheet" href="etu_style.css" type="text/css" />
-<title><?php echo "vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
+<title><?php echo "--vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
 </head>
 <body>
 <div id="global">

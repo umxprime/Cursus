@@ -33,19 +33,20 @@ include("lesotho.php");
 require("connect_info.php");
 require("connexion.php");
 include("fonctions.php");
+include("fonctions_eval.php");
 //echo $_GET["eval"];
 if($_GET["eval"]>0){
 	$id_eval=$_GET["eval"];
 	$req = "SELECT * FROM evaluations WHERE id='".$id_eval."';";
 	$res = mysql_query($req);
-	//echo $req;
+	
 	$eval = mysql_fetch_array($res);
-	$req = "select module, semestre from session where id = '".$eval['session']."';";
+	$req = "select module, periode from session where id = '".$eval['session']."';";
 	$res = mysql_query($req);
 	$session = mysql_fetch_array($res);
-	$req2 = "SELECT * FROM semestres where id = '".$session['semestre']."';";
+	$req2 = "SELECT * FROM periodes where id = '".$session['periode']."';";
 	$res2 = mysql_query($req2);
-	$semestre = mysql_fetch_array($res2);
+	$periode = mysql_fetch_array($res2);
 	if($_SESSION['auto']=='a'){
 		$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 	}else if($_SESSION['auto']=='p'){
@@ -73,7 +74,7 @@ if($_GET["eval"]>0){
 </head>
 <body>
 <p>
-<h2><?php echo $semestre['titre']; ?></h2>
+<h2><?php echo $periode['nom']; ?></h2>
 </p>
 <p>
 <h2>Evaluation de <?php echo $etudiant['prenom']." ".$etudiant['nom'];?> pour le module : <?php echo $module['intitule'];?></h2>
@@ -87,10 +88,10 @@ if($_GET["eval"]>0){
 
 	<?php
 
-	echo affiche_champs("appreciation_1",$eval['appreciation_1'],80);
+	echo affiche_champs("appreciation_1",$eval['appreciation_1'],80,8);
 	echo "<br />NOTE : <select name=\"note_1\" width=\"40\" STYLE=\"width: 40px\">";
 	echo "<option value='-' ";
-	echo (!strpos("__abcdefABCDEF",$eval['note_1']))?"selected ":"";
+	echo (!strpos("__abcdefABCDEF",verif($eval['note_1'])))?"selected ":"";
 	echo ">-</option>\n";
 	for($l=1; $l<7; $l++){
 		$carac=chr(64+$l);

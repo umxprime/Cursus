@@ -26,6 +26,12 @@
 	$page = $path[count($path)-1];
 	$page = explode(".php",$page);
 	$page = $page[0];
+	
 	echo "<script type=\"text/javascript\" src=\"potajx/modules/ajx_".$page.".js\"></script>";
 	echo "<script type=\"text/javascript\" src=\"potajx/potajuste.js\"></script>";
+	
+	function ajx_span($id)
+	{
+		echo "<span id=\"ajx_$id\"></span>";
+	}
 ?>

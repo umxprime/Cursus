@@ -62,6 +62,16 @@ function ajx_vide(id)
 	ajx_get_id("ajx_"+id).innerHTML="";
 }
 
+function ajx_cache(id)
+{
+	ajx_get_id(id).className = "off";
+}
+
+function ajx_montre(id)
+{
+	ajx_get_id(id).className = "on";
+}
+
 function ajx_content(id,content)
 {
 	ajx_get_id("ajx_"+id).innerHTML=content;

@@ -60,29 +60,35 @@
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			<table>
 				<tr><td>
-					<span id="ajx_liste_types">Liste des types d'utilisateurs</span>
-					<span id="ajx_liste_utilisateurs">Liste des utilisateurs</span>
+					<?php ajx_span("liste_types"); ajx_span("liste_utilisateurs"); ?>
 					<a href="javascript:chg_utilisateur()" onclick="this.blur()">Recharger</a>
 				</td></tr>
 				<tr><td>
-					Nom <span id="ajx_nom">Nom de l'utilisateur</span>
-					Prénom <span id="ajx_prenom">Prénom de l'utilisateur</span>
+					Nom <?php ajx_span("nom");?> Prénom <?php ajx_span("prenom"); ?>
 				</td></tr>
 				<tr><td>
-					Mot de passe <span id="ajx_passw">Mot de passe de l'utilisateur</span>
-					<span id="ajx_passwgen"><a href="javascript:ajx_genMotDePasse('passw');" onclick="this.blur();" >Générer</a></span>
+					Mot de passe <?php ajx_span("passw");?>
+					<a href="javascript:ajx_genMotDePasse('passw');" onclick="this.blur();" >Générer</a>
 				</td></tr>
 				<tr><td>
-					<span id="ajx_txt_ecoles"></span> <span id="ajx_liste_ecoles">Ecole de l'utilisateur</span>
-					<span id="ajx_txt_semestres"></span> <span id="ajx_liste_semestres">Semestre de l'utilisateur</span>
+					<table id="champs_etus">
+						<tr><td>
+							Semestre <?php ajx_span("liste_semestres"); ?>
+						</td></tr>
+						<tr><td>
+							Cycle <?php ajx_span("liste_cycles"); ?>
+						</td></tr>
+					</table>
+					<table id="champs_profs">
+						<tr><td>
+							École <?php ajx_span("liste_ecoles"); ?>
+						</td></tr>
+					</table>
 				</td></tr>
 				<tr><td>
-					<span id="ajx_txt_cycles"></span> <span id="ajx_liste_cycles">Cycle de l'utilisateur</span>
-				</td></tr>
-				<tr><td>
-					<a href="javascript:submit()">Valider</a></span>
+					<a href="javascript:submit()" onclick="this.blur()">Valider</a></span>
 				</td></tr><tr><td>
-					<span id="ajx_loader"></span>
+					<?php ajx_span("loader");?>
 				</td></tr>
 			</table>
 			<script type="text/javascript">

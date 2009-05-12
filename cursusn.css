@@ -42,6 +42,9 @@
 	.off {
 		display: none;
 	}
+	.on {
+		display:compact;
+	}
 	.valide {
 		background: url(img/trame-vert.gif);
 		border-right: 1px dotted #808080;

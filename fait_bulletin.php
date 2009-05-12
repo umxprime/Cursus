@@ -38,7 +38,15 @@ include ("fonctions_eval.php");
 //les classes de traitement des fichiers openOffice
 include_once ('tbs_class.php');
 include_once ('tbsooo_class.php');
-
+function moncode($chaine){
+	if ($semestre_courant >24){
+		return utf8_decode($chaine);
+	}
+	else
+	{
+		return $chaine;
+	}
+}
 if ( isset ($_GET['id_etudiant']))
 {
     $id_etudiant = $_GET['id_etudiant'];
@@ -102,13 +110,13 @@ if ( isset ($_GET['id_etudiant']))
                 $$var4 = ( isset ($tut['note_1']))?$tut['note_1']:"";
                 $$var10 = ( isset ($tut['note_1']))?$tut['note_1']:"";
                 $$var11 = "";
-                $$var5 = ( isset ($tut['appreciation_1']))?utf8_decode($tut['appreciation_1']):
+                $$var5 = ( isset ($tut['appreciation_1']))?moncode($tut['appreciation_1']):
                     "";
                     $$var3 = "";
                     $$var8 = "";
                     $$var9 = utf8_decode($tut['enseignant']);
                     $$var6 = ( isset ($tut['note_2']))?$tut['note_2']:"";
-                    $$var7 = utf8_decode($tut['appreciation_2']);
+                    $$var7 = ($tut['appreciation_2']);
                     $vartut = "tuteur_".$nligne;
                     $$vartut = utf8_decode($tut["enseignant"]);
 
@@ -150,7 +158,7 @@ if ( isset ($_GET['id_etudiant']))
             $requete = "select evaluations.*, session.module as module, modules.credits, modules.intitule, modules.code, modules.enseignants";
             $requete .= ", niveaux.niveau from evaluations, niveaux, session, modules where evaluations.etudiant = '".$id_etudiant."' ";
             $requete .= " and niveaux.niveau = '".$semestre."' and niveaux.etudiant = '".$id_etudiant."' ";
-            $requete .= "and session.semestre=niveaux.periode and evaluations.session=session.id and modules.id = session.module";
+            $requete .= "and session.periode=niveaux.periode and evaluations.session=session.id and modules.id = session.module";
             $requete .= ";";
             $resEvals = mysql_query($requete);
             while ($eval = mysql_fetch_array($resEvals))
@@ -168,18 +176,18 @@ if ( isset ($_GET['id_etudiant']))
                     $var8 = "cred2_module_".$nligne;
                     $var9 = "profs_module_".$nligne;
                     $var11 = "credits_module_".$nligne;
-                    $$var1 = utf8_decode($eval["intitule"]);
+                    $$var1 = $eval["intitule"];
                     $$var2 = $eval["code"];
                     $$var4 = verif($eval['note_1']);
                     $$var10 = verif($eval['note_1']);
                     $$var11 = "";
-                    $$var5 = ( isset ($eval['appreciation_1']))?utf8_decode($eval['appreciation_1']):
+                    $$var5 = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):
                         "";
                         $$var3 = "";
                         $$var8 = "";
                         $$var9 = utf8_decode($eval['enseignants']);
                         $$var6 = verif($eval['note_2']);
-                        $$var7 = utf8_decode($eval['appreciation_2']);
+                        $$var7 = moncode($eval['appreciation_2']);
                         if (strpos("_ABCDabcd", $$var4)>0)
                         {
                             $$var3 = $eval['credits'];
@@ -197,9 +205,9 @@ if ( isset ($_GET['id_etudiant']))
                         //evaluation semestrielle;
                         $note1_eval = verif($eval['note_1']);
                         $note2_eval = verif($eval['note_2']);
-                        $appr1_eval = ( isset ($eval['appreciation_1']))?utf8_decode($eval['appreciation_1']):
+                        $appr1_eval = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):
                             "";
-                            $appr2_eval = ( isset ($eval['appreciation_2']))?utf8_decode($eval['appreciation_2']):
+                            $appr2_eval = ( isset ($eval['appreciation_2']))?moncode($eval['appreciation_2']):
                                 "";
                                 $cred1_eval = ( strlen($eval['note_1'])>0?strpos("_abcdABCD", $eval['note_1']):false )?$eval['credits']:0;
                                 $cred2_eval = ( strlen($eval['note_2'])>0?strpos("_abcdABCD", $eval['note_2']):false )?$eval['credits']:0;

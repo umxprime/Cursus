@@ -113,11 +113,11 @@ $n_lignes=15;
 //l'association module<->semestre temporel est une session
 //les �tudiants sont donc inscrits � des sessions de modules p�dagogiques
 $req_evals = "SELECT evaluations.note_1,evaluations.note_2,evaluations.appreciation_1, evaluations.appreciation_2,evaluations.session, ";
-$req_evals .= "session.semestre, session.module, ";
+$req_evals .= "session.periode, session.module, ";
 $req_evals .= "modules.id as module_id, modules.code, modules.intitule, modules.credits";
 $req_evals .= " FROM evaluations, session, modules WHERE ";
 $req_evals .= " evaluations.etudiant = '".$etudiant["id"]."' AND session.id=evaluations.session";
-$req_evals .= " AND session.semestre = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.intitule;";
+$req_evals .= " AND session.periode = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.intitule;";
 
 //evaluations des �tudiants pour les sessions auxquelles ils sont inscrits
 $res_evals = mysql_query($req_evals);

@@ -51,7 +51,7 @@ $req = "SELECT * FROM session where id = '".$idd_session."';";
 //$req = "SELECT * FROM session, periodes, modules, evaluations, "
 $res = mysql_query($req);
 $session = mysql_fetch_array($res);
-$req2 = "SELECT * FROM periodes where id = '".$session['semestre']."';";
+$req2 = "SELECT * FROM periodes where id = '".$session['periode']."';";
 $res2 = mysql_query($req2);
 $semestre = mysql_fetch_array($res2);
 //echo $semestre['titre'];
@@ -159,7 +159,7 @@ if($ava>0){
 	?>
 <p>
 <h2>
-<?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["semestre"]."\">".$semestre['nom'] ?></a></h2>
+<?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["periode"]."\">".$semestre['nom'] ?></a></h2>
 </p>
 <p>
 <?php if($nres>0){ ?>

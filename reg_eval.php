@@ -39,7 +39,7 @@ if($_POST['eval']>0){
 	$avant = mysql_fetch_array($resavant);
 	$id_eval=$_POST['eval'];
 	$req= "UPDATE evaluations SET note_1='".$_POST['note_1']."', ";
-	$req .= "appreciation_1='".$_POST['appreciation_1']."', ";
+	$req .= "appreciation_1='".utf8_encode($_POST['appreciation_1'])."', ";
 	$req .= "note_2='".$_POST['note_2']."', ";
 	//echo $req;
 	if(!empty($_POST['note_1'])){
@@ -56,7 +56,7 @@ if($_POST['eval']>0){
 			$req .= "valide_2='0' ,";
 		}
 	}
-	$req .= "appreciation_2='".$_POST['appreciation_2']."' ";
+	$req .= "appreciation_2='".utf8_encode($_POST['appreciation_2'])."' ";
 	$req .= "WHERE id='".$id_eval."';";
 	//echo $req;
 	$res = mysql_query($req);

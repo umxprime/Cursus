@@ -41,7 +41,7 @@ include("inc_sem_courant.php");
 //trouver les modules ayant déjà une session dans ce semestre
 $req = "SELECT session.*, modules.intitule, modules.id as id_module ";
 			$req .="FROM session, modules ";
-			$req .="WHERE session.semestre='".$semestre_courant."' AND modules.id=session.module ";
+			$req .="WHERE session.periode='".$semestre_courant."' AND modules.id=session.module ";
 if($_SESSION['auto']=='p'){
 			$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%';";
 		}else if($_SESSION['auto']=='a'){
@@ -49,7 +49,7 @@ if($_SESSION['auto']=='p'){
 		}else{
 			$req="select id from etudiants where id <0;";
 		}
-//$req = "select session.*, module.intitule from session, modules where session.semestre = '".$periode['id']."' and modules.id=session.module ORDER BY modules.code";
+//$req = "select session.*, module.intitule from session, modules where session.periode = '".$periode['id']."' and modules.id=session.module ORDER BY modules.code";
 //echo $req;
 		$res = mysql_query($req);
 $c = mysql_num_rows($res);

@@ -186,7 +186,7 @@ if ($etudiant["niveau"]>2 and $_SESSION['ecole']==1){
 //$total_inscrit+=credits;
 $requete= "select evaluations.*, session.module as module, modules.credits, modules.intitule, modules.code, modules.enseignants";
 $requete .=" from evaluations, session, modules where evaluations.etudiant = '".$id_etudiant."' ";
-$requete .= "and session.semestre='".$semestre_courant."' and evaluations.session=session.id and modules.id = session.module";
+$requete .= "and session.periode='".$semestre_courant."' and evaluations.session=session.id and modules.id = session.module";
 $requete .=";";
 //echo $requete;
 $resEvals = mysql_query($requete);

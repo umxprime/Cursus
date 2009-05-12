@@ -48,7 +48,7 @@ if($_SESSION['auto']=='a' or $_SESSION['auto']=='s'){
 	echo ($outil=="coordination")?" class=\"courant\" ":"";
 	echo "><a href=\"vue_etu_sem.php?ns=1\">coordination</a></li>\n";
 }else{
-	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.semestre='".$semestre_courant."' ";
+	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.periode='".$semestre_courant."' ";
 	$req .= " and modules.id=session.module and modules.code LIKE 'PP_EVL_%' and modules.enseignants like'%".$_SESSION['username']."%';";
 	//echo $req;
 	$res = mysql_query($req);

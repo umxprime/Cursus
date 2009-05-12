@@ -50,7 +50,8 @@
 			$prof = $params["prof"];
 			mysql_select_db(BASE);
 			$req = "SELECT ecole FROM professeurs WHERE id=$prof;";
-			$res = mysql_fetch_array(mysql_query($req));
+			$res = mysql_query($req);
+			if($res) $res = mysql_fetch_array($res);
 			$selected = $res["ecole"];
 			$req = "SELECT id,nom FROM ecoles;";
 			$schools = mysql_query($req);
@@ -67,7 +68,8 @@
 			$semestre = $params["semestre"];
 			mysql_select_db(BASE);
 			$req = "SELECT niveau FROM niveaux WHERE etudiant=$etudiant AND periode='$semestre' ORDER BY id DESC;";
-			$res = mysql_fetch_array(mysql_query($req));
+			$res = mysql_query($req);
+			if($res) $res = mysql_fetch_array($res);
 			$selected = $res["niveau"];
 			$out = array();
 			for($i=0;$i<11;$i++)
@@ -84,7 +86,8 @@
 			if ($params["niveau"]) $niveau = $params["niveau"];
 			mysql_select_db(BASE);
 			$req = "SELECT cycle,niveau FROM niveaux WHERE etudiant=$etudiant AND periode='$semestre' ORDER BY id DESC;";
-			$res = mysql_fetch_array(mysql_query($req));
+			$res = mysql_query($req);
+			if($res) $res = mysql_fetch_array($res);
 			$selected = $res["cycle"];
 			if (!$params["niveau"]) $niveau = $res["niveau"];
 			if ($niveau==0)

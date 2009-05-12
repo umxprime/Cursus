@@ -28,6 +28,6 @@
 		$param = explode(":",$value);
 		$params[$param[0]] = $param[1];
 	}
-	include("../inc_semestre_courant.php");
+	include("../inc_sem_courant.php");
 	include("modules/ajx_".$_GET["page"].".php");
 ?>

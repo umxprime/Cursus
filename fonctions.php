@@ -71,10 +71,10 @@ function affiche_ligne_courte($nom,$valeur){
 
 function affiche_champs($nom, $valeur,$large, $haut){
 	if(!$large){$large=64;}
-	if(!isset($haut)){$haut=8;}
+	if(!($haut)){$haut=8;}
 	//$c_champs = $nom." : ";
 	$c_champs = "<textarea name=\"".$nom."\" cols=\"".$large."\" rows=\"".$haut."\">";
-	$c_champs .= $valeur;
+	$c_champs .= utf8_encode($valeur);
 	$c_champs .= "</textarea><br />\n";
 	return $c_champs;
 }

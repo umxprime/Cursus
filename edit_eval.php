@@ -70,14 +70,14 @@ if($_GET["eval"]>0){
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
 <link rel="stylesheet" href="cursus.css" type="text/css">
-<title>Evaluation de <?php echo $etudiant['prenom']." ".$etudiant['nom'];?> pour le module : <?php echo $module['intitule']; ?></title>
+<title>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']); ?></title>
 </head>
 <body>
 <p>
 <h2><?php echo $periode['nom']; ?></h2>
 </p>
 <p>
-<h2>Evaluation de <?php echo $etudiant['prenom']." ".$etudiant['nom'];?> pour le module : <?php echo $module['intitule'];?></h2>
+<h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']);?></h2>
 </p>
 <p>
 <h2>Premi&egrave;re session</h2>
@@ -104,7 +104,7 @@ if($_GET["eval"]>0){
 	if(!empty($eval['note_1'])){
 		if(strpos("__efEF",$eval['note_1'])){
 			echo "<h2>Deuxi&egrave;me session</h2></p><p>";
-			echo affiche_champs("appreciation_2",$eval['appreciation_2'],80);
+			echo affiche_champs("appreciation_2",$eval['appreciation_2'],80,false);
 			echo "<select name=\"note_2\">";
 			echo "<option value='-' ";
 			echo (!strpos("__abcdefABCDEF",$eval['note_2']))?"selected ":"";

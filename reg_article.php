@@ -36,10 +36,10 @@ if(isset($_POST['id'])){
 	if ( $_POST['id']>0){
 	$id=$_POST['id'];
 	$req= "UPDATE articles ";
-	$req .= "SET titre='".$_POST['titre']."', ";
-	$req .= "indication='".$_POST['indication']."', ";
-	$req .= "resume='".$_POST['resume']."', ";
-	$req .= "text='".$_POST['text']."', ";
+	$req .= "SET titre='".utf8_decode($_POST['titre'])."', ";
+	$req .= "indication='".utf8_decode($_POST['indication'])."', ";
+	$req .= "resume='".utf8_decode($_POST['resume'])."', ";
+	$req .= "text='".utf8_decode($_POST['text'])."', ";
 	$req .= "visible='".((isset($_POST['visible']))?1:0)."', ";
 	$req .= "ordre='".$_POST['ordre']."', ";
 	$req .= "date='".$_POST['date']['annee']."-".$_POST['date']['mois']."-".$_POST['date']['jour']."', ";
@@ -53,8 +53,8 @@ if(isset($_POST['id'])){
 	}else{
 	$req= "INSERT INTO articles ";
 	$req .= "(id, titre, indication, resume, text, visible, ordre, date, date_annonce, auteur, session, atelier, rubrique) ";
-	$req .= "VALUES ('','".$_POST['titre']."','".$_POST['indication']."', ";
-	$req .= "'".$_POST['resume']."', '".$_POST['text']."', ";
+	$req .= "VALUES ('','".utf8_decode($_POST['titre'])."','".utf8_decode($_POST['indication'])."', ";
+	$req .= "'".utf8_decode($_POST['resume'])."', '".utf8_decode($_POST['text'])."', ";
 		$req .= "'".((isset($_POST['visible']))?1:0)."', ";
 	$req .= "'".$_POST['ordre']."', ";
 	$req .= "'".$_POST['date']['annee']."-".$_POST['date']['mois']."-".$_POST['date']['jour']."', '";

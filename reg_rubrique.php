@@ -36,8 +36,8 @@ if(isset($_POST['id'])){
 	if ( $_POST['id']>0){
 	$id=$_POST['id'];
 	$req= "UPDATE rubriques ";
-	$req .= "SET titre='".$_POST['titre']."', ";
-	$req .= "indication='".$_POST['indication']."', ";
+	$req .= "SET titre='".utf8_decode($_POST['titre'])."', ";
+	$req .= "indication='".utf8_decode($_POST['indication'])."', ";
 	$req .= "parent='".$_POST['parent']."', ";
 	$req .= "visible='".((isset($_POST['visible']))?1:0)."', ";
 	$req .= "ordre='".$_POST['ordre']."'";
@@ -46,7 +46,7 @@ if(isset($_POST['id'])){
 	}else{
 		$req= "INSERT INTO rubriques ";
 	$req .= "(id, titre, indication, parent, visible, ordre) ";
-	$req .= "VALUES ('','".$_POST['titre']."','".$_POST['indication']."', ";
+	$req .= "VALUES ('','".utf8_decode($_POST['titre'])."','".utf8_decode($_POST['indication'])."', ";
 	$req .= "'".$_POST['parent']."', ";
 	$req .= "'".((isset($_POST['visible']))?1:0)."', ";
 	$req .= "'".$_POST['ordre']."');";

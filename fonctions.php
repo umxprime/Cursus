@@ -51,7 +51,7 @@ function affiche_ligne($nom,$valeur, $taille){
 	//$c_ligne = $nom." : ";
 	if(!$taille){$taille=64;}
 	$c_ligne = "<input type=\"text\" name=\"".$nom."\" size=\"".$taille."\" ";
-	$c_ligne .= "value=\"".$valeur."\" >";
+	$c_ligne .= "value=\"".utf8_encode($valeur)."\" >";
 	$c_ligne .= "<br />\n";
 	return $c_ligne;
 }

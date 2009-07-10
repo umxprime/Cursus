@@ -37,6 +37,7 @@
 	require("connexion.php");
 	$outil="utilisateurs";
 	include("inc_sem_courant.php");
+	exit();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

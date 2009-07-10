@@ -40,36 +40,38 @@ include("inc_sem_courant.php");
 
 //trouver les modules ayant déjà une session dans ce semestre
 $req = "SELECT session.*, modules.intitule, modules.id as id_module ";
-			$req .="FROM session, modules ";
-			$req .="WHERE session.periode='".$semestre_courant."' AND modules.id=session.module ";
-if($_SESSION['auto']=='p'){
-			$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%';";
-		}else if($_SESSION['auto']=='a'){
-			$req .= ";";
-		}else{
-			$req="select id from etudiants where id <0;";
-		}
+$req .="FROM session, modules ";
+$req .="WHERE session.periode='".$semestre_courant."' AND modules.id=session.module ";
+if($_SESSION['auto']=='p')
+{
+	$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%';";
+}
+else if($_SESSION['auto']=='a')
+{
+	$req .= ";";
+}else{
+	$req="select id from etudiants where id <0;";
+}
 //$req = "select session.*, module.intitule from session, modules where session.periode = '".$periode['id']."' and modules.id=session.module ORDER BY modules.code";
 //echo $req;
-		$res = mysql_query($req);
+$res = mysql_query($req);
 $c = mysql_num_rows($res);
-
 //echo "c======".$c."\n";
-if ($c >0){
+
+if ($c>0){
 	$chaineNot = "Select * from modules where id !='";
 	$n=0;
 	$tablModule = "";
-	while($session =mysql_fetch_array($res) ){
-		if ($n> 0){
-			$chaineNot .= " and id!='";
-		}
+	while($session=mysql_fetch_array($res) )
+	{
+		if ($n>0) $chaineNot.=" and id!='";
+		
 		//echo $_SESSION['auto'];
 		
-		
-			$tablModule .="<TR>\n<TD>\n";
-			$tablModule .="<A HREF=\"gestion_modules.php?session=".$session["id"]."\">";
-			$tablModule .=utf8_encode($session["intitule"])."</A>\n</TD>";
-			$tablModule .="<TD><a href=\"edition_modules.php?id=".$session['id_module']."\">Modifier le module</TD></tr>";
+		$tablModule .="<TR>\n<TD>\n";
+		$tablModule .="<A HREF=\"gestion_modules.php?session=".$session["id"]."\">";
+		$tablModule .=utf8_encode($session["intitule"])."</A>\n</TD>";
+		$tablModule .="<TD><a href=\"edition_modules.php?id=".$session['id_module']."\">Modifier le module</TD></tr>";
 		
 		$chaineNot .= $session["id_module"]."'";
 		$n++;

@@ -28,7 +28,7 @@
 	$page = $page[0];
 	
 	echo "<script type=\"text/javascript\" src=\"potajx/modules/ajx_".$page.".js\"></script>";
-	echo "<script type=\"text/javascript\" src=\"potajx/potajuste.js\"></script>";
+	echo "<script type=\"text/javascript\" src=\"potajx/potajx.js\"></script>";
 	
 	function ajx_span($id)
 	{

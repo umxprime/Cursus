@@ -51,7 +51,7 @@ if(strpos("_ABCDabcd",$n1)){
 	$lst .="			<li class=\"titre\">code</li>\n";
 	$lst .="			<li class=\"titreReponse\">".$code."</li>\n";
 	$lst .="			<li class=\"titre\">intitul&eacute;</li>\n";
-	$lst .="			<li class=\"titreReponse\">".$titre."</li>\n";
+	$lst .="			<li class=\"titreReponse\">".utf8_encode($titre)."</li>\n";
 	$lst .="		</ul>\n";
 	$lst .="</li>\n";
 
@@ -67,7 +67,7 @@ if(strpos("_ABCDabcd",$n1)){
 	$lst .=$affCreds;
 	$lst .="</strong>/".$creds."</li>\n";
 	$lst .="			<li class=\"titre\">Appr&eacute;ciation</li>\n";
-	$lst .="			<li class=\"bulletinAppreciation\">".$a1."</li>\n";
+	$lst .="			<li class=\"bulletinAppreciation\">".utf8_encode($a1)."</li>\n";
 	$lst .="		</ul>\n";
 	$lst .="	</li>\n";
 	
@@ -122,7 +122,7 @@ $etudiant = mysql_fetch_array($resreq);
 include("inc_css_thing.php");
 ?>
 <link rel="stylesheet" href="etu_style.css" type="text/css" />
-<title><?php echo "--vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
+<title><?php echo "--vue bulletin de ".utf8_encode($etudiant["prenom"])." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
 </head>
 <body>
 <div id="global">
@@ -132,9 +132,9 @@ include("inc_nav_sem.php"); ?>
 <div id="BulletinEntete">
 	<ul class="bulletinNom">
 		<li class="titre">nom</li>
-		<li class="titreReponse"><?php echo $etudiant["nom"];?></li >
+		<li class="titreReponse"><?php echo utf8_encode($etudiant["nom"]);?></li >
 		<li class="titre">pr&eacute;nom</li>
-		<li class="titreReponse"><?php echo $etudiant["prenom"];?></li>
+		<li class="titreReponse"><?php echo utf8_encode($etudiant["prenom"]);?></li>
 		<li class="titre">semestre</li>
 		<li class="titreReponse"><?php echo $etudiant["niveau"]; ?></li>
 	</ul>

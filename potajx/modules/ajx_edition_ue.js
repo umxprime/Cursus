@@ -56,10 +56,6 @@ function init()
 	if (ajx_get_value("liste_types") == "professeurs") {
 		ajx_cache("champs_etus");
 		ajx_montre("champs_profs");
-		ajx_inputTexts(	"autos:autos",
-					"edition_utilisateurs",
-					"get_valeurs",
-					"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"));
 	}
 	
 	if (ajx_get_value("liste_types") == "etudiants") {
@@ -91,10 +87,6 @@ function chg_utilisateur()
 	{
 		ajx_cache("champs_etus");
 		ajx_montre("champs_profs");
-		ajx_inputTexts(	"autos:autos",
-					"edition_utilisateurs",
-					"get_valeurs",
-					"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"));
 		ajx_select(	"liste_ecoles",
 					null,
 					"ajx",
@@ -165,7 +157,6 @@ function submit()
 		var form = "nom:"+ajx_get_value("nom");
 		form += ",prenom:"+ajx_get_value("prenom");
 		form += ",passw:"+ajx_get_value("passw");
-		form += ",autos:"+ajx_get_value("autos");
 		form += ",ecole:"+ajx_get_value("liste_ecoles");
 		var newuser = ajx_submit(	"edition_utilisateurs",
 									"set_professeurs",

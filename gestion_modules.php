@@ -40,6 +40,7 @@ require("connexion.php");
 include("fonctions.php");
 //echo $idd_session."|";
 include("inc_sem_courant.php");
+include("regles_utilisateurs.php");
 (!$_GET['session'])?$idd_session = $_POST['session']:$idd_session = $_GET['session'];
 if(!$idd_session){
 	$idd_session=$_SESSION['lasession'];
@@ -55,9 +56,9 @@ $req2 = "SELECT * FROM periodes where id = '".$session['periode']."';";
 $res2 = mysql_query($req2);
 $semestre = mysql_fetch_array($res2);
 //echo $semestre['titre'];
-if($_SESSION['auto']=='a'){
+if($droits[$_SESSION['auto']]["edit_tous_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
-}else if($_SESSION['auto']=='p'){
+}else if($droits[$_SESSION['auto']]["edit_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
 }else{
 	$req="select id from etudiants wehre id <0;";

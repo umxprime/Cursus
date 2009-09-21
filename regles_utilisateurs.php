@@ -37,18 +37,18 @@
 		{
 			foreach($droits as $k1=>$v1)
 			{
-				if($val==null) echo $k1.":".$v1."<br/>";
+				//if($val==null) echo $k1.":".$v1."<br/>";
 				if($droit=="*")
 				{
 					foreach($droits[$k1] as $k2=>$v2)
 					{
-						if($val==null) echo "-".$k1.":".$k2."=".($droits[$k1][$k2])."<br/>";
+						//if($val==null) echo "-".$k1.":".$k2."=".($droits[$k1][$k2])."<br/>";
 						if($val!=null) chdroits($droits,$k1,$k2,$val);
 					}
 				}
 				else
 				{
-					if($val==null) echo $k1.":".$droit."=".($droits[$k1][$droit])."<br/>";
+					//if($val==null) echo $k1.":".$droit."=".($droits[$k1][$droit])."<br/>";
 					if($val!=null) chdroits($droits,$k1,$droit,$val);
 				}
 				
@@ -57,21 +57,48 @@
 		}
 		if($val==null)
 		{
-			echo $groupe.":".$droit."=".($droits[$groupe][$droit]);
+			//echo $groupe.":".$droit."=".($droits[$groupe][$droit]);
 		}
 		else
 		{
-			echo "set ".$groupe.":".$droit." to ".$val."<br/>";
+			//echo "set ".$groupe.":".$droit." to ".$val."<br/>";
 			$droits[$groupe][$droit]=$val;
 		}
 	}
 	
 	$droits = array();
-	$droits["super"]["view_all_modules"] = true;
-	$droits["super"]["edit_all_modules"] = true;
-	$droits["super"]["edit_users"] = true;
-	$droits["coorda"]["edit_users"]=false;
-	$droits["coordc"]["edit_all_modules"]=false;
-	chdroits($droits,"*","*",true);
-	chdroits($droits,"*","*");
+	
+	$droits["super"]["menu_utilisateurs"] = true;
+	$droits["super"]["menu_coordination"] = true;
+	$droits["super"]["menu_modules"] = true;
+	$droits["super"]["menu_niveaux"] = true;
+	$droits["super"]["edit_utilisateurs"] = true;
+	$droits["super"]["edit_coordination"] = true;
+	$droits["super"]["edit_coordination_s13"] = true;
+	$droits["super"]["edit_niveaux"] = true;
+	$droits["super"]["edit_modules"] = true;
+	$droits["super"]["edit_modules_adv"] = true;
+	$droits["super"]["edit_tous_modules"] = true;
+	$droits["super"]["voir_tous_modules"] = true;
+	$droits["super"]["voir_tous_sites"] = true;
+	
+	$droits["admin"] = $droits["super"];
+	$droits["admin"]["voir_tous_modules"] = false;
+	$droits["admin"]["edit_coordination_s13"] = false;
+	$droits["admin"]["voir_tous_sites"] = false;
+	
+	$droits["coord_semestre"] = $droits["admin"];
+	$droits["coord_semestre"]["menu_utilisateurs"] = false;
+	$droits["coord_semestre"]["edit_utilisateurs"] = false;
+	$droits["coord_semestre"]["edit_tous_modules"] = false;
+	$droits["coord_semestre"]["edit_modules_adv"] = false;
+	$droits["coord_semestre"]["menu_niveaux"] = false;
+	
+	$droits["p"] = $droits["coord_semestre"];
+	$droits["p"]["menu_coordination"] = false;
+	
+	//chdroits($droits,"*","*");
+	//chdroits($droits,"*","*",true);
+	//chdroits($droits,"*","*");
+	
 ?>

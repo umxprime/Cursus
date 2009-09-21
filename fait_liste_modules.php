@@ -38,8 +38,9 @@
 	//les classes de traitement des fichiers openOffice
 	include_once ('tbs_class.php');
 	include_once ('tbsooo_class.php');
+	if (!isset($_GET["periode"])) die('?periode=');
 	
-	$req = "SELECT * FROM modules WHERE desuetude='0000-00-00';";
+	$req = "SELECT modules.* FROM modules,session WHERE session.periode='".$_GET["periode"]."' AND modules.id=session.module ORDER BY modules.code ASC;";
 	
 	$res = mysql_query($req);
 	$modules = array();

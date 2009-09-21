@@ -28,18 +28,14 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-
     include("lesotho.php");
 	include("fonctions.php");
-	//on requiert les variables de connexion;
 	require("connect_info.php");
-	//puis la connexion standard;
 	require("connexion.php");
-	$outil="utilisateurs";
+	$outil="unités d'évaluation";
 	include("inc_sem_courant.php");
-	include("regles_utilisateurs.php");
-	//exit();
 ?>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -82,9 +78,6 @@
 						</td></tr>
 					</table>
 					<table id="champs_profs">
-						<tr><td>
-							Auto <?php ajx_span("autos"); ?>
-						</td></tr>
 						<tr><td>
 							École <?php ajx_span("liste_ecoles"); ?>
 						</td></tr>

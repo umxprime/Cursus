@@ -37,6 +37,7 @@ require("connect_info.php");
 require("connexion.php");
 $outil="infosperso";
 include("inc_sem_courant.php");
+include("regles_utilisateurs.php");
 $table="professeurs";
 	$src= $_SERVER['PHP_SELF'];
 $id = ($_POST['id'])?$_POST['id']:$_GET['id'];

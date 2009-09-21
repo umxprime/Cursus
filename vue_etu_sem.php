@@ -37,6 +37,7 @@ include("lesotho.php");
 $outil="coordination";
 include("inc_sem_courant.php");
 include("fonctions_eval.php");
+include("regles_utilisateurs.php");
 //si un mumero de semestre d'etude est transmis (pas la p�riode temporelle, le semestre d'enseignement
 // c'est � dire les semestres de 1 � 10
 if(isset($_GET['ns'])){
@@ -68,26 +69,31 @@ include("inc_nav_sem.php");
 
 //navigationn entre les semestres d'�tude
 //en fonction du degr�s d'autorisation, acc�s � un choix de semestre d'�tude
-if($_SESSION['auto']=='a' or $_SESSION['auto']=='s' or $_SESSION['auto']=='p'){
-if($_SESSION['auto']=='a'){
-$coords=array(1,2,3,4,5,6,7,8,9,10,13);
-}else{
-$coords=array(1,2,3,4,5,6,7,8,9,10);
-}
-echo "<div id=\"choixSemestre\">";
-echo "<ul>";
-
-//le semestre d'�tude actuellement s�lectionn� est trait� diff�remment � l'affichage
-//et sont onglet est inactif (pas de lien)
-foreach($coords as $niv){
-if($niv==$ns){
-echo "<li id=\"courant\"><a href=\"#\">s".$niv."</a></li>";
-}else{
-echo "<li><a href=\"vue_etu_sem.php?ns=".$niv."&nPeriode=".$periode['id']."\">s".$niv."</a></li>";
-}
-}
-echo "<ul>";
-echo "</div>";
+if($droits[$_SESSION['auto']]['edit_coordination'])
+{
+	if($droits[$_SESSION['auto']]['edit_coordination_s13'])
+	{
+		$coords=array(1,2,3,4,5,6,7,8,9,10,13);
+	}else
+	{
+		$coords=array(1,2,3,4,5,6,7,8,9,10);
+	}
+	echo "<div id=\"choixSemestre\">";
+	echo "<ul>";
+	
+	//le semestre d'�tude actuellement s�lectionn� est trait� diff�remment � l'affichage
+	//et sont onglet est inactif (pas de lien)
+	foreach($coords as $niv){
+		if($niv==$ns)
+		{
+			echo "<li id=\"courant\"><a href=\"#\">s".$niv."</a></li>";
+		}else
+		{
+			echo "<li><a href=\"vue_etu_sem.php?ns=".$niv."&nPeriode=".$periode['id']."\">s".$niv."</a></li>";
+		}
+	}
+	echo "<ul>";
+	echo "</div>";
 }
 ?>
 <div id="content"><?php
@@ -101,7 +107,7 @@ $res_etu = mysql_query($req_etu);
 while($etudiant=mysql_fetch_array($res_etu)){
 echo "<ul class=\"bulletin\">\n";
 echo "<li class=\"nomBulletin\"><a href='vue_bulletin.php?id_etudiant=".$etudiant['id']."&nPeriode=".$semestre_courant."'>".$etudiant["nom"]." ";
-echo $etudiant["prenom"]."</a></li>\n";
+echo utf8_encode($etudiant["prenom"])."</a></li>\n";
 //mise � 0 des cr�dits pr�vus et des cr�dits acquis
 $total_inscrit = 0;
 $total_acquis = 0;

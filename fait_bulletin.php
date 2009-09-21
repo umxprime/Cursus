@@ -40,7 +40,7 @@ include_once ('tbs_class.php');
 include_once ('tbsooo_class.php');
 function moncode($chaine){
 	if ($semestre_courant >24){
-		return utf8_decode($chaine);
+		return ($chaine);
 	}
 	else
 	{
@@ -59,8 +59,8 @@ if ( isset ($_GET['id_etudiant']))
     while ($etudiant = mysql_fetch_array($resreq))
     {
         $id_etudiant = $etudiant["id"];
-        $nom_etudiant = utf8_decode($etudiant["nom"]);
-        $prenom_etudiant = utf8_decode($etudiant["prenom"]);
+        $nom_etudiant = ($etudiant["nom"]);
+        $prenom_etudiant = ($etudiant["prenom"]);
         $semestre = $etudiant["niveau"];
 
         $total1_credits = 0;
@@ -105,7 +105,7 @@ if ( isset ($_GET['id_etudiant']))
                 $var8 = "cred2_module_".$nligne;
                 $var9 = "profs_module_".$nligne;
                 $var11 = "credits_module_".$nligne;
-                $$var1 = "Tutorat ".utf8_decode($tut["enseignant"]);
+                $$var1 = "Tutorat ".($tut["enseignant"]);
                 $$var2 = "TUTO_".$nligne;
                 $$var4 = ( isset ($tut['note_1']))?$tut['note_1']:"";
                 $$var10 = ( isset ($tut['note_1']))?$tut['note_1']:"";
@@ -114,11 +114,11 @@ if ( isset ($_GET['id_etudiant']))
                     "";
                     $$var3 = "";
                     $$var8 = "";
-                    $$var9 = utf8_decode($tut['enseignant']);
+                    $$var9 = ($tut['enseignant']);
                     $$var6 = ( isset ($tut['note_2']))?$tut['note_2']:"";
                     $$var7 = ($tut['appreciation_2']);
                     $vartut = "tuteur_".$nligne;
-                    $$vartut = utf8_decode($tut["enseignant"]);
+                    $$vartut = ($tut["enseignant"]);
 
                     $nligne++;
                 }
@@ -185,7 +185,7 @@ if ( isset ($_GET['id_etudiant']))
                         "";
                         $$var3 = "";
                         $$var8 = "";
-                        $$var9 = utf8_decode($eval['enseignants']);
+                        $$var9 = ($eval['enseignants']);
                         $$var6 = verif($eval['note_2']);
                         $$var7 = moncode($eval['appreciation_2']);
                         if (strpos("_ABCDabcd", $$var4)>0)
@@ -241,12 +241,12 @@ if ( isset ($_GET['id_etudiant']))
                             $var8 = "cred2_module_".$nligne;
                             $var9 = "profs_module_".$nligne;
                             $var11 = "credits_module_".$nligne;
-                            $$var1 = utf8_decode($eval["lieu"]);
+                            $$var1 = ($eval["lieu"]);
                             $$var2 = "STAGE";
                             $$var4 = verif($eval['note']);
                             $$var10 = verif($eval['note']);
                             $$var11 = "";
-                            $$var5 = ( isset ($eval['appreciation']))?utf8_decode($eval['appreciation']):
+                            $$var5 = ( isset ($eval['appreciation']))?($eval['appreciation']):
                                 "";
                                 $$var3 = "";
                                 $$var8 = "";
@@ -307,8 +307,8 @@ if ( isset ($_GET['id_etudiant']))
                                     $$var2 = $evalSup[$nligne-$raz]['code'];
                                     $$var3 = $evalSup[$nligne-$raz]['credits'];
                                     $$var4 = verif($evalSup[$nligne-$raz]['note_2']);
-                                    $$var5 = utf8_decode($evalSup[$nligne-$raz]['appreciation_2']);
-                                    $$var8 = utf8_decode($evalSup[$nligne-$raz]['enseignants']);
+                                    $$var5 = ($evalSup[$nligne-$raz]['appreciation_2']);
+                                    $$var8 = ($evalSup[$nligne-$raz]['enseignants']);
                                 }
                                 $nligne++;
                             }

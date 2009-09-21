@@ -37,20 +37,23 @@ require("connect_info.php");
 require("connexion.php");
 $outil="modules";
 include("inc_sem_courant.php");
+include("regles_utilisateurs.php");
+
+if($_SESSION['auto']=="etudiant") exit();
 
 //trouver les modules ayant déjà une session dans ce semestre
 $req = "SELECT session.*, modules.intitule, modules.id as id_module ";
 $req .="FROM session, modules ";
 $req .="WHERE session.periode='".$semestre_courant."' AND modules.id=session.module ";
-if($_SESSION['auto']=='p')
+if($droits[$_SESSION['auto']]['voir_tous_modules']==false)
 {
 	$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%';";
 }
-else if($_SESSION['auto']=='a')
+else if($droits[$_SESSION['auto']]['voir_tous_modules']==true)
 {
 	$req .= ";";
-}else{
-	$req="select id from etudiants where id <0;";
+} else {
+	header("Location: login.php?origine=".$_SERVER['PHP_SELF']);
 }
 //$req = "select session.*, module.intitule from session, modules where session.periode = '".$periode['id']."' and modules.id=session.module ORDER BY modules.code";
 //echo $req;
@@ -68,10 +71,12 @@ if ($c>0){
 		
 		//echo $_SESSION['auto'];
 		
-		$tablModule .="<TR>\n<TD>\n";
-		$tablModule .="<A HREF=\"gestion_modules.php?session=".$session["id"]."\">";
-		$tablModule .=utf8_encode($session["intitule"])."</A>\n</TD>";
-		$tablModule .="<TD><a href=\"edition_modules.php?id=".$session['id_module']."\">Modifier le module</TD></tr>";
+		$tablModule .="<tr>\n<td>\n";
+		$tablModule .="<a href=\"gestion_modules.php?session=".$session["id"]."&nPeriode=".$periode["id"]."\">";
+		$tablModule .=utf8_encode($session["intitule"])."</a>\n</td>";
+		$tablModule .="<td>";
+		if($droits[$_SESSION["auto"]]["edit_modules"]) $tablModule .= "<a href=\"edition_modules.php?id=".$session['id_module']."\">Modifier le module</a>";
+		$tablModule .="</td></tr>";
 		
 		$chaineNot .= $session["id_module"]."'";
 		$n++;

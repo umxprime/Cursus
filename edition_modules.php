@@ -35,6 +35,7 @@ include("fonctions.php");
 require("connect_info.php");
 //puis la connexion standard;
 require("connexion.php");
+include("regles_utilisateurs.php");
 $id = ($_POST['id'])?$_POST['id']:$_GET['id'];
 /*
 sécurité : édition interdite aux étudiants
@@ -48,7 +49,8 @@ if(!$id or $id<0 or $id==$_POST["old_id"]){
 	/*
 	sécurité : édition réservée aux admins
 	*/
-	if($_SESSION["auto"]!="a"){
+	//if($_SESSION["auto"]!="a"){
+	if($droits[$_SESSION["auto"]]["edit_modules_adv"]!=true){
 		header("Location: sessions.php");
 		exit();
 	}
@@ -68,7 +70,8 @@ else
 	sécurité : édition limitée aux enseignants du module et aux admins
 	*/
 	$valid = strlen(stripos($ligne["enseignants"],$_SESSION["username"]));
-	if(!$valid and $_SESSION["auto"]!="a"){
+	//if(!$valid and $_SESSION["auto"]!="a"){
+	if(!$valid and $droits[$_SESSION["auto"]]["edit_modules_adv"]!=true){
 		header("Location: sessions.php");
 		exit();
 	}
@@ -92,7 +95,8 @@ else
  border="1" cellpadding="2" cellspacing="2">
   <tbody>
   <?php 
-  $peut_ajouter=($_SESSION['auto']=="a")?1:0;
+  $peut_ajouter=($droits[$_SESSION['auto']]['edit_modules_adv'])?1:0;
+  //$peut_ajouter=($_SESSION['auto']=='a')?1:0;
   if($peut_ajouter){?>
     <tr>
       
@@ -107,13 +111,13 @@ else
     <tr>
       <td style="width: 70px;">Modifier ici</td>
       <td colspan="5" rowspan="1">
-      <?php echo affiche_ligne("intitule",utf8_encode($ligne['intitule']),30); ?>
+      <?php echo affiche_ligne("intitule",($ligne['intitule']),30); ?>
 	</td>
       <td>Code</td>
       <td>
       <?php 
       if($peut_ajouter){
-      echo affiche_ligne_courte("code",utf8_encode($ligne['code']));
+      echo affiche_ligne_courte("code",($ligne['code']));
       }else{echo utf8_encode($ligne['code']);}
       ?>
 
@@ -121,7 +125,7 @@ else
     </tr>
     <tr>
       <td colspan="8" rowspan="1";">
-      <?php echo affiche_champs("description",utf8_encode($ligne['description']),100,8); ?></td>
+      <?php echo affiche_champs("description",($ligne['description']),100,8); ?></td>
     </tr>
     <tr>
       <td style="width: 70px;">Jour</td>
@@ -174,7 +178,7 @@ else
     <tr>
       <td style="width: 70px;">Enseignants</td>
       <td colspan="5" rowspan="1" style="width: 52px;">
-      <?php echo affiche_ligne("enseignants",utf8_encode($ligne['enseignants']),60); ?>
+      <?php echo affiche_ligne("enseignants",($ligne['enseignants']),60); ?>
       </td>
       <td style="width: 105px;"><?php echo selecteurObjets("","professeurs","ajout_prof","nom_complet","nom_complet",$connexion,"",0,0,"nom"); ?>
 		</td>
@@ -187,7 +191,7 @@ else
       Mode d'évaluation
       </td>
       <td colspan="6" rowspan="1" style="width: 70px;">
-       <?php echo affiche_champs("evaluation",utf8_encode($ligne['evaluation']),80,5); ?>
+       <?php echo affiche_champs("evaluation",($ligne['evaluation']),80,5); ?>
       </td>
     </tr>
    

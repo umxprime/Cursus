@@ -36,12 +36,13 @@ require("connect_info.php");
 //puis la connexion standard;
 require("connexion.php");
 $outil="niveaux";
-if($_SESSION['auto']!='a'){$id=$_SESSION['userid'];}
+if(!$droits[$_SESSION['auto']]["edit_niveaux"]){$id=$_SESSION['userid'];}
 include("inc_sem_courant.php");
+include("regles_utilisateurs.php");
 //echo "id= ".$id;
 //echo "old_id= ".$_POST['old_id'];
 $message_rec= "Valider les modifications";
-$ok_edit=($_SESSION['auto']=='a')?1:0;
+$ok_edit=($droits[$_SESSION['auto']]["edit_niveaux"])?1:0;
 //echo "ok_edit : ".$ok_edit;
 (isset($_POST['cycle']))?($cycle=$_POST['cycle']):((isset($_GET['cycle']))?($cycle=$_GET['cycle']):($cycle=1));
 $req = "SELECT * FROM cycles where id=".$cycle.";";

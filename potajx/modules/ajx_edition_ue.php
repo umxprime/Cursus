@@ -23,7 +23,7 @@
 		case "get_utilisateurs" :
 			$base = $params["base"];
 			mysql_select_db(BASE);
-			$req = "SELECT * FROM $base ORDER BY nom ASC";
+			$req = "SELECT * FROM $base";
 			$users = mysql_query($req);
 			$out = array();
 			while($user=mysql_fetch_array($users)){

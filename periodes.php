@@ -58,14 +58,14 @@ $arrDateCourante= array('jour'=>$expDate[0],'mois'=>$expDate[1],'annee'=>$expDat
 //echo "dateFin : ".$dateFin['jour'].$dateFin['mois'].$dateFin['annee']."<br/>";
 
 ?>
-<title>Ajout d'une p&eacute;riode</title>
+<title>Ajout d'une période</title>
 
 </head>
 <body>
 <?php
 if(!$id or $id<0 or $id==$_POST['old_id']){
 	$ligne = FALSE;
-	$nom=(empty($_POST['nom']))?"nom de la p&eacute;riode":$_POST['nom'];
+	$nom=(empty($_POST['nom']))?"nom de la période":$_POST['nom'];
 	$activite=(empty($_POST['activite']))?-1:$_POST['activite'];
 	$dateFin = (empty($_POST['dateFin']))?$arrDateCourante:$_POST['dateFin'];
 	$dateDebut = (empty($_POST['dateDebut']))?$arrDateCourante:$_POST['dateDebut'];

@@ -42,6 +42,7 @@ $outil="tutorat";
 include("inc_sem_courant.php");
 $dateCourante = date("Y-m-d");
 include("inc_nav_sem.php");
+include("regles_utilisateurs.php");
 $form0 ="";
 //echo $semestre['titre'];
 if (isset($_POST['tuteur'])){

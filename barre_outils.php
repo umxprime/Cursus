@@ -34,19 +34,19 @@
 <?php
 echo "<li";
 echo ($outil=="modules")?" class=\"courant\" ":"";
-echo "><a href=\"sessions.php\">modules</a></li>\n";
+echo "><a href=\"sessions.php?nPeriode=$semestre_courant\">modules</a></li>\n";
 echo "<li";
 echo ($outil=="tutorat")?" class=\"courant\" ":"";
-echo "><a href=\"tutorats.php\">tutorats</a></li>\n";
-if($_SESSION['auto']=='a' or $_SESSION['auto']=='s'){
+echo "><a href=\"tutorats.php?nPeriode=$semestre_courant\">tutorats</a></li>\n";
+if($droits[$_SESSION['auto']]["menu_utilisateurs"]==true){
 	echo "<li";
 	echo ($outil=="utilisateurs")?" class=\"courant\" ":"";
-	echo "><a href=\"edition_utilisateurs.php\">utilisateurs</a></li>\n";
+	echo "><a href=\"edition_utilisateurs.php?nPeriode=$semestre_courant\">utilisateurs</a></li>\n";
 }
-if($_SESSION['auto']=='a' or $_SESSION['auto']=='s'){
+if($droits[$_SESSION['auto']]["menu_coordination"]==true){
 	echo "<li";
 	echo ($outil=="coordination")?" class=\"courant\" ":"";
-	echo "><a href=\"vue_etu_sem.php?ns=1\">coordination</a></li>\n";
+	echo "><a href=\"vue_etu_sem.php?ns=1&nPeriode=$semestre_courant\">coordination</a></li>\n";
 }else{
 	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.periode='".$semestre_courant."' ";
 	$req .= " and modules.id=session.module and modules.code LIKE 'PP_EVL_%' and modules.enseignants like'%".$_SESSION['username']."%';";
@@ -56,18 +56,18 @@ if($_SESSION['auto']=='a' or $_SESSION['auto']=='s'){
 	while($arr = mysql_fetch_array($res)){
 			echo "<li";
 			echo ($outil=="coordination")?" class=\"courant\" ":"";
-			echo "><a href=\"vue_etu_sem.php?ns=".($arr['obligatoire']*1)."\">coordination</a></li>\n";
+			echo "><a href=\"vue_etu_sem.php?ns=".($arr['obligatoire']*1)."&nPeriode=$semestre_courant\">coordination</a></li>\n";
 		}
 		
 	}
-if($_SESSION['auto']=='a' or $_SESSION['auto']=='s'){
+if($droits[$_SESSION['auto']]["menu_niveaux"]==true){
 	echo "<li";
 	echo ($outil=="niveaux")?" class=\"courant\" ":"";
-	echo "><a href=\"passages_niveaux.php\">niveaux</a></li>\n";
+	echo "><a href=\"passages_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
 }
 echo "<li";
 echo ($outil=="infoperso")?" class=\"courant\" ":"";
-echo "><a href=\"edition_prof.php\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
+echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
 echo "<li class=\"nomEnseignant\">".$_SESSION['username']."</li>\n";
 echo "<li class=\"logoff\"><a href=\"login.php\">d&eacute;connexion</a></li>\n";
 ?>

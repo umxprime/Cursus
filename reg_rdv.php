@@ -34,13 +34,12 @@ require("connect_info.php");
 require("connexion.php");
 if($_POST['id_rdv']>0){
 	$id_rdv=$_POST['id_rdv'];
-	$req= "UPDATE rdv SET cr='".$_POST['cr']."', ";
-	$date = $_POST['date'];
-	$req .= "date='".$date['annee']."-".$date['mois']."-".$date['jour']." ".implode(":",$_POST['heure']).":00'";
-	$req .= " WHERE id='".$id_rdv."';";
-	//echo $req;
-	$res = mysql_query($req);
-	//echo mysql_error();
-	header("Location: edit_rdv.php?rdv=".$id_rdv);
+	header("Location:edit_rdv.php?rdv=".$id_rdv);
+	//$req = "UPDATE rdv SET cr='".$_POST['cr']."', ";
+	//$date = $_POST['date'];
+	//$req .= "date='".$date['annee']."-".$date['mois']."-".$date['jour']." ".implode(":",$_POST['heure']).":00'";
+	//$req .= " WHERE id='".$id_rdv."';";
+	//$res = mysql_query($req);
+	//header("Location:edit_rdv.php?rdv=".$id_rdv);
 }
 ?>

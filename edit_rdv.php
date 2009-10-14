@@ -84,11 +84,11 @@ if(isset($_POST['date'])){
 <p>
 <h4>
 	<a href="edition_prof.php">
-		<?php echo $_SESSION['username']; ?>
+		<?php echo utf8_encode($_SESSION['username']); ?>
 	</a>
 	 :: :: 
 	<a href="login.php">
-		se d&eacute;connecter
+		se déconnecter
 	</a>
 </h4>
 </p>
@@ -96,7 +96,7 @@ if(isset($_POST['date'])){
 <h2>
 <?php
 echo "<a href='tutorats.php?tuteur=".$prof['id']."'>";
-echo "Tutorat ".$prof['nom_complet']."</a> - ".$etu['prenom']." ".$etu['nom']."/ rdv ".$rdv['ordre']." / <a href=\"sessions.php?nPeriode=".$sem['id']."\">".$sem['nom'] ?></a></h2>
+echo "Tutorat ".utf8_encode($prof['nom_complet'])."</a> - ".$etu['prenom']." ".$etu['nom']."/ rdv ".$rdv['ordre']." / <a href=\"sessions.php?nPeriode=".$sem['id']."\">".$sem['nom'] ?></a></h2>
 </p>
 <form id="formulaire" name="formulaire" action="reg_rdv.php"
 	method="post">
@@ -113,8 +113,7 @@ echo "Tutorat ".$prof['nom_complet']."</a> - ".$etu['prenom']." ".$etu['nom']."/
 	?>
 <input type="submit" name="action" value="valider">
 <br />
-<input type="hidden" name="id_rdv" value="
-<?php echo $rdv['id']; ?>">
+<input type="hidden" name="id_rdv" value="<?php echo $rdv['id']; ?>">
 </form>
 </body>
 </html>

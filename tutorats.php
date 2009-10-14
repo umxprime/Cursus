@@ -36,13 +36,13 @@ require("connect_info.php");
 //echo $idd_session."|";
 require("connexion.php");
 //echo $idd_session."|";
+include("regles_utilisateurs.php");
 include("fonctions.php");
 $outil="tutorat";
 //echo $idd_session."|";
 include("inc_sem_courant.php");
 $dateCourante = date("Y-m-d");
 include("inc_nav_sem.php");
-include("regles_utilisateurs.php");
 $form0 ="";
 //echo $semestre['titre'];
 if (isset($_POST['tuteur'])){
@@ -56,20 +56,21 @@ if (isset($_POST['tuteur'])){
 	$tuteur = $_SESSION['userid'];
 	$nomTuteur = $_SESSION['username'];
 }
-if($_SESSION['auto']=='a'){
+if($droits[$_SESSION['auto']]['admin_tutorats']){
 	
-	$form0 .= "<form id=\"formulaire\" name=\"formulaire\" action=\"tutorats.php\" method=\"post\">";
-	$form0 .= selecteurObjets("tutorats.php","professeurs","tuteur","nom_complet","id",$connexion,$tuteur,0,0,"nom");
-	$form0 .="<input type=\"hidden\" name=\"nPeriode\" value=\"".$nPeriode."\">";
+	$form0 .= "<form id=\"formulaire\" name=\"formulaire\" action=\"tutorats.php?nPeriode=$semestre_courant\" method=\"post\">";
+	$form0 .= selecteurObjets("tutorats.php?nPeriode=$semestre_courant","professeurs","tuteur","nom_complet","id",$connexion,$tuteur,0,0,"nom");
+	$form0 .="<input type=\"hidden\" name=\"nPeriode\" value=\"".$semestre_courant."\">";
 	$form0 .= "</form>";
 }
-if($_SESSION['auto']=='p' or $_SESSION['auto']=='a'){
+if($droits[$_SESSION['auto']]['voir_tutorats']){
 	$req = "SELECT * FROM tutorats WHERE professeur = '".$tuteur."' AND semestre='".$semestre_courant."' AND trash !=1;";
 }else{
 	$req="";
 }
 //echo $req;
 $res = mysql_query($req);
+//echo $req;
 $nres=mysql_num_rows($res);
 
 if ($nres>0){
@@ -98,7 +99,7 @@ if ($nres>0){
 		$resEtu= mysql_query($req);
 		$etudiant = mysql_fetch_array($resEtu);
 		$tablEvals .= "<tr>\n\t<td>";
-		$tablEvals .= $etudiant['prenom']. " ".$etudiant['nom'];
+		$tablEvals .= utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);
 		$tablEvals .= "\n\t</td>\n\t<td>";
 		//desinscription de l'étudiant
 		$tablEvals .= "<a href=\"#\" onClick=\"document.formulaire2.action.value='desinscrire';";
@@ -158,7 +159,7 @@ if ($nres>0){
 <?php echo $form0;?>
 <h2>
 <?php //echo $chaineNot;
-echo "Tutorats ".$nomTuteur." / <a href=\"sessions.php?nPeriode=".$periode['id']."\">".$periode['nom'] ?></a></h2>
+echo "Tutorats ".utf8_encode($nomTuteur)." / <a href=\"sessions.php?nPeriode=".$periode['id']."\">".$periode['nom'] ?></a></h2>
 </p>
 <p>
 <?php if($nres>0){ ?>
@@ -173,14 +174,14 @@ $chaineNot.= " GROUP BY semestre, nom";
 $resNot = mysql_query($chaineNot);
 ?>
 <p>
-<h2>Inscrire un &eacute;tudiant &agrave; ce module</h2>
+<h2>Inscrire un étudiant à ce module</h2>
 </p>
 <P>
 <form id="formulaire2" name="formulaire2" action="reg_tutorats.php"
 	method="post">
 <P>Nom de l'etudiant : <select id="etudiant" name="etudiant">
 <?php
-echo liste_etudiants($sauf, $connexion, $periode['id']);
+echo liste_etudiants($sauf, $connexion, $periode['id'],$_SESSION["ecole"],$droits[$_SESSION['auto']]['voir_tous_sites']);
 ?>
 </select></P>
 <input type="hidden" name="periode" value="<?php echo $semestre_courant; ?>" >

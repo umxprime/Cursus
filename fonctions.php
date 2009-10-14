@@ -425,13 +425,13 @@ function generatePassword ($length = 8)
 	return $password;
 
 }
-function liste_etudiants($sauf=array(), $conn, $perid, $ecole=0){
+function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
 	$req = "SELECT etudiants.*, niveaux.niveau, niveaux.cycle as cycle, niveaux.id as id_niveau, cycles.id as cycle_id, cycles.ecole as ecole FROM etudiants, niveaux, cycles WHERE ";
 	$req .="niveaux.periode='".$perid."' AND niveaux.niveau>0";
-	$req .=" AND niveaux.niveau <11 AND etudiants.id =niveaux.etudiant ";
-	if ($ecole!=0)
+	$req .=" AND niveaux.niveau <11 AND etudiants.id =niveaux.etudiant AND niveaux.cycle=cycles.id ";
+	if ($ecole && !$all)
 	{
-		$req .= "AND niveaux.cycle=cycles.id AND cycles.ecole=$ecole ";
+		$req .= "AND cycles.ecole= $ecole ";
 	}
 	if (!is_array($sauf)){
 		
@@ -441,6 +441,7 @@ function liste_etudiants($sauf=array(), $conn, $perid, $ecole=0){
 	}
 	}
 	$req .= " ORDER BY niveaux.niveau, etudiants.nom;";
+	//echo $req;
 	$c_select = "";
 	//$c_select .= $req;
 	$res = mysql_query($req, $conn);

@@ -32,7 +32,7 @@
 <div id="menuCursus">
 		<ul>
 			<li class="courant">Bulletin</li>
-			<li><a title="Modifier votre mot de passe et indentifiant" href="edition_etu.php">infos perso</a></li>
+			<li><a title="Signaler un bug" href="http://bugs.esa-npdc.net" target="_blank">signaler un bug</a></li>
 			<li class="nomEnseignant"><?php echo $etudiant["prenom"]." ".$etudiant["nom"]; ?></li>
 			<li class="logoff"><a title="se d&eaute;connecter" href="login.php">d&eacute;connexion</a></li>
 		</ul>

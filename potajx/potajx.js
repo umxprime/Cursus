@@ -149,7 +149,7 @@ function ajx_inputTexts(fields,page,action,params)
 function ajx_genMotDePasse(field)
 {
 	var element = ajx_get_id(field);
-	var patterns = ["xyxyxzzz","yxyxyzzz","xyzxyzyy"]
+	var patterns = ["xyxyxzzz","yxyxyzzz","zzxyxyzz","zzyxyxzz"]
 	var pattern = patterns[Math.floor(Math.random()*patterns.length)];
 	var x = "aeiouy";
 	var y = "zrtpqsdfghjklmwxcvbn";
@@ -179,5 +179,5 @@ function ajx_genMotDePasse(field)
 function ajx_submit(page,action,params)
 {
 	var message = ajx(page,action,params);
-	return message;
+	return message;	
 }

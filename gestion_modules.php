@@ -60,6 +60,7 @@ if($droits[$_SESSION['auto']]["edit_tous_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 }else if($droits[$_SESSION['auto']]["edit_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
+	//echo $req;
 }else{
 	$req="select id from etudiants wehre id <0;";
 }
@@ -186,7 +187,12 @@ echo $tablEvals;
 	method="post">
 <P>Nom de l'etudiant : <select id="etudiant" name="etudiant">
 <?php
-echo liste_etudiants($sauf, $connexion, $periode['id']);
+$session = $_GET["session"];
+$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole FROM session, modules WHERE session.id='$session' AND session.module=modules.id;";
+$res = mysql_fetch_array(mysql_query($req));
+$ecole = $res["module_ecole"];
+echo $ecole;
+echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecole);
 ?>
 </select>
 </P>

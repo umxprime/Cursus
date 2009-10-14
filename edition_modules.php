@@ -36,6 +36,7 @@ require("connect_info.php");
 //puis la connexion standard;
 require("connexion.php");
 include("regles_utilisateurs.php");
+include("inc_sem_courant.php");
 $id = ($_POST['id'])?$_POST['id']:$_GET['id'];
 /*
 sécurité : édition interdite aux étudiants
@@ -90,7 +91,7 @@ else
 </title>
 </head>
 <body>
-<form id="formulaire" name="formulaire" action="reg_module.php" method="post">
+<form id="formulaire" name="formulaire" action="reg_module.php?nPeriode=<?php echo $semestre_courant;?>" method="post">
 <table style="text-align: left; width: 626px; height: 228px;"
  border="1" cellpadding="2" cellspacing="2">
   <tbody>
@@ -103,7 +104,7 @@ else
       <td style="width: 70px;">Intitulé</td>
       <td colspan="7" rowspan="1"> 
     <?php 
-	echo selecteurModules("edition_modules.php","modules","id","intitule","id",$connexion,$ligne['id'],0,$peut_ajouter, "code"); 
+	echo selecteurModules("edition_modules.php?nPeriode=$semestre_courant","modules","id","intitule","id",$connexion,$ligne['id'],0,$peut_ajouter, "code",$semestre_courant); 
 	?>
 	</td>
     </tr>

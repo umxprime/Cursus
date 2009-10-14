@@ -166,9 +166,12 @@ function liste_table($table, $col_affs, $col_vals, $conn, $order){
 	}
 }
 
-function liste_modules($table, $col_affs, $col_vals, $conn, $order){
+function liste_modules($table, $col_affs, $col_vals, $conn, $order, $semestre){
+	$req = "SELECT debut,fin FROM periodes WHERE id='$semestre'";
+	$res = mysql_query($req);
+	$periode = mysql_fetch_array($res);
 	$sql = "SELECT ".$col_vals.",".$col_affs." FROM ".$table;
-	$sql .= " WHERE (desuetude='0000-00-00' OR desuetude>'".date("Y-m-d")."')";
+	$sql .= " WHERE (desuetude='0000-00-00' OR (desuetude>'".$periode["debut"]."'))";
 	if($order){
 		$sql .= " ORDER BY ".$order;
 	}
@@ -219,14 +222,14 @@ function selecteurObjets($page, $table,$nom, $col_affs, $col_vals, $conn, $coche
 	$c_sel .= "\t</select>\n";
 	return $c_sel;
 }
-function selecteurModules($page, $table,$nom, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau, $order){
+function selecteurModules($page, $table,$nom, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau, $order, $semestre){
 	$c_sel = "<select class=\"select_".$table."\" name=\"".$nom."\" ";
 	if(strlen($page)){
 		$c_sel .= "onchange = \"javascript:document.formulaire.action='".$page."';document.formulaire.submit()\"";
 	}
 	$c_sel .= ">\n";
 	if (!is_array($liste)){
-		$c_sel .= affiche_options(liste_modules($table, $col_affs, $col_vals, $conn,$order),$coche,$nouveau);
+		$c_sel .= affiche_options(liste_modules($table, $col_affs, $col_vals, $conn,$order,$semestre),$coche,$nouveau);
 	}
 	else
 	{
@@ -422,15 +425,19 @@ function generatePassword ($length = 8)
 	return $password;
 
 }
-function liste_etudiants($sauf=array(), $conn, $perid){
-	$req = "SELECT etudiants.*, niveaux.niveau, niveaux.id as id_niveau FROM etudiants, niveaux WHERE ";
+function liste_etudiants($sauf=array(), $conn, $perid, $ecole=0){
+	$req = "SELECT etudiants.*, niveaux.niveau, niveaux.cycle as cycle, niveaux.id as id_niveau, cycles.id as cycle_id, cycles.ecole as ecole FROM etudiants, niveaux, cycles WHERE ";
 	$req .="niveaux.periode='".$perid."' AND niveaux.niveau>0";
 	$req .=" AND niveaux.niveau <11 AND etudiants.id =niveaux.etudiant ";
+	if ($ecole!=0)
+	{
+		$req .= "AND niveaux.cycle=cycles.id AND cycles.ecole=$ecole ";
+	}
 	if (!is_array($sauf)){
 		
 	}else{
 	foreach($sauf as $et){
-		$req .="AND etudiants.id!='".$et."' ";
+		$req .="AND etudiants.id!='$et' ";
 	}
 	}
 	$req .= " ORDER BY niveaux.niveau, etudiants.nom;";

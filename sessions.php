@@ -42,16 +42,16 @@ include("regles_utilisateurs.php");
 if($_SESSION['auto']=="etudiant") exit();
 
 //trouver les modules ayant déjà une session dans ce semestre
-$req = "SELECT session.*, modules.intitule, modules.id as id_module ";
-$req .="FROM session, modules ";
-$req .="WHERE session.periode='".$semestre_courant."' AND modules.id=session.module ";
+$req = "SELECT session.*, modules.intitule, modules.id as id_module, modules.code as module_code ";
+$req .="FROM session, modules, professeurs ";
+$req .="WHERE professeurs.id='".$_SESSION['userid']."' AND session.periode='".$semestre_courant."' AND modules.id=session.module ";
 if($droits[$_SESSION['auto']]['voir_tous_modules']==false)
 {
-	$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%';";
+	$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%' ORDER BY modules.intitule ASC;";
 }
 else if($droits[$_SESSION['auto']]['voir_tous_modules']==true)
 {
-	$req .= ";";
+	$req .= "ORDER BY modules.code ASC;";
 } else {
 	header("Location: login.php?origine=".$_SERVER['PHP_SELF']);
 }
@@ -72,10 +72,12 @@ if ($c>0){
 		//echo $_SESSION['auto'];
 		
 		$tablModule .="<tr>\n<td>\n";
+		$tablModule .= $session["module_code"];
+		$tablModule .="</td>\n<td>\n";
 		$tablModule .="<a href=\"gestion_modules.php?session=".$session["id"]."&nPeriode=".$periode["id"]."\">";
 		$tablModule .=utf8_encode($session["intitule"])."</a>\n</td>";
 		$tablModule .="<td>";
-		if($droits[$_SESSION["auto"]]["edit_modules"]) $tablModule .= "<a href=\"edition_modules.php?id=".$session['id_module']."\">Modifier le module</a>";
+		if($droits[$_SESSION["auto"]]["edit_modules_adv"]) $tablModule .= "<a href=\"edition_modules.php?id=".$session['id_module']."&nPeriode=$semestre_courant\">Modifier le module</a>";
 		$tablModule .="</td></tr>";
 		
 		$chaineNot .= $session["id_module"]."'";
@@ -103,12 +105,12 @@ if ($c>0){
 			//echo "test session".implode("|", $_SESSION);
 			?>			
 			<?php include("inc_nav_sem.php"); ?>
-			<p>
+			
 				<table id="table_modules">
 					<?php echo $tablModule;	?>
 					</tr>
 				</table>
-			</p>
+			
 			<?php
 			}
 			else
@@ -116,7 +118,7 @@ if ($c>0){
 				$req = "select * from modules where desuetude='0000-00-00' or desuetude>'".$dateCourante."' ORDER BY code;";
 				$resNot = mysql_query($req);
 			}
-			if ($_SESSION['auto']=="a")
+			if ($droits[$_SESSION['auto']]["ajouter_module"])
 			{
 			?>
 			<h2>Ajouter un module pour ce semestre</h2>

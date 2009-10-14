@@ -60,13 +60,19 @@
 			<?php include("barre_outils.php"); ?>
 			<?php include("inc_nav_sem.php"); ?>
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
+			
 			<table>
 				<tr><td>
 					<?php ajx_span("liste_types"); ajx_span("liste_utilisateurs"); ?>
 					<a href="javascript:chg_utilisateur()" onclick="this.blur()">Recharger</a>
+					<a href="javascript:init()" onclick="this.blur()">Nouveau</a>
+					<a href="javascript:del_utilisateur()" onclick="this.blur()">Supprimer</a>
 				</td></tr>
 				<tr><td>
 					Nom <?php ajx_span("nom");?> Prénom <?php ajx_span("prenom"); ?>
+				</td></tr>
+				<tr><td>
+					Log <?php ajx_span("log"); ?> Type <?php ajx_span("logtype"); ?>
 				</td></tr>
 				<tr><td>
 					Mot de passe <?php ajx_span("passw");?>
@@ -93,6 +99,7 @@
 				<tr><td>
 					<a href="javascript:submit()" onclick="this.blur()">Valider</a></span>
 				</td></tr><tr><td>
+					<?php ajx_span("alerts"); ?>
 					<?php ajx_span("loader");?>
 				</td></tr>
 			</table>

@@ -35,7 +35,7 @@ include("fonctions.php");
 require("connect_info.php");
 //puis la connexion standard;
 require("connexion.php");
-if($_SESSION['auto']!='a'){re_root("login.php");}
+if(!$droits[$_SESSION["auto"]]["edit_niveaux"]) re_root("login.php");
 include("inc_sem_courant.php");
 (isset($_POST['id_etudiant']))?($id_etudiant=$_POST['id_etudiant']):((isset($_GET['id_etudiant']))?($id_etudiant=$_GET['id_etudiant']):($id_etudiant=0));
 (isset($_POST['cycle']))?($cycle=$_POST['cycle']):((isset($_GET['cycle']))?($cycle=$_GET['cycle']):($cycle=0));

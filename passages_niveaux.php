@@ -61,7 +61,7 @@ if($ok_edit==1){
 	if (mysql_num_rows($res)<3){
 		echo "<br />creation des niveaux...";
 		$req2 = "insert into niveaux (periode, etudiant, niveau, cycle)";
-		$req2 .=" select periodes.id, etudiants.id, 0, niveaux.cycle";
+		$req2 .=" select periodes.id, etudiants.id, niveaux.niveau, niveaux.cycle";
 		$req2 .=" from periodes, etudiants, niveaux";
 		$req2 .=" where periodes.id = '".$semestre_courant."' and etudiants.periode_sortie<1 and niveaux.cycle=$cycle and etudiants.id=niveaux.etudiant and niveaux.periode=".($semestre_courant-1).";";
 		echo "<br />".$req2;
@@ -113,7 +113,7 @@ if($ok_edit==1){
 <title>Passages et niveau des &eacute;tudiants</title>
 <style type="text/css">
 <?php 
-include("cursus2.css"); 
+include("cursusn.css"); 
 ?>
 </style>
 </head>
@@ -124,8 +124,13 @@ include("barre_outils.php") ;
 $plus_nav_semestre=array(array('var'=>'cycle', 'val'=>$cycle));
 include("inc_nav_sem.php");
 echo "<form method=\"post\" action=\"passages_niveaux.php\" name=\"formulaire\">";
-echo selecteur_cycle($conn, $cycle,"cycle", "passages_niveaux.php",$_SESSION['ecole']);
-
+if($droits[$_SESSION["auto"]]["edit_tous_niveaux"])
+{
+	echo selecteur_cycle($conn, $cycle,"cycle", "passages_niveaux.php",0);
+} else
+{
+	echo selecteur_cycle($conn, $cycle,"cycle", "passages_niveaux.php",$_SESSION['ecole']);
+}
 echo "<input type=hidden name=\"nPeriode\" value=\"".$semestre_courant."\"/>";
 
 echo "</form>";

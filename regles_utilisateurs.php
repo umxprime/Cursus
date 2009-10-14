@@ -76,25 +76,35 @@
 	$droits["super"]["edit_coordination"] = true;
 	$droits["super"]["edit_coordination_s13"] = true;
 	$droits["super"]["edit_niveaux"] = true;
+	$droits["super"]["edit_tous_niveaux"] = true;
 	$droits["super"]["edit_modules"] = true;
+	$droits["super"]["edit_tous_evaluations"] = true;
+	$droits["super"]["edit_evaluations"] = true;
 	$droits["super"]["edit_modules_adv"] = true;
 	$droits["super"]["edit_tous_modules"] = true;
 	$droits["super"]["voir_tous_modules"] = true;
 	$droits["super"]["voir_tous_sites"] = true;
+	$droits["super"]["ajouter_module"] = true;
 	
 	$droits["admin"] = $droits["super"];
-	$droits["admin"]["voir_tous_modules"] = false;
+	$droits["admin"]["edit_tous_niveaux"] = false;
+	$droits["admin"]["edit_tous_evaluations"] = false;
 	$droits["admin"]["edit_coordination_s13"] = false;
 	$droits["admin"]["voir_tous_sites"] = false;
 	
-	$droits["coord_semestre"] = $droits["admin"];
-	$droits["coord_semestre"]["menu_utilisateurs"] = false;
-	$droits["coord_semestre"]["edit_utilisateurs"] = false;
+	$droits["coord"] = $droits["admin"];
+	$droits["coord"]["ajouter_module"] = false;
+	$droits["coord"]["voir_utilisateurs"] = false;
+	$droits["coord"]["menu_utilisateurs"] = false;
+	
+	$droits["coord_semestre"] = $droits["coord"];
 	$droits["coord_semestre"]["edit_tous_modules"] = false;
 	$droits["coord_semestre"]["edit_modules_adv"] = false;
 	$droits["coord_semestre"]["menu_niveaux"] = false;
+	$droits["coord_semestre"]["edit_niveaux"] = false;
 	
 	$droits["p"] = $droits["coord_semestre"];
+	$droits["p"]["voir_tous_modules"] = false;
 	$droits["p"]["menu_coordination"] = false;
 	
 	//chdroits($droits,"*","*");

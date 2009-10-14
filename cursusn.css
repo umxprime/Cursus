@@ -109,8 +109,8 @@ html {
 }
 #global {
 	position: relative;
-	width: 760px;
-	margin-left: -380px;
+	width: 1024px;
+	margin-left: -512px;
 	left: 50%;
 	height: auto;
 	min-height: 100%;
@@ -140,7 +140,7 @@ img {
 	top: 0px;
 	left: 11px;
 	padding-left: 10px;
-	width: 728px;
+	width: 992px;
 	background-color: #eee;
 	color: inherit;
 	/*background: url(img/trame-gris.gif);*/
@@ -213,7 +213,7 @@ img {
 	position: relative;
 	left: 11px;
 	padding-left: 10px;
-	width: 728px;
+	width: 992px;
 	height: 35px;
 	margin-bottom: 20px;
 	background-color: #f8f8f8;
@@ -256,4 +256,10 @@ img {
 	background-color: inherit;
 	margin-left: 60px;
 	margin-right: 15px;
+}
+#table_modules
+{
+	width:760px;
+	margin-left:auto;
+	margin-right:auto;
 }

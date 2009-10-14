@@ -76,11 +76,12 @@
 			}
 			#identifiant {
 			position: relative;
-			left: 11px;
+			left: 0px;
 			padding-left: 10px;
-			width: 728px;
+			width: 1002px;
 			/*background-color: #fff;*/
 			background: url(img/fond-cursus.gif) no-repeat;
+			background-position-x:10px;
 			color: inherit;
 			/*height: 35px;*/
 			height: 100%;

@@ -29,43 +29,36 @@
 	 * 
 	 **/
 	
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-include("lesotho.php");
-$outil="coordination";
-include("inc_sem_courant.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
-//si un mumero de semestre d'etude est transmis (pas la p�riode temporelle, le semestre d'enseignement
-// c'est � dire les semestres de 1 � 10
-if(isset($_GET['ns'])){
-$ns = $_GET['ns'];
-}else{
-$ns=1;
-}
+	//on requiert les variables de connexion;
+	require("connect_info.php");
+	//puis la connexion standard;
+	require("connexion.php");
+	include("lesotho.php");
+	$outil="coordination";
+	include("inc_sem_courant.php");
+	include("fonctions_eval.php");
+	include("regles_utilisateurs.php");
+	//si un mumero de semestre d'etude est transmis (pas la p�riode temporelle, le semestre d'enseignement
+	// c'est � dire les semestres de 1 � 10
+	$ns=1;
+	if(isset($_GET['ns'])) $ns = $_GET['ns'];
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
-<?php
-include("inc_css_thing.php");
-?>
-<title><?php echo "vue etudiants semestre ".$ns." ".$periode["nom"] ?></title>
-<link rel="stylesheet" href="etu_sem.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="etu_sem_print.css" type="text/css"
-	media="print" />
+	<?php
+	include("inc_css_thing.php");
+	?>
+	<title><?php echo "vue etudiants semestre ".$ns." ".$periode["nom"] ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="etu_sem.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="etu_sem_print.css" type="text/css" media="print" />
 </head>
 <body>
-<div id="global"><?php
-//affichage de la barre de navigation outils
-include("barre_outils.php");
-//affichage de la barre de navigation en semestres temporels
-include("inc_nav_sem.php");
+<div id="global">
+	<?php
+		include("barre_outils.php");
+		include("inc_nav_sem.php");
 
 //navigationn entre les semestres d'�tude
 //en fonction du degr�s d'autorisation, acc�s � un choix de semestre d'�tude
@@ -118,9 +111,9 @@ $n_lignes=15;
 //c'est � dire qu'un m�me module p�dagogique peut avoir lieu surant diff�rents semestres temporels
 //l'association module<->semestre temporel est une session
 //les �tudiants sont donc inscrits � des sessions de modules p�dagogiques
-$req_evals = "SELECT evaluations.note_1,evaluations.note_2,evaluations.appreciation_1, evaluations.appreciation_2,evaluations.session, ";
+$req_evals = "SELECT evaluations.note_1,evaluations.note_2,evaluations.appreciation_1, evaluations.appreciation_2,evaluations.session, evaluations.id as eval_id, ";
 $req_evals .= "session.periode, session.module, ";
-$req_evals .= "modules.id as module_id, modules.code, modules.intitule, modules.credits";
+$req_evals .= "modules.id as module_id, modules.code, modules.intitule, modules.credits, modules.enseignants";
 $req_evals .= " FROM evaluations, session, modules WHERE ";
 $req_evals .= " evaluations.etudiant = '".$etudiant["id"]."' AND session.id=evaluations.session";
 $req_evals .= " AND session.periode = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.intitule;";
@@ -130,22 +123,22 @@ $res_evals = mysql_query($req_evals);
 while($eval=mysql_fetch_array($res_evals)){
 //incr�mentation du nombre de cr�dits pr�vus
 $total_inscrit +=$eval['credits'];
-if($eval['code']=="PP_EVL_".$etudiant['sem_etu']){
-//traitement de l'�valuation semestrielle
-// elle sera affich�e en bas de liste donc stockage dans une variable
-$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
-$classe = $valide['classe'];
-$total_acquis += $valide['creds'];
-$sem_eval = "<li class=\"".$classe."\">";
-//echo $n_lignes;
-$sem_eval .= "<a href=\"#\" title=\"".$eval['intitule']."\">";
-$sem_eval .= $eval["code"]." : </a>";
-$sem_eval .= "<a href=\"#\" title=\"".$eval['appreciation_1']."\">";
-$sem_eval .= $eval['note_1']."</a>";
-$sem_eval .= "/";
-$sem_eval .= "<a href=\"#\" title=\"".$eval['appreciation_2']."\">";
-$sem_eval .= $eval['note_2']."</a></li>\n";
-
+if($eval['code']=="PP_EVL_".$etudiant['sem_etu'])
+{
+	//traitement de l'�valuation semestrielle
+	// elle sera affich�e en bas de liste donc stockage dans une variable
+	$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
+	$classe = $valide['classe'];
+	$total_acquis += $valide['creds'];
+	$sem_eval = "<li class=\"".$classe."\">";
+	//echo $n_lignes;
+	$sem_eval .= "<a href=\"gestion_modules.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])."\">";
+	$sem_eval .= $eval["code"]." : </a>";
+	$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
+	$sem_eval .= $eval['note_1']."</a>";
+	$sem_eval .= "/";
+	$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
+	$sem_eval .= $eval['note_2']."</a></li>\n";
 }else{
 //traitement des modules autres que l'�valuation
 $valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
@@ -153,12 +146,12 @@ $classe = $valide['classe'];
 $total_acquis += $valide['creds'];
 echo "<li class=\"".$classe."\">";
 //echo $n_lignes;
-echo "<a href=\"#\" title=\"".$eval['intitule']."\">";
+echo "<a href=\"gestion_modules.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])." (".utf8_encode($eval["enseignants"]).")\">";
 echo $eval["code"]." : </a>";
-echo "<a href=\"#\" title=\"".$eval['appreciation_1']."\">";
+echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
 echo $eval['note_1']."</a>";
 echo "/";
-echo "<a href=\"#\" title=\"".$eval['appreciation_2']."\">";
+echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
 echo $eval['note_2']."</a></li>\n";
 $n_lignes -=1;
 }

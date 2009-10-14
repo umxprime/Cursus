@@ -98,6 +98,6 @@ if(strlen($_POST['action'])>1){
 	$res = mysql_query($req);
 	//echo mysql_error($res);
 	
-	header("Location: edition_modules.php?id=".$_POST["id"]);
+	header("Location: edition_modules.php?id=".$_POST["id"]."&nPeriode=".$_GET["nPeriode"]);
 }
 ?>

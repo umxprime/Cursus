@@ -47,7 +47,8 @@ if($droits[$_SESSION['auto']]["menu_coordination"]==true){
 	echo "<li";
 	echo ($outil=="coordination")?" class=\"courant\" ":"";
 	echo "><a href=\"vue_etu_sem.php?ns=1&nPeriode=$semestre_courant\">coordination</a></li>\n";
-}else{
+}
+/*else{
 	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.periode='".$semestre_courant."' ";
 	$req .= " and modules.id=session.module and modules.code LIKE 'PP_EVL_%' and modules.enseignants like'%".$_SESSION['username']."%';";
 	//echo $req;
@@ -59,12 +60,14 @@ if($droits[$_SESSION['auto']]["menu_coordination"]==true){
 			echo "><a href=\"vue_etu_sem.php?ns=".($arr['obligatoire']*1)."&nPeriode=$semestre_courant\">coordination</a></li>\n";
 		}
 		
-	}
+	}*/
 if($droits[$_SESSION['auto']]["menu_niveaux"]==true){
 	echo "<li";
 	echo ($outil=="niveaux")?" class=\"courant\" ":"";
 	echo "><a href=\"passages_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
 }
+echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\">signaler un bug</a></li>\n";
+
 echo "<li";
 echo ($outil=="infoperso")?" class=\"courant\" ":"";
 echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";

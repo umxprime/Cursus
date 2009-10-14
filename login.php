@@ -71,12 +71,15 @@ if($_POST["action"] == "Login")
 	{	
 		//le nom d'utilisateur est passé en bas de casse;
 		$username = trim(strtolower($_POST["username"]));
+		//prevent mysql injections
+		$username = mysql_real_escape_string($username);
 		//requete pour l'identification, objectif d'une requete unique, mais pas trouv� la m�thode encore
-		$sql = "select etudiants.id from etudiants where log like '".$username."';";
+		$sql = "select etudiants.id from etudiants where log like '$username';";
 		$res = mysql_query ($sql);
 		if(mysql_num_rows($res)<=0){
 			//echo "recherche chez les profs<br />\n";
-			$sql = "select professeurs.id from professeurs where log like '".$username."';";
+			$sql = "select professeurs.id from professeurs where log like '$username';";
+			//echo $sql;
 			$res = mysql_query ($sql);
 			$eid=0;
 			//echo mysql_error();
@@ -110,7 +113,8 @@ if($_POST["action"] == "Login")
 		
 		
 		$password = trim(strtolower($_POST["password"]));
-		
+		//prevent mysql injections
+		$password = mysql_real_escape_string($password);
 		//echo $password."<br />\n";
 		//echo $usr['passw']."<br />\n";
 		if($usr['passw'] == $password)

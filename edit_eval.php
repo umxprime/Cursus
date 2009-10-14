@@ -34,7 +34,7 @@ require("connect_info.php");
 require("connexion.php");
 include("fonctions.php");
 include("fonctions_eval.php");
-//echo $_GET["eval"];
+include("regles_utilisateurs.php");
 if($_GET["eval"]>0){
 	$id_eval=$_GET["eval"];
 	$req = "SELECT * FROM evaluations WHERE id='".$id_eval."';";
@@ -47,9 +47,9 @@ if($_GET["eval"]>0){
 	$req2 = "SELECT * FROM periodes where id = '".$session['periode']."';";
 	$res2 = mysql_query($req2);
 	$periode = mysql_fetch_array($res2);
-	if($_SESSION['auto']=='a'){
+	if($droits[$_SESSION['auto']]["edit_tous_evaluations"]){
 		$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
-	}else if($_SESSION['auto']=='p'){
+	}else if($droits[$_SESSION['auto']]["edit_evaluations"]){
 		$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
 	}else{
 		$req="select id from etudiants where id <0;";

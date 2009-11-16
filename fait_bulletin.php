@@ -59,7 +59,7 @@ if ( isset ($_GET['id_etudiant']))
     while ($etudiant = mysql_fetch_array($resreq))
     {
         $id_etudiant = $etudiant["id"];
-        $nom_etudiant = ($etudiant["nom"]);
+        $nom_etudiant = str_ireplace(" ", "", $etudiant["nom"]);
         $prenom_etudiant = ($etudiant["prenom"]);
         $semestre = $etudiant["niveau"];
 

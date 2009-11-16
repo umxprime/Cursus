@@ -198,6 +198,39 @@
 			mysql_query($req);
 			echo $newid;
 			break;
+		case "set_professeurs" :
+			$base = $params["base"];
+			$id = $params["id"];
+			$nom = utf8_decode($params["nom"]);
+			$prenom = utf8_decode($params["prenom"]);
+			$log = $params["log"];
+			$logtype = $params["logtype"];
+			$passw = $params["passw"];
+			$autos = $params["autos"];
+			$ecole = $params["ecole"];
+			if ($id == "new")
+			{
+				$req = "INSERT INTO $base (`nom`,`prenom`,`passw`,`log`,`logtype`,`autos`,`ecole`) VALUES";
+				$req .= "('$nom','$prenom','$passw','$log','$logtype','$autos','$ecole')";
+				$res = mysql_query($req);
+				//$req = "SELECT `id` FROM $base ORDER BY `id` DESC;";
+				//$newuser = mysql_fetch_array(mysql_query($req));
+				$newid = mysql_insert_id();
+			} else {
+				$req = "UPDATE $base SET ";
+				$req .= "nom='$nom'";
+				$req .= ",prenom='$prenom'";
+				$req .= ",passw='$passw'";
+				$req .= ",log='$log'";
+				$req .= ",logtype='$logtype'";
+				$req .= ",autos='$autos'";
+				$req .= ",ecole='$ecole'";
+				$req .= " WHERE id='$id';";
+				mysql_query($req);
+				$newid=$id;
+			}
+			echo $newid;
+			break;
 		case "del_utilisateur" :
 			$base = $params["base"];
 			$id = $params["id"];

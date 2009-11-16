@@ -66,8 +66,7 @@ else
 }
 
 ?>
-<form id="formulaire" name="formulaire" action="ajouter_activite.php"
-	method="post">
+<form id="formulaire" action="ajouter_activite.php" method="post">
 	<?php
 	echo "<div class=\"selecteur_periode\">P&eacute;riode : ";
 	echo selecteur_objets("activites.php", "activites", "nom", "id", $connexion, $id_clef,0,1);
@@ -80,10 +79,10 @@ else
 	echo "\n</div>";
 
 	if($id_clef > 0){
-		?>
-<input type="submit" name="action" value="modifier">
-<br />
-<input type="submit" name="action" value="supprimer">
+	?>
+<input type="submit" name="action" value="modifier"/>
+<br/>
+<input type="submit" name="action" value="supprimer"/>
 <?php
 	}
 	else{
@@ -92,8 +91,7 @@ else
 		<?php
 	}
 	?>
-<input type="hidden" name="table" value="
-<?php echo $table ?>">
+<input type="hidden" name="table" value="<?php echo $table ?>">
 </form>
 </body>
 </html>

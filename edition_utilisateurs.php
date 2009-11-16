@@ -97,7 +97,7 @@
 					</table>
 				</td></tr>
 				<tr><td>
-					<a href="javascript:submit()" onclick="this.blur()">Valider</a></span>
+					<a href="javascript:submit()" onclick="this.blur()">Valider</a>
 				</td></tr><tr><td>
 					<?php ajx_span("alerts"); ?>
 					<?php ajx_span("loader");?>

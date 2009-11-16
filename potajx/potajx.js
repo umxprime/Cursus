@@ -96,7 +96,7 @@ function ajx_select(id,onchangefunc,values,page,action,params,addnew,baseselecte
 	}
 	else a_values = values.split(",");
 
-	if (addnew) content += "<option value='new'>Nouvel Enregistrement</option>"
+	if (addnew) content += "<option value='new'>Nouvel Enregistrement</option>";
 	for(var i=0;i<a_values.length;i++)
 	{
 		var a_value = a_values[i].split(":");
@@ -149,7 +149,7 @@ function ajx_inputTexts(fields,page,action,params)
 function ajx_genMotDePasse(field)
 {
 	var element = ajx_get_id(field);
-	var patterns = ["xyxyxzzz","yxyxyzzz","zzxyxyzz","zzyxyxzz"]
+	var patterns = ["xyxyxzzz","yxyxyzzz","zzxyxyzz","zzyxyxzz"];
 	var pattern = patterns[Math.floor(Math.random()*patterns.length)];
 	var x = "aeiouy";
 	var y = "zrtpqsdfghjklmwxcvbn";

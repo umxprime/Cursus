@@ -61,7 +61,6 @@ $res = mysql_query($req);
 $c = mysql_num_rows($res);
 //echo "c======".$c."\n";
 
-if ($c>0){
 	$chaineNot = "Select * from modules where id !='";
 	$n=0;
 	$tablModule = "";
@@ -112,12 +111,6 @@ if ($c>0){
 				</table>
 			
 			<?php
-			}
-			else
-			{
-				$req = "select * from modules where desuetude='0000-00-00' or desuetude>'".$dateCourante."' ORDER BY code;";
-				$resNot = mysql_query($req);
-			}
 			if ($droits[$_SESSION['auto']]["ajouter_module"])
 			{
 			?>

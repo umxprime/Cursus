@@ -92,9 +92,9 @@ if($droits[$_SESSION['auto']]['edit_coordination'])
 <div id="content"><?php
 //r�cup�rer les �tudiants inscit dans le niveau d'�tude durant le semestre tremporel choisit
 $req_etu = "SELECT etudiants.id, etudiants.nom, etudiants.prenom, niveaux.niveau as sem_etu ";
-$req_etu .= " FROM etudiants, niveaux WHERE ";
+$req_etu .= " FROM etudiants, niveaux, cycles WHERE ";
 $req_etu .= "niveaux.niveau ='".$ns."' AND niveaux.periode='".$semestre_courant."'";
-$req_etu .= "AND etudiants.id= niveaux.etudiant ORDER BY etudiants.nom;";
+$req_etu .= "AND etudiants.id= niveaux.etudiant AND niveaux.cycle=cycles.id AND cycles.ecole='".$_SESSION["ecole"]."' ORDER BY etudiants.nom;";
 $res_etu = mysql_query($req_etu);
 //pour chaque etudiant afficher un mini bulletin avec ses modules, son tutorat et son �valuation
 while($etudiant=mysql_fetch_array($res_etu)){
@@ -240,7 +240,7 @@ $n_lignes -=1;
 }
 //affichage de l'�valuation semestrielle en bas de liste
 echo $sem_eval;
-echo "<li class=\"credits\"><span class=\"bleu\">".$total_acquis."</span> / ".$total_inscrit."</li>";
+echo "<li class=\"credits\"><a href=\"\" class=\"contrat\"><span class=\"hiddentext\">contrat d'études</span></a><span class=\"bleu\">".$total_acquis."</span> / ".$total_inscrit."</li>";
 echo "</ul>";
 }
 
@@ -248,6 +248,6 @@ echo "</ul>";
 <div id="footer"></div>
 </div>
 </div>
-
-</html>
 </body>
+</html>
+

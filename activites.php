@@ -35,63 +35,62 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<?php
-require("connect_info.php");
-require("connexion.php");
-include("fonctions.php");
-$id_clef = ($_POST['id'])?$_POST['id']:$_GET['id'];
-$nom=(empty($_POST['nom']))?"nom de l'activit&eacute;":$_POST['nom'];
-$couleur=(empty($_POST['couleur']))?"#000000":$_POST['couleur'];
-?>
-<title>Ajout d'une activit&eacute;</title>
-
-</head>
-<body>
-<?php
-if(!$id_clef){
-	$id_clef = -1;
-	$ligne = FALSE;
-	$nom=(empty($_POST['nom']))?"nom de l'activit&eacute;":$_POST['nom'];
-	$couleur=(empty($_POST['couleur']))?"#000000":$_POST['couleur'];
-}
-else
-{
-	$requete = "SELECT * FROM periodes WHERE id = '".$id_clef."';";
-	$resultat = mysql_query($requete, $connexion);
-	$ligne = mysql_fetch_array($resultat);
-	$nom=$ligne['nom'];
-	$couleur=$ligne['couleur'];
-}
-
-?>
-<form id="formulaire" action="ajouter_activite.php" method="post">
-	<?php
-	echo "<div class=\"selecteur_periode\">P&eacute;riode : ";
-	echo selecteur_objets("activites.php", "activites", "nom", "id", $connexion, $id_clef,0,1);
-	echo "\n</div>";
-	echo "<div class=\"nom_periode\">";
-	echo affiche_ligne("nom",$nom);
-	echo "\n</div>";
-	echo "<div class=\"code_couleur\">";
-	echo affiche_ligne("couleur",$couleur);
-	echo "\n</div>";
-
-	if($id_clef > 0){
-	?>
-<input type="submit" name="action" value="modifier"/>
-<br/>
-<input type="submit" name="action" value="supprimer"/>
-<?php
-	}
-	else{
-		?>
-<input type="submit" name="action" value="ajouter">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<?php
+		require("connect_info.php");
+		require("connexion.php");
+		include("fonctions.php");
+		$id_clef = ($_POST['id'])?$_POST['id']:$_GET['id'];
+		$nom=(empty($_POST['nom']))?"nom de l'activit&eacute;":$_POST['nom'];
+		$couleur=(empty($_POST['couleur']))?"#000000":$_POST['couleur'];
+		?>
+		<title>Ajout d'une activit&eacute;</title>
+	</head>
+	<body>
+	<?php
+	if(!$id_clef){
+		$id_clef = -1;
+		$ligne = FALSE;
+		$nom=(empty($_POST['nom']))?"nom de l'activit&eacute;":$_POST['nom'];
+		$couleur=(empty($_POST['couleur']))?"#000000":$_POST['couleur'];
 	}
+	else
+	{
+		$requete = "SELECT * FROM periodes WHERE id = '".$id_clef."';";
+		$resultat = mysql_query($requete, $connexion);
+		$ligne = mysql_fetch_array($resultat);
+		$nom=$ligne['nom'];
+		$couleur=$ligne['couleur'];
+	}
+	
 	?>
-<input type="hidden" name="table" value="<?php echo $table ?>">
-</form>
-</body>
+		<form id="formulaire" action="ajouter_activite.php" method="post">
+			<?php
+			echo "<div class=\"selecteur_periode\">P&eacute;riode : ";
+			echo selecteur_objets("activites.php", "activites", "nom", "id", $connexion, $id_clef,0,1);
+			echo "\n</div>";
+			echo "<div class=\"nom_periode\">";
+			echo affiche_ligne("nom",$nom);
+			echo "\n</div>";
+			echo "<div class=\"code_couleur\">";
+			echo affiche_ligne("couleur",$couleur);
+			echo "\n</div>";
+		
+			if($id_clef > 0){
+			?>
+		<input type="submit" name="action" value="modifier"/>
+		<br/>
+		<input type="submit" name="action" value="supprimer"/>
+		<?php
+			}
+			else{
+				?>
+		<input type="submit" name="action" value="ajouter">
+				<?php
+			}
+			?>
+		<input type="hidden" name="table" value="<?php echo $table ?>">
+		</form>
+	</body>
 </html>

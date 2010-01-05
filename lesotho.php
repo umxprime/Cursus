@@ -29,16 +29,14 @@
 	 * 
 	 **/
 
- if ($PHPSESSID)
-   session_start($PHPSESSID);
- else
-   session_start();
-//echo $_SESSION["userid"].$_SESSION['username'];
-if($_SESSION["userid"] <0 or $_SESSION['username']=="")
+if ($PHPSESSID)
+	session_start($PHPSESSID);
+else
+	session_start();
+if($_SESSION["userid"]<0 or $_SESSION['username']=="")
 {
 	//echo "retour de lesotho";
-header("Location: login.php?origine=".$_SERVER['PHP_SELF']);
-
-die();
+	header("Location: login.php?origine=".$_SERVER['PHP_SELF']);
+	die();
 }
 ?>

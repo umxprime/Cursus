@@ -129,7 +129,7 @@ function ajx_inputTexts(fields,page,action,params)
 	var i;
 	for (i = 0; i < a_elements.length; i++)
 	{
-		var elements = a_elements[i].split(":")
+		var elements = a_elements[i].split(":");
 		a_fields.push(elements[0]);
 		a_req.push(elements[1]);
 	}
@@ -180,4 +180,18 @@ function ajx_submit(page,action,params)
 {
 	var message = ajx(page,action,params);
 	return message;	
+}
+
+//Cross-browser implementation of element.addEventListener()
+function addListener(element, type, expression, bubbling) {
+	bubbling = bubbling || false;
+
+	if (window.addEventListener) { // Standard
+		element.addEventListener(type, expression, bubbling);
+		return true;
+	} else if (window.attachEvent) { // IE
+		element.attachEvent('on' + type, expression);
+		return true;
+	} else
+		return false;
 }

@@ -240,7 +240,7 @@ $n_lignes -=1;
 }
 //affichage de l'�valuation semestrielle en bas de liste
 echo $sem_eval;
-echo "<li class=\"credits\"><a href=\"\" class=\"contrat\"><span class=\"hiddentext\">contrat d'études</span></a><span class=\"bleu\">".$total_acquis."</span> / ".$total_inscrit."</li>";
+echo "<li class=\"credits\"><a href=\"edition_contrats.php?id=".$etudiant['id']."&nPeriode=$semestre_courant\" class=\"contrat\"><span class=\"hiddentext\">contrat d'études</span></a><span class=\"bleu\">".$total_acquis."</span> / ".$total_inscrit."</li>";
 echo "</ul>";
 }
 

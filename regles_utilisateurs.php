@@ -106,6 +106,7 @@
 	$droits["coord_semestre"]["edit_niveaux"] = false;
 	
 	$droits["p"] = $droits["coord_semestre"];
+	$droits["p"]["edit_coordination"] = false;
 	$droits["p"]["admin_tutorats"] = false;
 	$droits["p"]["voir_tous_modules"] = false;
 	$droits["p"]["menu_coordination"] = false;

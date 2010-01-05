@@ -1,33 +1,33 @@
 <?php
-	/**
-	 * 
-	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
-	 *
-	 * This file is a part of Cursus
-	 *
-	 * Cursus is free software: you can redistribute it and/or modify
-	 * it under the terms of the GNU General Public License as published by
-	 * the Free Software Foundation, either version 3 of the License, or
-	 * (at your option) any later version.
-	 *
-	 * Cursus is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
-	 *
-	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
-	 * originally released under the LGPL <http://www.gnu.org/licenses/>
-	 * by Olivier LOYNET (tbsooo@free.fr)
-	 *
-	 * Cursus uses Potajx
-	 * released under the GPL <http://www.gnu.org/licenses/>
-	 * by Maxime CHAPELET (umxprime@umxprime.com)
-	 * 
-	 **/
+/**
+ *
+ * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+ * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+ *
+ * This file is a part of Cursus
+ *
+ * Cursus is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Cursus is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+ * originally released under the LGPL <http://www.gnu.org/licenses/>
+ * by Olivier LOYNET (tbsooo@free.fr)
+ *
+ * Cursus uses Potajx
+ * released under the GPL <http://www.gnu.org/licenses/>
+ * by Maxime CHAPELET (umxprime@umxprime.com)
+ *
+ **/
 
 include("lesotho.php");
 //echo $idd_session."|";
@@ -93,10 +93,10 @@ if($ava>0){
 
 		$neval = 1;
 		while($eval = mysql_fetch_array($resEvals)){
-//			$req = "SELECT * FROM etudiants WHERE id='".$eval['etudiant']."';";
+			//			$req = "SELECT * FROM etudiants WHERE id='".$eval['etudiant']."';";
 			//echo "requete : ".$req."\n";
-//			$res= mysql_query($req);
-//			$etudiant = mysql_fetch_array($res);
+			//			$res= mysql_query($req);
+			//			$etudiant = mysql_fetch_array($res);
 			$tablEvals .= "<tr>\n\t<td>";
 			$tablEvals .= utf8_encode($eval['prenom']). " ".utf8_encode($eval['nom']);
 			$tablEvals .= "\n\t</td>\n\t<td>";
@@ -141,67 +141,64 @@ if($ava>0){
 	}
 
 	?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<?php
-	include("inc_css_thing.php");
-	?>
-
-<title><?php echo utf8_encode($module['intitule']) ?></title>
-</head>
-<body>
-	<?php
-	include("barre_outils.php") ;
-	//include("inc_nav_sem.php");
-	?>
-<p>
-<h2>
-<?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["periode"]."\">".$semestre['nom'] ?></a></h2>
-</p>
-<p>
-<?php if($nres>0){ ?>
-<form id="fpresences" name="fpresences" action="reg_presences.php"
-	method="post">
-<?php
-echo $tablEvals;
-?>
-<input type="hidden" name="session" value="<?php echo $idd_session; ?>">
-<input type="submit" value="valider les pr&eacute;sences">
-</form>
-</p>
-<?php
-}
-
-
-?>
-<p>
-<h2>Inscrire un &eacute;tudiant &agrave; ce module</h2>
-</p>
-<P>
-<form id="formulaire" name="formulaire" action="ajouter_etudiant.php"
-	method="post">
-<P>Nom de l'etudiant : <select id="etudiant" name="etudiant">
-<?php
-$session = $_GET["session"];
-$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole FROM session, modules WHERE session.id='$session' AND session.module=modules.id;";
-$res = mysql_fetch_array(mysql_query($req));
-$ecole = $res["module_ecole"];
-echo $ecole;
-echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecole);
-?>
-</select>
-</P>
-<input type="hidden" name="session" value="<?php echo $idd_session; ?>" >
-<input type="submit" value="inscrire">
-<p>
-<?php echo affiche_champs("dests",$destsMail,80,8); ?></p>
-</form>
-</p>
-<?php }?>
-</body>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<?php
+		include("inc_css_thing.php");
+		?>
+		<title><?php echo utf8_encode($module['intitule']) ?></title>
+	</head>
+	<body>
+		<?php
+			include("barre_outils.php") ;
+		?>
+		<h2><?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["periode"]."\">".$semestre['nom']."</a>"; ?></h2>
+		<h2>Inscrire des étudiants à ce module</h2>
+		<form id="formulaire" action="ajouter_etudiant.php" method="post">
+		<p>
+			Nom de l'etudiant :
+			<select id="etudiant" name="etudiant">
+				<?php
+					$session = $_GET["session"];
+					$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$idd_session' AND session.module=modules.id;";
+					$res = mysql_fetch_array(mysql_query($req));
+					$ecole = $res["module_ecole"];
+					echo $ecole;
+					echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecole);
+				?>
+			</select>
+			<input type="hidden" name="session" value="<?php echo $idd_session; ?>"/>
+			<input type="submit" value="inscrire" />
+		</p>
+		<?php
+		if ($res["obligatoire"]>0){
+			?>
+		<p>Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?> :
+		<a href="reg_module_obligatoire.php?id=<?php echo $res["session_id"]?>&nPeriode=<? echo $semestre_courant;?>">inscrire les étudiants</a>.</p>
+			<?php }?>
+		</form>
+		
+		<?php
+			if($nres>0){
+		?>
+		<form id="fpresences" action="reg_presences.php" method="post">
+			<?php
+			echo $tablEvals;
+			?>
+			<fieldset>
+					<input type="hidden" name="session" value="<?php echo $idd_session; ?>"/>
+					<input type="submit" value="valider les présences"/>
+			</fieldset>
+		</form>
+		<?php
+			}
+		?>
+		<p><?php echo affiche_champs("dests",$destsMail,80,8); ?></p>
+		<?php
+			}
+		?>
+	</body>
 </html>

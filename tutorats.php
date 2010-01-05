@@ -102,9 +102,7 @@ if ($nres>0){
 		$tablEvals .= utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);
 		$tablEvals .= "\n\t</td>\n\t<td>";
 		//desinscription de l'étudiant
-		$tablEvals .= "<a href=\"#\" onClick=\"document.formulaire2.action.value='desinscrire';";
-		$tablEvals .= "document.formulaire2.tutorat.value='".$tutorat['id']."';";
-		$tablEvals .="document.formulaire2.submit();\">d&eacute;sinscrire</a></td>\n<td>";
+		$tablEvals .= "<a href=\"javascript:desinscrire(".$tutorat["id"].")\">désinscrire</a></td>\n<td>";
 		$sauf[] = $etudiant['id'];
 		for($d=1;$d<=5;$d++){
 			if(is_array($rdv[$d-1])){
@@ -147,20 +145,28 @@ if ($nres>0){
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
-<link rel="stylesheet" href="cursus.css" type="text/css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="cursus.css" type="text/css"/>
+<script type="text/javascript">
+	function desinscrire(id) {
+		document.getElementById('action').value="desinscrire";
+		document.getElementById('tutorat').value=""+id;
+		document.getElementById('formulaire2').submit();
+	}
+</script>
 <title><?php echo $module['intitule'] ?></title>
 </head>
 <body>
 <?php include("barre_outils.php"); ?>
 
-<p>
+
 <?php echo $form0;?>
 <h2>
 <?php //echo $chaineNot;
-echo "Tutorats ".utf8_encode($nomTuteur)." / <a href=\"sessions.php?nPeriode=".$periode['id']."\">".$periode['nom'] ?></a></h2>
-</p>
+echo "Tutorats ".utf8_encode($nomTuteur)." / <a href=\"sessions.php?nPeriode=".$periode['id']."\">".$periode['nom']."</a>"; ?>
+</h2>
+
 <p>
 <?php if($nres>0){ ?>
 
@@ -173,24 +179,19 @@ $chaineNot.= " GROUP BY semestre, nom";
 //echo $chaineNot;
 $resNot = mysql_query($chaineNot);
 ?>
-<p>
 <h2>Inscrire un étudiant à ce module</h2>
-</p>
-<P>
-<form id="formulaire2" name="formulaire2" action="reg_tutorats.php"
-	method="post">
-<P>Nom de l'etudiant : <select id="etudiant" name="etudiant">
+<form id="formulaire2" action="reg_tutorats.php" method="post">
+<p>Nom de l'etudiant : <select id="etudiant" name="etudiant">
 <?php
 echo liste_etudiants($sauf, $connexion, $periode['id'],$_SESSION["ecole"],$droits[$_SESSION['auto']]['voir_tous_sites']);
 ?>
-</select></P>
-<input type="hidden" name="periode" value="<?php echo $semestre_courant; ?>" >
-<input type="hidden" name="tuteur" value="<?php echo $tuteur; ?>" >
-<input type="hidden" name="tutorat" value="0">
-<input type="hidden" name="action" value="inscrire">
-<input type="submit" value="inscrire">
+</select></p>
+<input type="hidden" id="periode" name="periode" value="<?php echo $semestre_courant; ?>" />
+<input type="hidden" id="tuteur" name="tuteur" value="<?php echo $tuteur; ?>" />
+<input type="hidden" id="tutorat" name="tutorat" value="0"/>
+<input type="hidden" id="action" name="action" value="inscrire"/>
+<input type="submit" value="inscrire"/>
 </form>
-</p>
 <?php ?>
 </body>
 </html>

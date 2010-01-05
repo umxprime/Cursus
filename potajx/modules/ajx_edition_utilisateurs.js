@@ -20,6 +20,7 @@
 
 function init()
 {
+	addListener(ajx_get_id("valider"),'click',submit,true);
 	ajx_select(	"liste_types",
 				"init",
 				"etudiants:Étudiants,professeurs:Professeurs",
@@ -85,6 +86,8 @@ function init()
 	ajx_get_id("log").onchange = update_log;
 	update_log();
 }
+
+addListener(window,"load",init,true);
 
 function update_log()
 {
@@ -237,8 +240,12 @@ function chg_semestre()
 					false);
 }
 
-function submit()
+function submit(event)
 {
+	if (event.preventDefault) { 
+	  event.preventDefault(); 
+	} 
+	event.returnValue = false;
 	var base = ajx_get_value("liste_types");
 	var user = ajx_get_value("liste_utilisateurs");
 	if (base == "etudiants") {

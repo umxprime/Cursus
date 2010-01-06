@@ -247,7 +247,7 @@ function selecteurObjets($page, $table,$nom, $col_affs, $col_vals, $conn, $coche
 function selecteurModules($page, $table,$nom, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau, $order, $semestre){
 	$c_sel = "<select class=\"select_".$table."\" name=\"".$nom."\" ";
 	if(strlen($page)){
-		$c_sel .= "onchange = \"javascript:document.formulaire.action='".$page."';document.formulaire.submit()\"";
+		$c_sel .= "onchange = \"javascript:document.getElementById('formulaire').action='".$page."';document.getElementById('formulaire').submit()\"";
 	}
 	$c_sel .= ">\n";
 	if (!is_array($liste)){

@@ -1,0 +1,15 @@
+==r24==
+//Corrections
+- Ajouts de champs fieldset dans certaines pages
+
+//Nouveautés
+- Apparition des codes dans la liste d'ajout de modules sur les pages Modules et Édition de module
+- Création d'un fichier de revisions et implémentation du dernier
+  numéro de révision dans le titre des pages
+- Intégration de la css dans la page Tutorats
+
+------------------------------------------------------------------
+
+==r23==
+Changelog initial
+Voir log subversion pour les antécédents.

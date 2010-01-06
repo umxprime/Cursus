@@ -42,7 +42,6 @@ $outil="tutorat";
 //echo $idd_session."|";
 include("inc_sem_courant.php");
 $dateCourante = date("Y-m-d");
-include("inc_nav_sem.php");
 $form0 ="";
 //echo $semestre['titre'];
 if (isset($_POST['tuteur'])){
@@ -141,57 +140,58 @@ if ($nres>0){
 }
 //echo $chaineNot;
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="cursus.css" type="text/css"/>
-<script type="text/javascript">
-	function desinscrire(id) {
-		document.getElementById('action').value="desinscrire";
-		document.getElementById('tutorat').value=""+id;
-		document.getElementById('formulaire2').submit();
-	}
-</script>
-<title><?php echo $module['intitule'] ?></title>
-</head>
-<body>
-<?php include("barre_outils.php"); ?>
-
-
-<?php echo $form0;?>
-<h2>
-<?php //echo $chaineNot;
-echo "Tutorats ".utf8_encode($nomTuteur)." / <a href=\"sessions.php?nPeriode=".$periode['id']."\">".$periode['nom']."</a>"; ?>
-</h2>
-
-<p>
-<?php if($nres>0){ ?>
-
-<?php
-echo $tablEvals;
-?></p>
-<?php
-}
-$chaineNot.= " GROUP BY semestre, nom";
-//echo $chaineNot;
-$resNot = mysql_query($chaineNot);
-?>
-<h2>Inscrire un étudiant à ce module</h2>
-<form id="formulaire2" action="reg_tutorats.php" method="post">
-<p>Nom de l'etudiant : <select id="etudiant" name="etudiant">
-<?php
-echo liste_etudiants($sauf, $connexion, $periode['id'],$_SESSION["ecole"],$droits[$_SESSION['auto']]['voir_tous_sites']);
-?>
-</select></p>
-<input type="hidden" id="periode" name="periode" value="<?php echo $semestre_courant; ?>" />
-<input type="hidden" id="tuteur" name="tuteur" value="<?php echo $tuteur; ?>" />
-<input type="hidden" id="tutorat" name="tutorat" value="0"/>
-<input type="hidden" id="action" name="action" value="inscrire"/>
-<input type="submit" value="inscrire"/>
-</form>
-<?php ?>
-</body>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<?php include("inc_css_thing.php");	?>
+		<script type="text/javascript">
+			function desinscrire(id) {
+				document.getElementById('action').value="desinscrire";
+				document.getElementById('tutorat').value=""+id;
+				document.getElementById('formulaire2').submit();
+			}
+		</script>
+		<title>Cursus <?php revision();?> / Tutorats : <?php echo utf8_encode($nomTuteur); ?></title>
+	</head>
+	<body>
+		<div id="global">
+			<?php
+				include("barre_outils.php"); 
+				include("inc_nav_sem.php");
+				echo $form0;
+			?>
+			<p>
+			<?php
+				if($nres>0)
+				{
+					echo $tablEvals;
+			?>
+			</p>
+			<?php
+				}
+				$chaineNot.= " GROUP BY semestre, nom";
+				//echo $chaineNot;
+				$resNot = mysql_query($chaineNot);
+			?>
+			<h2>Inscrire un étudiant en tutorat</h2>
+			<form id="formulaire2" action="reg_tutorats.php" method="post">
+				
+				<fieldset style="border-style:none;">
+					Nom de l'etudiant :
+					<select id="etudiant" name="etudiant">
+						<?php
+							echo liste_etudiants($sauf, $connexion, $periode['id'],$_SESSION["ecole"],$droits[$_SESSION['auto']]['voir_tous_sites']);
+						?>
+					</select>
+					<input type="hidden" id="periode" name="periode" value="<?php echo $semestre_courant; ?>" />
+					<input type="hidden" id="tuteur" name="tuteur" value="<?php echo $tuteur; ?>" />
+					<input type="hidden" id="tutorat" name="tutorat" value="0"/>
+					<input type="hidden" id="action" name="action" value="inscrire"/>
+					<input type="submit" value="inscrire"/>
+				</fieldset>
+			</form>
+		</div>
+	</body>
 </html>

@@ -29,12 +29,11 @@
 	 * 
 	 **/
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>Identification</title>
+		<title>Cursus <?php revision();?> / Identification</title>
 		<link rel="stylesheet" href="cursusn.css" type="text/css" />
 		<style type="text/css">
 			.IdNom {
@@ -118,7 +117,6 @@
 	</head>
 	<body>
 		<div id="global">
-			
 			<div id="identifiant">
 				<form method="post" enctype="multipart/form-data" action="<?php $_SERVER["PHP_SELF"]; ?>">
 					<ul class="IdNom">
@@ -131,8 +129,6 @@
 				</form>
 			</div>
 			<div class="traitOmbre">
-				
-				
 			</div>
 		</div>
 	</body>

@@ -29,6 +29,28 @@
 	 * 
 	 **/
 
+function revision()
+{
+	$file = fopen("revisions","r");
+	$data = fread($file,filesize("revisions"));
+	$data = explode("==\n",$data);
+	$data = substr($data[0],2,strlen($data[0]));
+	echo "version ".$data;
+}
+
+function revision_infos()
+{
+	$file = fopen("revisions","r");
+	$data = fread($file,filesize("revisions"));
+	$data = explode("==\n",$data);
+	$rev = array();
+	for ($i=0;$i<count($data);$i++)
+	{
+		$rev = substr($data[0],2,strlen($data[0]));
+	}
+	echo "version ".$data;
+}
+
 function affiche_options($liste, $coche, $nouveau){
 	if($nouveau){
 		$c_select = "\t\t<option value=\"-1\" ";
@@ -170,7 +192,7 @@ function liste_modules($table, $col_affs, $col_vals, $conn, $order, $semestre){
 	$req = "SELECT debut,fin FROM periodes WHERE id='$semestre'";
 	$res = mysql_query($req);
 	$periode = mysql_fetch_array($res);
-	$sql = "SELECT ".$col_vals.",".$col_affs." FROM ".$table;
+	$sql = "SELECT ".$col_vals.",".$col_affs.",code FROM ".$table;
 	$sql .= " WHERE (desuetude='0000-00-00' OR (desuetude>'".$periode["debut"]."'))";
 	if($order){
 		$sql .= " ORDER BY ".$order;
@@ -181,7 +203,7 @@ function liste_modules($table, $col_affs, $col_vals, $conn, $order, $semestre){
 		$n=0;
 		if (!empty($res)){
 			while($l = mysql_fetch_array($res)){
-				$liste[$n]['aff']=$l[$col_affs];
+				$liste[$n]['aff']=$l["code"]." / ".$l[$col_affs];
 				$liste[$n]['val']=$l[$col_vals];
 				$n++;
 			}
@@ -209,7 +231,7 @@ function selecteur_objets($page, $table, $col_affs, $col_vals, $conn, $coche, $l
 function selecteurObjets($page, $table,$nom, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau, $order){
 	$c_sel = "<select class=\"select_".$table."\" name=\"".$nom."\" ";
 	if(strlen($page)){
-		$c_sel .= "onchange = \"javascript:document.formulaire.action='".$page."';document.formulaire.submit()\"";
+		$c_sel .= "onchange = \"javascript:document.getElementById('formulaire').action='".$page."';document.getElementById('formulaire').submit()\"";
 	}
 	$c_sel .= ">\n";
 	if (!is_array($liste)){
@@ -500,7 +522,7 @@ function selecteur_site($conn,$coche,$nom,$page){
 }
 function selecteur_cycle($conn,$coche,$nom,$page,$ecole){
 	if ($ecole>0){
-	$req = "SELECT cycles.* FROM cycles where ecole=".$ecole.";";
+		$req = "SELECT cycles.* FROM cycles where ecole=".$ecole.";";
 	}else{
 		$req = "SELECT cycles.* FROM cycles WHERE 1";
 	}

@@ -96,7 +96,7 @@ $c = mysql_num_rows($res);
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<?php include("inc_css_thing.php");	?>
-		<title><?php echo $periode['nom']?></title>
+		<title>Cursus <?php echo revision();?> / Modules pour la période : <?php echo $periode['nom'];?></title>
 	</head>
 	<body>
 		<div id="global">
@@ -107,7 +107,6 @@ $c = mysql_num_rows($res);
 			
 				<table id="table_modules">
 					<?php echo $tablModule;	?>
-					</tr>
 				</table>
 			
 			<?php
@@ -115,8 +114,9 @@ $c = mysql_num_rows($res);
 			{
 			?>
 			<h2>Ajouter un module pour ce semestre</h2>
-			<form id="formulaire" name="formulaire" action="ajouter_session.php" method="post">
-				<input type="hidden" name="nPeriode" value="<?php echo $periode["id"]; ?>" >
+			<form id="formulaire" action="ajouter_session.php" method="post">
+			<fieldset style="border-style:none">
+				<input type="hidden" name="nPeriode" value="<?php echo $periode["id"]; ?>"/>
 				<table>
 					<tr><td>
 						Choisir le module à ajouter :
@@ -128,7 +128,7 @@ $c = mysql_num_rows($res);
 							while($resteModule = mysql_fetch_array($resNot)){
 								//echo $resteModule['code']."\n";
 								$l[$n]['val']=$resteModule["id"];
-								$l[$n]['aff']=$resteModule["intitule"];
+								$l[$n]['aff']=$resteModule["code"]." / ".$resteModule["intitule"];
 								$n++;
 							}
 							echo affiche_options($l,"",0);
@@ -142,8 +142,10 @@ $c = mysql_num_rows($res);
 						<?php echo affiche_ligne("titre","",false); ?>
 					</td></tr>
 					<tr><td>
-					<input type="submit" value="ajouter">
+						<input type="submit" value="ajouter"/>
+					</td></tr>
 				</table>
+				</fieldset>
 			</form>
 			<?php
 			}

@@ -107,10 +107,10 @@ if($ok_edit==1){
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 
 <?php include("inc_css_thing.php"); echo "\n"; ?>
-<title>Passages et niveau des &eacute;tudiants</title>
+<title>Cursus <?php revision();?> / Niveaux des étudiants pour le cycle : <?php echo utf8_encode($arr_cycle["nom"])?></title>
 <style type="text/css">
 <?php 
 include("cursusn.css"); 
@@ -123,7 +123,7 @@ include("cursusn.css");
 include("barre_outils.php") ; 
 $plus_nav_semestre=array(array('var'=>'cycle', 'val'=>$cycle));
 include("inc_nav_sem.php");
-echo "<form method=\"post\" action=\"passages_niveaux.php\" name=\"formulaire\">";
+echo "<form method=\"post\" action=\"passages_niveaux.php\" id=\"formulaire\">";
 if($droits[$_SESSION["auto"]]["edit_tous_niveaux"])
 {
 	echo selecteur_cycle($conn, $cycle,"cycle", "passages_niveaux.php",0);
@@ -136,7 +136,7 @@ echo "<input type=hidden name=\"nPeriode\" value=\"".$semestre_courant."\"/>";
 echo "</form>";
 ?>
 
-<form method="post" action="passages_niveaux.php" name="passages">
+<form method="post" action="passages_niveaux.php" id="passages">
 <table style="text-align: left; width: 704px; height: 32px;" border="1"
 	cellpadding="2" cellspacing="2">
 	<tbody>
@@ -158,15 +158,14 @@ echo "</form>";
 				echo " type=\"radio\" /></td>\n";
 			}
 echo "<td><a href=\"exclure_etudiant.php?id_etudiant=".$etudiants[$n_et]['id']."&nPeriode=".$semestre_courant."&cycle=".$cycle."\">changer</a></td>\n";
-echo "</tr>";
 		 } ?>
+		 </tr>
 	</tbody>
 </table>
-<br />
-<input type=hidden name="nPeriode" value="<?php echo $semestre_courant; ?>"/>";
-<input type="submit" name="action" value="
-<?php echo $message_rec; ?>" />
-
+	<fieldset style="border-style: none;">
+		<input type=hidden name="nPeriode" value="<?php echo $semestre_courant; ?>"/>";
+		<input type="submit" name="action" value="<?php echo $message_rec; ?>" />
+	</fieldset>
 </form>
 
 </div>

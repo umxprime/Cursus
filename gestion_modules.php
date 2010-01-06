@@ -149,7 +149,7 @@ if($ava>0){
 		<?php
 		include("inc_css_thing.php");
 		?>
-		<title><?php echo utf8_encode($module['intitule']) ?></title>
+		<title>Cursus <?php revision();?> / Gestion module : <?php echo utf8_encode($module['intitule']) ?></title>
 	</head>
 	<body>
 		<?php
@@ -188,7 +188,7 @@ if($ava>0){
 			<?php
 			echo $tablEvals;
 			?>
-			<fieldset>
+			<fieldset style="border-style:none;">
 					<input type="hidden" name="session" value="<?php echo $idd_session; ?>"/>
 					<input type="submit" value="valider les présences"/>
 			</fieldset>
@@ -199,6 +199,7 @@ if($ava>0){
 		<p><?php echo affiche_champs("dests",$destsMail,80,8); ?></p>
 		<?php
 			}
+			revision();
 		?>
 	</body>
 </html>

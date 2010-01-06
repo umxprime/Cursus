@@ -47,6 +47,7 @@
 	//requises les variables de connexion puis la connexion à mysql;
 	require("connect_info.php");
 	require("connexion.php");
+	include ("fonctions.php");
 	include ("inc_sem_courant.php");
 	
 	//si une personne déjà identifiée revient sur cette page, la déconnexion est automatique et enregistrée;

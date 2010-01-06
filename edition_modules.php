@@ -83,15 +83,13 @@ else
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<head>
-<link rel="stylesheet" href="cursus.css" type="text/css">
-<title>
-	<?php echo utf8_encode($ligne['intitule']) ?>
-</title>
-</head>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<?php include("inc_css_thing.php");	?>
+		<title>Cursus <?php revision();?> / Édition de module : <?php echo utf8_encode($ligne['intitule']) ?></title>
+	</head>
 <body>
-<form id="formulaire" name="formulaire" action="reg_module.php?nPeriode=<?php echo $semestre_courant;?>" method="post">
+<form id="formulaire" action="reg_module.php?nPeriode=<?php echo $semestre_courant;?>" method="post">
 <table style="text-align: left; width: 626px; height: 228px;"
  border="1" cellpadding="2" cellspacing="2">
   <tbody>

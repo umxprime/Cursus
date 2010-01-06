@@ -50,7 +50,7 @@
 		<?php 
 			include("inc_css_thing.php");
 		?>
-		<title><?php echo $periode['nom']?></title>
+		<title>Cursus <?php echo revision();?> / Édition utilisateurs</title>
 		<?php
 			include("potajx/incpotajx.php");
 		?>

@@ -36,6 +36,7 @@
 	include("lesotho.php");
 	$outil="coordination";
 	include("inc_sem_courant.php");
+	include("fonctions.php");
 	include("fonctions_eval.php");
 	include("regles_utilisateurs.php");
 	//si un mumero de semestre d'etude est transmis (pas la p�riode temporelle, le semestre d'enseignement
@@ -46,10 +47,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
-	<?php
-	include("inc_css_thing.php");
-	?>
-	<title><?php echo "vue etudiants semestre ".$ns." ".$periode["nom"] ?></title>
+	<?php include("inc_css_thing.php");?>
+	<title>Cursus <?php revision();?> / Coordination des étudiants en semestre <?php echo $ns;?> pour la période : <?php echo $periode["nom"]; ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="etu_sem.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="etu_sem_print.css" type="text/css" media="print" />

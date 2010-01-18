@@ -72,7 +72,7 @@ function affiche_options($liste, $coche, $nouveau){
 function affiche_ligne($nom,$valeur, $taille){
 	//$c_ligne = $nom." : ";
 	if(!$taille){$taille=64;}
-	$c_ligne = "<input type=\"text\" name=\"".$nom."\" size=\"".$taille."\" ";
+	$c_ligne = "<input type=\"text\" id=\"$nom\" name=\"".$nom."\" size=\"".$taille."\" ";
 	$c_ligne .= "value=\"".utf8_encode($valeur)."\" >";
 	$c_ligne .= "<br />\n";
 	return $c_ligne;
@@ -463,7 +463,7 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
 	}
 	}
 	$req .= " ORDER BY niveaux.niveau, etudiants.nom;";
-	//echo $req;
+	echo $req;
 	$c_select = "";
 	//$c_select .= $req;
 	$res = mysql_query($req, $conn);

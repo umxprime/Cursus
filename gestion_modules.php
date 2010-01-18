@@ -60,7 +60,6 @@ if($droits[$_SESSION['auto']]["edit_tous_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 }else if($droits[$_SESSION['auto']]["edit_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
-	//echo $req;
 }else{
 	$req="select id from etudiants wehre id <0;";
 }
@@ -84,8 +83,7 @@ if($ava>0){
 		$tablEvals ="<table><tr>\n<th>Etudiant</th>";
 		$tablEvals .= "\t<th>Annuler <br/>inscription</th>\n";
 		for($i=1; $i<=10;$i++){
-			$tablEvals .= "\t<th>Cours<br/>#".$i."</th>\n";
-
+			$tablEvals .= "\t<th><a href=\"javascript:presence($i)\">Cours<br/>#$i</a></th>\n";
 		}
 		$tablEvals .= "\t<th>Session <br/>#1</th>\n";
 		$tablEvals .= "\t<th>Rattrapage</th>\n";
@@ -100,14 +98,14 @@ if($ava>0){
 			$tablEvals .= "<tr>\n\t<td>";
 			$tablEvals .= utf8_encode($eval['prenom']). " ".utf8_encode($eval['nom']);
 			$tablEvals .= "\n\t</td>\n\t<td>";
-			$destsMail .= utf8_encode($eval['prenom']). " ".utf8_encode($eval['nom']);
+			$destsMail .= $eval['prenom']." ".$eval['nom'];
 			$destsMail .= "<".$eval["mail"].">";
 			if($neval<$nres){$destsMail .=", ";}
-			//desinscription de l'�tudiant
-			$tablEvals .= "<A HREF=\"desinscrire.php?eval=".$eval['id']."\">d&eacute;sinscrire</a></td>\n<td>";
+			//desinscription de l'étudiant
+			$tablEvals .= "<a href=\"desinscrire.php?eval=".$eval['id']."\">désinscrire</a></td>\n<td>";
 			$sauf[] = $eval['id_etudiant'];
 			for($d=1;$d<=10;$d++){
-				$tablEvals .= "<input name=\"presences".$eval['id']."[]\" value=\"".$d."\" type=\"checkbox\" ";
+				$tablEvals .= "<input id=\"presence_$neval-$d\" name=\"presences".$eval['id']."[]\" value=\"".$d."\" type=\"checkbox\" ";
 				if (strpos($eval['presences'], "".$d)){
 					$tablEvals .= "checked=\"checked\"";
 				}
@@ -116,14 +114,14 @@ if($ava>0){
 				//echo $d."\n";
 			}
 			//$tablEvals .="</td>\n";
-			$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
+			$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
 			//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
-			$tablEvals .= (empty($eval['note_1']) or $eval['note_1']=='-')?"&eacute;diter":$eval['note_1'];
+			$tablEvals .= (empty($eval['note_1']) or $eval['note_1']=='-')?"Éditer":$eval['note_1'];
 			$tablEvals .= "</a></td>\n";
 			$tablEvals .="<td>";
 			if(!empty($eval['note_1'])){
 				if(strpos("__efEF",$eval['note_1'])){
-					$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&session_name()=".session_id()."\">";
+					$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
 					//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
 					$tablEvals.= (empty($eval['note_2']) or $eval['note_2']=='-')?"&eacute;diter":$eval['note_2'];
 					$tablEvals .= "</a>";
@@ -149,9 +147,10 @@ if($ava>0){
 		<?php
 		include("inc_css_thing.php");
 		?>
-		<title>Cursus <?php revision();?> / Gestion module : <?php echo utf8_encode($module['intitule']) ?></title>
+		<title>Cursus <?php revision();?> / Gestion de module : <?php echo utf8_encode($module['intitule']) ?></title>
 	</head>
 	<body>
+		<div id="global">
 		<?php
 			include("barre_outils.php") ;
 		?>
@@ -164,9 +163,10 @@ if($ava>0){
 				<?php
 					$session = $_GET["session"];
 					$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$idd_session' AND session.module=modules.id;";
+					//echo $req;
 					$res = mysql_fetch_array(mysql_query($req));
 					$ecole = $res["module_ecole"];
-					echo $ecole;
+					//echo $ecole;
 					echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecole);
 				?>
 			</select>
@@ -199,7 +199,28 @@ if($ava>0){
 		<p><?php echo affiche_champs("dests",$destsMail,80,8); ?></p>
 		<?php
 			}
-			revision();
 		?>
+		<fieldset>
+			<input type="hidden" id="neval" value="<?php echo $neval-1;?>"/>
+		</fieldset>
+		<script type="text/javascript">
+			function presence(p)
+			{
+				var neval = document.getElementById("neval").value;
+				for(var i=1;i<=neval;i++)
+				{
+					var value = document.getElementById("presence_"+i+"-"+p).checked;
+					if (value)
+					{
+						document.getElementById("presence_"+i+"-"+p).checked=false;
+					}
+					else
+					{
+						document.getElementById("presence_"+i+"-"+p).checked=true;
+					}
+				}
+			}
+		</script>
+		</div>
 	</body>
 </html>

@@ -36,12 +36,16 @@ require("connexion.php");
 $dateCourante = date("Y-m-d");
 include("inc_sem_courant.php");
 include("fonctions_eval.php");
-function fait_liste_eval($titre, $code,$n1, $a1, $n2, $a2, $creds){
+function fait_liste_eval($titre, $code,$n1, $a1, $n2, $a2, $creds)
+{
 //echo "ctrl-".strlen($n1)."-<br />\n";
-if(strpos("_ABCDabcd",$n1)){
+	if(strpos("_ABCDabcd",$n1))
+	{
 		$affCreds=$creds;
 		$suffixe = "Oui";
-	}else{
+	}
+	else
+	{
 		$affCreds="0";
 		$suffixe = "Non";
 	}
@@ -67,34 +71,38 @@ if(strpos("_ABCDabcd",$n1)){
 	$lst .=$affCreds;
 	$lst .="</strong>/".$creds."</li>\n";
 	$lst .="			<li class=\"titre\">Appr&eacute;ciation</li>\n";
-	$lst .="			<li class=\"bulletinAppreciation\">".$a1."</li>\n";
+	$lst .="			<li class=\"bulletinAppreciation\">".utf8_encode($a1)."</li>\n";
 	$lst .="		</ul>\n";
 	$lst .="	</li>\n";
 	
 	
 
-	if($suffixe=="Non" and $a1!="-" and $code!="STAGE"){
-	if(strpos("_ABCDabcd",$n2)){
-		$affCreds=$creds;
-		$suffixe = "Oui";
-	}else{
-		$affCreds="0";
-		$suffixe = "Non";
-	}
-	$lst .="	<li class=\"traitseul\">\n";
-	$lst .="		<ul class=\"bulletinComplement\">\n";
-	$lst .="			<li class=\"";
-	$lst .= "note".$suffixe;
-	$lst .= "\">\n";
-	$lst .=$n2."</li>\n";
-	$lst .="			<li class=\"bulletinCredits";
-	$lst .= $suffixe."\"><strong >\n";
-	$lst .=$affCreds;
-	$lst .="</strong>/".$creds."</li>\n";
-	$lst .="			<li class=\"titre\">Appr&eacute;ciation</li>\n";
-	$lst .="			<li class=\"bulletinAppreciation\">".$a2."</li>\n";
-	$lst .="		</ul>\n";
-	$lst .="	</li>\n";
+	if($suffixe=="Non" and $a1!="-" and $code!="STAGE")
+	{
+		if(strpos("_ABCDabcd",$n2))
+		{
+			$affCreds=$creds;
+			$suffixe = "Oui";
+		}
+		else
+		{
+			$affCreds="0";
+			$suffixe = "Non";
+		}
+		$lst .="	<li class=\"traitseul\">\n";
+		$lst .="		<ul class=\"bulletinComplement\">\n";
+		$lst .="			<li class=\"";
+		$lst .= "note".$suffixe;
+		$lst .= "\">\n";
+		$lst .=$n2."</li>\n";
+		$lst .="			<li class=\"bulletinCredits";
+		$lst .= $suffixe."\"><strong >\n";
+		$lst .=$affCreds;
+		$lst .="</strong>/".$creds."</li>\n";
+		$lst .="			<li class=\"titre\">Appréciation</li>\n";
+		$lst .="			<li class=\"bulletinAppreciation\">".$a2."</li>\n";
+		$lst .="		</ul>\n";
+		$lst .="	</li>\n";
 	}
 	$lst .="</ul>\n";
 	return $lst;
@@ -110,18 +118,18 @@ $requete .=" AND niveaux.etudiant = '".$id_etudiant."' AND niveaux.periode='".$s
 $resreq = mysql_query($requete);
 $etudiant = mysql_fetch_array($resreq);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<head>
-<?php
-include("inc_css_thing.php");
-?>
-<link rel="stylesheet" href="etu_style.css" type="text/css" />
-<title><?php echo "vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
-</head>
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<?php
+		include("inc_css_thing.php");
+		?>
+		<link rel="stylesheet" href="etu_style.css" type="text/css" />
+		<title><?php echo "vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
+	</head>
 <body>
 <div id="global">
 <?php include("barre_etu.php"); 
@@ -134,6 +142,10 @@ include("inc_nav_sem.php"); ?>
 		<li class="titreReponse"><?php echo $etudiant["prenom"];?></li>
 		<li class="titre">semestre</li>
 		<li class="titreReponse"><?php echo $etudiant["niveau"]; ?></li>
+		<!--
+		<li class="titre">acquis s1 :</li>
+		<li class="titreReponse"><?php echo $etudiant["niveau"]; ?></li>
+		 -->
 	</ul>
 </div>
 	
@@ -193,7 +205,6 @@ while($eval = mysql_fetch_array($resEvals)){
 		$profs = $eval['enseignants'];
 		$n2 = verif($eval['note_2']);
 		$a2 = verif($eval['appreciation_2']);
-
 		echo fait_liste_eval($titre,$code,$n1,$a1,$n2,$a2, $eval[credits]);
 		$nligne++;
 		if(strpos("_abcdABCD",$n1) or strpos("_abcdABCD",$n2)){

@@ -1,3 +1,27 @@
+==r26==
+//Corrections
+- Erreurs de syntaxes diverses
+- Erreurs de règles pour les coordinateurs de semestre
+- Erreur typo dans les adresses mail sur la page Gestion d'un
+  module
+- Erreur typo dans les appréciations sur le bulletin étudiant
+
+//Nouveautés
+- Intégration de la css et des fonctions de navigation sur les
+  pages Édition de modules, Gestion de module et Évaluation de
+  module
+- Nouveau design pour la page Modules
+- Affichage des quota de saisie des évaluations et des
+  appréciations sur la page Modules
+- Coche rapide des colonnes de présences sur la page Gestion de
+  module
+- Écriture partielle du code sous-jacent au futur calcul de cumul
+  des crédits sur l'ensemble des semestres
+- Possibilité de signaler des évaluations incomplètes pour chaque
+  module, par email aux enseignants concernés
+ 
+------------------------------------------------------------------
+
 ==r25==
 //Corrections
 - Bug sur la fonction de selecteur de modules
@@ -11,7 +35,8 @@
 - Ajouts de champs fieldset dans certaines pages
 
 //Nouveautés
-- Apparition des codes dans la liste d'ajout de modules sur les pages Modules et Édition de module
+- Apparition des codes dans la liste d'ajout de modules sur les
+  pages Modules et Édition de module
 - Création d'un fichier de revisions et implémentation du dernier
   numéro de révision dans le titre des pages
 - Intégration de la css dans la page Tutorats
@@ -19,5 +44,7 @@
 ------------------------------------------------------------------
 
 ==r23==
-Changelog initial
+//Corrections
+//Nouveautés
+- Création d'un Changelog
 Voir log subversion pour les antécédents.

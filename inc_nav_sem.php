@@ -30,39 +30,48 @@
 	 **/
 ?>
 <div id="semestre">
+	<table class="center"><tr><td>
 	<ul>
-	<?php
-	$plus = (!isset($plus_nav_semestre))?array():$plus_nav_semestre;
-$req = "SELECT * FROM periodes WHERE activite='14' ";
-$req .="AND debut >='".$periode["fin"]."' ";
-$req .="ORDER BY debut LIMIT 1;";
-$res = mysql_query($req);
-$nextSem = mysql_fetch_array($res);
-$nexts = $nextSem["id"];
-$req = "SELECT * FROM periodes WHERE activite='14' ";
-$req .="AND fin <='".$periode["debut"]."' ";
-$req .="ORDER BY fin DESC LIMIT 1;";
-//echo $req;
-$res = mysql_query($req);
-$precSem = mysql_fetch_array($res);
-$precs = $precSem["id"];
-$retour = $_SERVER["PHP_SELF"];
-if(isset($_GET['ns'])){
-	$retour .= "?ns=".$ns;
-	$liaison="&";
-}else{
-	$liaison="?";
-}
-$lien_suite= $retour.$liaison."nPeriode=".$precs;
-$lien_precedent = $retour.$liaison."nPeriode=".$nexts;
-foreach($plus as $ajout){
-	$lien_suite.="&".$ajout['var']."=".$ajout['val'];
-	$lien_precedent.="&".$ajout['var']."=".$ajout['val'];
-}
-if(is_array($precSem)){echo "<li id=\"sem-precedent\"><a href=\"".$lien_suite."\">&lt;---   </a></li>";}
-echo "<li><h2>".$periode['nom']."</h2></li>";
-if(is_array($nextSem)){echo "<li id=\"sem-suivant\"><a href=\"".$lien_precedent."\">---&gt;</a></li>";}
-?>
-
+		<?php
+			$plus = (!isset($plus_nav_semestre))?array():$plus_nav_semestre;
+			$req = "SELECT * FROM periodes WHERE activite='14' ";
+			$req .="AND debut >='".$periode["fin"]."' ";
+			$req .="ORDER BY debut LIMIT 1;";
+			$res = mysql_query($req);
+			$nextSem = mysql_fetch_array($res);
+			$nexts = $nextSem["id"];
+			$req = "SELECT * FROM periodes WHERE activite='14' ";
+			$req .="AND fin <='".$periode["debut"]."' ";
+			$req .="ORDER BY fin DESC LIMIT 1;";
+			//echo $req;
+			$res = mysql_query($req);
+			$precSem = mysql_fetch_array($res);
+			$precs = $precSem["id"];
+			$retour = $_SERVER["PHP_SELF"];
+			if(isset($_GET['ns']))
+			{
+				$retour .= "?ns=".$ns;
+				$liaison="&";
+			}else{
+				$liaison="?";
+			}
+			$lien_suite= $retour.$liaison."nPeriode=".$precs;
+			$lien_precedent = $retour.$liaison."nPeriode=".$nexts;
+			foreach($plus as $ajout)
+			{
+				$lien_suite.="&".$ajout['var']."=".$ajout['val'];
+				$lien_precedent.="&".$ajout['var']."=".$ajout['val'];
+			}
+			if(is_array($precSem))
+			{
+				echo "<li id=\"sem-precedent\"><a href=\"".$lien_suite."\">&lt;---   </a></li>";
+			}
+			echo "<li><h2>".$periode['nom']."</h2></li>";
+			if(is_array($nextSem))
+			{
+				echo "<li id=\"sem-suivant\"><a href=\"".$lien_precedent."\">---&gt;</a></li>";
+			}
+		?>
 	</ul>
+	</td></tr></table>
 </div>

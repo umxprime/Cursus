@@ -35,6 +35,7 @@ require("connexion.php");
 include("fonctions.php");
 include("fonctions_eval.php");
 include("regles_utilisateurs.php");
+include("inc_sem_courant.php");
 if($_GET["eval"]>0){
 	$id_eval=$_GET["eval"];
 	$req = "SELECT * FROM evaluations WHERE id='".$id_eval."';";
@@ -67,33 +68,29 @@ if($_GET["eval"]>0){
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
-<link rel="stylesheet" href="cursus.css" type="text/css">
-<title>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']); ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="cursusn.css" type="text/css"/>
+	<title>Évaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']); ?></title>
 </head>
 <body>
-<p>
+<div id="global">
+<?php 
+	include("barre_outils.php");
+?>
 <h2><?php echo $periode['nom']; ?></h2>
-</p>
-<p>
 <h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']);?></h2>
-</p>
-<p>
-<h2>Premi&egrave;re session</h2>
-</p>
-<p>
-<form name="evaluation" id="evaluation" method="post"
-	action="reg_eval.php">
+<h2>Première session</h2>
+<form id="evaluation" method="post" action="reg_eval.php">
 
 	<?php
-
 	echo affiche_champs("appreciation_1",$eval['appreciation_1'],80,8);
 	echo "<br />NOTE : <select name=\"note_1\" width=\"40\" STYLE=\"width: 40px\">";
-	echo "<option value='-' ";
+	echo "<option value='' ";
 	echo (!strpos("__abcdefABCDEF",verif($eval['note_1'])))?"selected ":"";
 	echo ">-</option>\n";
-	for($l=1; $l<7; $l++){
+	for($l=1; $l<7; $l++)
+	{
 		$carac=chr(64+$l);
 		echo "<option value='".$carac."' ";
 		echo ($eval['note_1']==$carac)?"selected ":"";
@@ -103,11 +100,11 @@ if($_GET["eval"]>0){
 	echo "</select></p>\n<p>";
 	if(!empty($eval['note_1'])){
 		if(strpos("__efEF",$eval['note_1'])){
-			echo "<h2>Deuxi&egrave;me session</h2></p><p>";
+			echo "<h2>Deuxième session</h2></p><p>";
 			echo affiche_champs("appreciation_2",$eval['appreciation_2'],80,false);
-			echo "<select name=\"note_2\">";
-			echo "<option value='-' ";
-			echo (!strpos("__abcdefABCDEF",$eval['note_2']))?"selected ":"";
+			echo "<br/>NOTE : <select name=\"note_2\">";
+			echo "<option value='' ";
+			echo (!strpos("__abcdefABCDEF",verif($eval['note_2'])))?"selected ":"";
 			echo ">-</option>\n";
 			for($l=1; $l<7; $l++){
 				$carac=chr(64+$l);
@@ -120,8 +117,11 @@ if($_GET["eval"]>0){
 	}
 	echo "<input type=\"hidden\" name=\"eval\" value=\"".$eval['id']."\" >";
 	echo "<input type=\"hidden\" name=\"session\" value=\"".$eval['session']."\" >";
-	echo "<input type=\"submit\" value=\"enregistrer l'&eacute;valuation\" >";
-	echo "</form></body></html>";
+	echo "<input type=\"submit\" value=\"enregistrer l'évaluation\" >";
 	}
 
 }?>
+</form>
+</div>
+</body>
+</html>

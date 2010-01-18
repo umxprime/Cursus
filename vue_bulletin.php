@@ -36,6 +36,7 @@ require("connexion.php");
 $dateCourante = date("Y-m-d");
 include("inc_sem_courant.php");
 include("fonctions_eval.php");
+include("regles_utilisateurs.php");
 function fait_liste_eval($titre, $code,$n1, $a1, $n2, $a2, $creds){
 //echo "ctrl-".strlen($n1)."-<br />\n";
 if(strpos("_ABCDabcd",$n1)){
@@ -112,17 +113,16 @@ $requete .=" AND niveaux.etudiant = '".$id_etudiant."' AND niveaux.periode='".$s
 $resreq = mysql_query($requete);
 $etudiant = mysql_fetch_array($resreq);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
-<?php
-include("inc_css_thing.php");
-?>
-<link rel="stylesheet" href="etu_style.css" type="text/css" />
-<title><?php echo "--vue bulletin de ".utf8_encode($etudiant["prenom"])." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
+	<?php
+	include("inc_css_thing.php");
+	?>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="etu_style.css" type="text/css" />
+	<title><?php echo "--vue bulletin de ".utf8_encode($etudiant["prenom"])." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
 </head>
 <body>
 <div id="global">
@@ -133,7 +133,7 @@ include("inc_nav_sem.php"); ?>
 	<ul class="bulletinNom">
 		<li class="titre">nom</li>
 		<li class="titreReponse"><?php echo utf8_encode($etudiant["nom"]);?></li >
-		<li class="titre">pr&eacute;nom</li>
+		<li class="titre">prénom</li>
 		<li class="titreReponse"><?php echo utf8_encode($etudiant["prenom"]);?></li>
 		<li class="titre">semestre</li>
 		<li class="titreReponse"><?php echo $etudiant["niveau"]; ?></li>
@@ -141,6 +141,110 @@ include("inc_nav_sem.php"); ?>
 </div>
 	
 	<div id="content">
+	<?php/*
+		$etudiant_id = $etudiant["id"];
+		$etudiant_niveau = $etudiant["niveau"];
+		$req = "SELECT * FROM niveaux WHERE etudiant='$etudiant_id' ORDER BY niveau ASC;";// AND niveau!='$etudiant_niveau'";
+		$res = mysql_query($req) or die(mysql_error());
+		$niveaux = array();
+		$premier_niveau=10;
+		while($niveau = mysql_fetch_array($res))
+		{
+			$periode = $niveau["periode"];
+			$req = "SELECT evaluations.note_1, evaluations.note_2, modules.credits, modules.intitule FROM session,evaluations,modules WHERE session.periode='$periode' AND session.module=modules.id AND evaluations.session=session.id AND evaluations.etudiant='$etudiant_id'";
+			$evaluations = mysql_query($req) or die(mysql_error());
+			if(mysql_num_rows($evaluations)==0) continue;
+			if($niveau["niveau"]<$premier_niveau)$premier_niveau=$niveau["niveau"];
+			array_push($niveaux,array("id"=>$niveau["id"],"niveau"=>$niveau["niveau"],"periode"=>$niveau["periode"],"cycle"=>$niveau["cycle"]));
+		}
+		$cumul = ($premier_niveau-1)*30;
+		for($n=0;$n<count($niveaux);$n++)
+		{
+			$periode = $niveaux[$n]["periode"];
+			$niveau = $niveaux[$n]["niveau"];
+			$req = "SELECT nom FROM periodes WHERE id='$periode';";
+			$res = mysql_query($req) or die(mysql_error());
+			$periode_nom = mysql_result($res,0,"nom");
+			$req = "SELECT evaluations.note_1, evaluations.note_2, modules.credits, modules.intitule FROM session,evaluations,modules WHERE session.periode='$periode' AND session.module=modules.id AND evaluations.session=session.id AND evaluations.etudiant='$etudiant_id'";
+			$evaluations = mysql_query($req) or die(mysql_error());
+			echo "<table><tr style=\"font-size:1.5em;\"><td>";
+			echo "$periode_nom | Semestre ".$niveaux[$n]["niveau"];
+			echo "</td><td>Évaluations</td><td>Rattrapages</td><td>Cumul</td></tr>";
+			$total = 0;
+			while($evaluation = mysql_fetch_array($evaluations))
+			{
+				echo "<tr><td>";
+				echo utf8_encode($evaluation["intitule"]);
+				echo "</td><td>";
+				$eval = $evaluation["note_1"];
+				if((strlen($eval)>0)?strpos("ABCD",$eval)>-1:false)
+				{
+					echo $eval." : ".$evaluation["credits"]." cr";
+					$total += intval($evaluation["credits"]);
+					$cumul += intval($evaluation["credits"]);
+				}
+				else if((strlen($eval)>0)?strpos("EF",$eval)>-1:false)
+				{
+					echo $eval." : 0 cr";
+				}
+				echo "</td><td>";
+				$eval = $evaluation["note_2"];
+				if((strlen($eval)>0)?strpos("ABCD",$eval)>-1:false)
+				{
+					echo $eval." : ".$evaluation["credits"]." cr";
+					$total += intval($evaluation["credits"]);
+					$cumul += intval($evaluation["credits"]);
+				}
+				else if((strlen($eval)>0)?strpos("EF",$eval)>-1:false)
+				{
+					echo $eval." : 0 cr";
+				}
+				$cumul = min($cumul,30*$niveau);
+				echo "</td><td>$cumul cr";
+				echo "</td></tr>";
+			}
+			
+			$req = "SELECT evaluations.note_1, evaluations.note_2, professeurs.nom, professeurs.prenom FROM tutorats,evaluations,professeurs WHERE tutorats.professeur=professeurs.id AND tutorats.semestre='$periode' AND evaluations.tutorat=tutorats.id AND tutorats.etudiant='$etudiant_id' AND tutorats.trash!='1'";
+			//echo $req;
+			$evaluations = mysql_query($req) or die(mysql_error());
+			if(mysql_num_rows($evaluations)>0)
+			{
+				$evaluation = mysql_fetch_array($evaluations);
+				echo "<tr><td>";
+				echo "Tutorat ".utf8_encode($evaluation["prenom"])." ".utf8_encode($evaluation["nom"]);
+				echo "</td><td>";
+				$eval = $evaluation["note_1"];
+				if((strlen($eval)>0)?strpos("ABCD",$eval)>-1:false)
+				{
+					echo $eval." : ".credits_tutorat($niveau)." cr";
+					$total += credits_tutorat($niveau);
+					$cumul += credits_tutorat($niveau);
+				}
+				else if((strlen($eval)>0)?strpos("EF",$eval)>-1:false)
+				{
+					echo $eval." : 0 cr";
+				}
+				echo "</td><td>";
+				$eval = $evaluation["note_2"];
+				if((strlen($eval)>0)?strpos("ABCD",$eval)>-1:false)
+				{
+					echo $eval." : ".credits_tutorat($niveau)." cr";
+					$total += credits_tutorat($niveau);
+					$cumul += credits_tutorat($niveau);
+				}
+				else if((strlen($eval)>0)?strpos("EF",$eval)>-1:false)
+				{
+					echo $eval." : 0 cr";
+				}
+				$cumul = min($cumul,30*$niveau);
+				echo "</td><td>$cumul cr";
+				echo "</td></tr>";
+			}
+			//$total = min($total,30);
+			echo "<tr><td>Total Semestre</td><td>$total cr</td></tr>";
+			echo "</table>";
+		}		
+	*/?>
 <?php
 
 $id_etudiant = $etudiant["id"];

@@ -89,6 +89,11 @@ else
 		<title>Cursus <?php revision();?> / Édition de module : <?php echo utf8_encode($ligne['intitule']) ?></title>
 	</head>
 <body>
+<div id="global">
+<?php
+include("barre_outils.php"); 		
+include("inc_nav_sem.php");
+?>
 <form id="formulaire" action="reg_module.php?nPeriode=<?php echo $semestre_courant;?>" method="post">
 <table style="text-align: left; width: 626px; height: 228px;"
  border="1" cellpadding="2" cellspacing="2">
@@ -213,5 +218,6 @@ else
 <input type="hidden" name="old_id" value="<?php echo ($ligne["id"])?$ligne["id"]:-1; ?>">
 <input type="submit" name="action" value="valider les modifications">
 </form>
+</div>
 </body>
 </html>

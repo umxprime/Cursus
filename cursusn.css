@@ -126,7 +126,7 @@ h2{
 	text-transform: uppercase;
 	color: #60acbf;
 	background-color: inherit;
-	margin-left: 20px;
+	margin-left: 0px;
 	}
 .hide {
 	display: none;
@@ -221,16 +221,11 @@ img {
 	/*background: url(img/trame-gris.gif);*/
 }
 #semestre li {
-	padding-top: 10px;
-	display: inline;
-	float: left;
+	display: inline-table;
 }
-#semestre ul {
-	margin-left: 30%;
-	margin-right: -30%;
-}
+
 #semestre a {
-	position: absolute;
+	position: relative;
 	height: 15px;
 	width: 45px;
 	text-indent: -5000px;
@@ -238,28 +233,79 @@ img {
 	/*border: 1px solid red;*/
 }
 #sem-precedent a{
+	width:45px;
+	display:block;
 	background: url(img/semestre.gif) 0 -15px no-repeat;
 }
 #sem-precedent a:hover {
 	background: url(img/semestre.gif) 0 -45px no-repeat;
 }
 #sem-suivant a {
+	width:45px;
+	display:block;
 	background: url(img/semestre.gif) 0 0px no-repeat;
 }
 #sem-suivant a:hover {
 	background: url(img/semestre.gif) 0 -30px no-repeat;
 }
 #semestre li h2{
+	display:block;
 	font: 14px "Trebuchet MS", Verdana, sans-serif;
 	text-transform: uppercase;
 	color: #60acbf;
 	background-color: inherit;
-	margin-left: 60px;
-	margin-right: 15px;
 }
 #table_modules
 {
-	width:760px;
+	position:relative;
+	width:1002px;
+	left:11px;
+	
+}
+#table_modules tr
+{
+	 background-color:#f8f8f8;
+	 font-size:1.2em;
+}
+#table_modules tr:hover
+{
+	 background-color:#D8D8D8;
+}
+#table_modules td
+{
+	text-align:center;
+}
+#table_modules td.module
+{
+	background-image:url("img/ombre-ptt.png");
+	background-repeat:repeat-x;
+	text-align:center;
+	padding:5px;
+	padding-top:8px;
+}
+#table_modules a {
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:block;
+	max-width:200px;
 	margin-left:auto;
 	margin-right:auto;
+}
+#table_modules a:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+table.center
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+fieldset
+{
+	border-style:none;
 }

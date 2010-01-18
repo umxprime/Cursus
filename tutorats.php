@@ -157,11 +157,17 @@ if ($nres>0){
 	</head>
 	<body>
 		<div id="global">
+			
 			<?php
 				include("barre_outils.php"); 
 				include("inc_nav_sem.php");
+			?>
+			<table>
+			<tr><td>
+			<?php 
 				echo $form0;
 			?>
+			
 			<p>
 			<?php
 				if($nres>0)
@@ -192,6 +198,8 @@ if ($nres>0){
 					<input type="submit" value="inscrire"/>
 				</fieldset>
 			</form>
+			</td></tr>
+			</table>
 		</div>
 	</body>
 </html>

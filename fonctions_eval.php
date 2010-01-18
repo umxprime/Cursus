@@ -30,35 +30,40 @@
 	 **/
 	
 function verif($n){
-$r = (strlen($n)>=1)?$n:"-";
-return $r;
+	$r = (strlen($n)>0)?$n:"-";
+	return $r;
 }
 
 function valide_eval($n1, $n2, $creds)
 {//fonction qui g�re la validation ou non d'un module, renvoi une chaine correspondant � un style
 //mise � 0 des cr�dits valid�s
-$cval=0;
-if (verif($n1)=="-"){
-$classe = "noneval";
-}else if(strpos("_ABCDabcd",verif($n1)) or strpos("_ABCDabcd",verif($n2))){
-$classe = "ok";
-$cval=$creds;
-//$total_acquis += $eval['credits'];
-}else{
-$classe = "pasok";
+	$cval=0;
+	if (verif($n1)=="-")
+	{
+		$classe = "noneval";
+	}else if(strpos("_ABCDabcd",verif($n1)) or strpos("_ABCDabcd",verif($n2)))
+	{
+		$classe = "ok";
+		$cval=$creds;
+		//$total_acquis += $eval['credits'];
+	}else{
+		$classe = "pasok";
+	}
+	$ret=array();
+	$ret['classe']=$classe;
+	$ret['creds']=$cval;
+	return $ret;
 }
-$ret=array();
-$ret['classe']=$classe;
-$ret['creds']=$cval;
-return $ret;
-}
-function credits_tutorat($n){
-if($n>8){
-$plus = 6;
-}else{
-$plus = floor(($n-1)/2+1);
-}
-//echo "ctrl-n:".$n."-plus:".$plus."<br />\n";
-return $plus;
+
+function credits_tutorat($n)
+{
+	if($n>8)
+	{
+		$plus = 6;
+	}else{
+		$plus = floor(($n-1)/2+1);
+	}
+	//echo "ctrl-n:".$n."-plus:".$plus."<br />\n";
+	return $plus;
 }
 ?>

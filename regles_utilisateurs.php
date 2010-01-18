@@ -90,7 +90,6 @@
 	
 	$droits["admin"] = $droits["super"];
 	$droits["admin"]["edit_tous_niveaux"] = false;
-	$droits["admin"]["edit_tous_evaluations"] = false;
 	$droits["admin"]["edit_coordination_s13"] = false;
 	$droits["admin"]["voir_tous_sites"] = false;
 	
@@ -100,12 +99,13 @@
 	$droits["coord"]["menu_utilisateurs"] = false;
 	
 	$droits["coord_semestre"] = $droits["coord"];
-	$droits["coord_semestre"]["edit_tous_modules"] = false;
 	$droits["coord_semestre"]["edit_modules_adv"] = false;
 	$droits["coord_semestre"]["menu_niveaux"] = false;
 	$droits["coord_semestre"]["edit_niveaux"] = false;
 	
 	$droits["p"] = $droits["coord_semestre"];
+	$droits["p"]["edit_tous_evaluations"] = false;
+	$droits["p"]["edit_tous_modules"] = false;
 	$droits["p"]["edit_coordination"] = false;
 	$droits["p"]["admin_tutorats"] = false;
 	$droits["p"]["voir_tous_modules"] = false;

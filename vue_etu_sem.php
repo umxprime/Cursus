@@ -115,7 +115,7 @@ $req_evals .= "session.periode, session.module, ";
 $req_evals .= "modules.id as module_id, modules.code, modules.intitule, modules.credits, modules.enseignants";
 $req_evals .= " FROM evaluations, session, modules WHERE ";
 $req_evals .= " evaluations.etudiant = '".$etudiant["id"]."' AND session.id=evaluations.session";
-$req_evals .= " AND session.periode = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.intitule;";
+$req_evals .= " AND session.periode = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.code ASC;";
 
 //evaluations des �tudiants pour les sessions auxquelles ils sont inscrits
 $res_evals = mysql_query($req_evals);

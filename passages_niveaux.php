@@ -80,13 +80,16 @@ if($ok_edit==1){
 		$n_et++;
 	}
 
-	if($_POST["action"]==$message_rec){
-		for($n_et = 0; $n_et<count($etudiants); $n_et++){
+	if($_POST["action"]==$message_rec)
+	{
+		for($n_et = 0; $n_et<count($etudiants); $n_et++)
+		{
 			echo $_POST["etudiant_".$n_et]."<br/>";
 			$arrData = explode("_",$_POST["etudiant_".$n_et]);
 			$idniv=$arrData[1];
 			$newSem = $arrData[0];
-			if ($newSem != $etudiants[$n_et]['semestre']){
+			if ($newSem != $etudiants[$n_et]['semestre'])
+			{
 				$req = "update niveaux set niveau='".$newSem."' where id ='".$idniv."';";
 				$res=mysql_query($req);
 				echo mysql_error($res);
@@ -102,20 +105,18 @@ if($ok_edit==1){
 		}
 	}
 	?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-
-<?php include("inc_css_thing.php"); echo "\n"; ?>
-<title>Cursus <?php revision();?> / Niveaux des étudiants pour le cycle : <?php echo utf8_encode($arr_cycle["nom"])?></title>
-<style type="text/css">
-<?php 
-include("cursusn.css"); 
-?>
-</style>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<?php include("inc_css_thing.php"); echo "\n"; ?>
+	<title>Cursus <?php revision();?> / Niveaux des étudiants pour le cycle : <?php echo utf8_encode($arr_cycle["nom"])?></title>
+	<style type="text/css">
+	<?php 
+	include("cursusn.css"); 
+	?>
+	</style>
 </head>
 <body>
 <div id="global">

@@ -68,9 +68,9 @@ if($droits[$_SESSION['auto']]["menu_niveaux"]==true){
 }
 echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\">signaler un bug</a></li>\n";
 
-echo "<li";
-echo ($outil=="infoperso")?" class=\"courant\" ":"";
-echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
+//echo "<li";
+//echo ($outil=="infoperso")?" class=\"courant\" ":"";
+//echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
 echo "<li class=\"nomEnseignant\">".utf8_encode($_SESSION['username'])."</li>\n";
 echo "<li class=\"logoff\"><a href=\"login.php\">d&eacute;connexion</a></li>\n";
 ?>

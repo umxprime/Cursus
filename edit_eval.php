@@ -64,8 +64,7 @@ if($_GET["eval"]>0){
 		$res = mysql_query($req);
 		$etudiant = mysql_fetch_array($res);
 		?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
@@ -78,6 +77,7 @@ if($_GET["eval"]>0){
 <?php 
 	include("barre_outils.php");
 ?>
+<table class="center"><tr><td>
 <h2><?php echo $periode['nom']; ?></h2>
 <h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']);?></h2>
 <h2>Première session</h2>
@@ -122,6 +122,7 @@ if($_GET["eval"]>0){
 
 }?>
 </form>
+</td></tr></table>
 </div>
 </body>
 </html>

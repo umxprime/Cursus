@@ -35,6 +35,7 @@ include("fonctions.php");
 require("connect_info.php");
 //puis la connexion standard;
 require("connexion.php");
+include("regles_utilisateurs.php");
 if(!$droits[$_SESSION["auto"]]["edit_niveaux"]) re_root("login.php");
 include("inc_sem_courant.php");
 (isset($_POST['id_etudiant']))?($id_etudiant=$_POST['id_etudiant']):((isset($_GET['id_etudiant']))?($id_etudiant=$_GET['id_etudiant']):($id_etudiant=0));
@@ -64,33 +65,37 @@ $etudiant = mysql_fetch_array($res);
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-<?php include("inc_css_thing.php"); echo "\n"; ?>
-<title>Spécifier le moment du départ d'un étudiant</title>
-<style type="text/css">
-<?php include("cursus2.css"); ?>
-</style>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<?php include("inc_css_thing.php"); echo "\n"; ?>
+	<title>Spécifier le moment du départ d'un étudiant</title>
+	<style type="text/css">
+		<?php include("cursus2.css"); ?>
+	</style>
 </head>
 <body>
-	<form method="post" action="exclure_etudiant.php" name="changer">"
-	<?php
-	echo "<p>Notifier le changemet de cycle de : ".$etudiant['prenom']." ".$etudiant['nom']."<br />";
-echo "Indiquez le nouveau cycle";
-echo selecteur_cycle($conn, $cycle,"nouveau_cycle", "passages_niveaux.php",-1);
-echo "</p>";?>
-<input type=submit value="Valider le changement"/>
-<input type="hidden" name="id_etudiant" value="<?php echo $id_etudiant; ?>">
-</form>
-<form method="post" action="exclure_etudiant.php" name="depart">"
-<?php
-echo "<p>Notifier le sortie de : ".$etudiant['prenom']." ".$etudiant['nom']."<br />";
-echo "Indiquez le semestre de départ de l'établissement (la date de fin de semestre est retenue)";
-echo selecteur_semestres($connexion,$semestre_courant,'periode_sortie','exclure_etudiant.php');
-echo "</p>";
-?>
-<input type=submit value="Valider le départ"/>
-<input type="hidden" name="id_etudiant" value="<?php echo $id_etudiant; ?>">
-<input type="hidden" name="origine" value="<?php echo $origine; ?>">
-</form>
+	<form method="post" action="exclure_etudiant.php" id="changer">
+		<?php
+		echo "<p>Notifier le changemet de cycle de : ".$etudiant['prenom']." ".$etudiant['nom']."<br />";
+		echo "Indiquez le nouveau cycle";
+		echo selecteur_cycle($conn, $cycle,"nouveau_cycle", "passages_niveaux.php",-1);
+		echo "</p>";?>
+		<fieldset>
+			<input type=submit value="Valider le changement"/>
+			<input type="hidden" name="id_etudiant" value="<?php echo $id_etudiant; ?>"/>
+		</fieldset>
+		</form>
+		<form method="post" action="exclure_etudiant.php" id="depart">
+		<?php
+		echo "<p>Notifier la sortie de : ".$etudiant['prenom']." ".$etudiant['nom']."<br />";
+		echo "Indiquez le semestre de départ de l'établissement (la date de fin de semestre est retenue)";
+		echo selecteur_semestres($connexion,$semestre_courant,'periode_sortie','exclure_etudiant.php');
+		echo "</p>";
+		?>
+		<fieldset>
+		<input type=submit value="Valider le départ"/>
+			<input type="hidden" name="id_etudiant" value="<?php echo $id_etudiant; ?>"/>
+			<input type="hidden" name="origine" value="<?php echo $origine; ?>"/>
+		</fieldset>
+	</form>
 </body>
+</html>

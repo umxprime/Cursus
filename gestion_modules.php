@@ -154,6 +154,7 @@ if($ava>0){
 		<?php
 			include("barre_outils.php") ;
 		?>
+		<table class="center"><tr><td>
 		<h2><?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["periode"]."\">".$semestre['nom']."</a>"; ?></h2>
 		<h2>Inscrire des étudiants à ce module</h2>
 		<form id="formulaire" action="ajouter_etudiant.php" method="post">
@@ -221,6 +222,7 @@ if($ava>0){
 				}
 			}
 		</script>
+		</td></tr></table>
 		</div>
 	</body>
 </html>

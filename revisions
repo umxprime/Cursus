@@ -1,3 +1,14 @@
+==r27==
+//Corrections
+- Erreurs de syntaxes diverses
+- Oublis d'include de règles utilisateurs
+
+//Nouveautés
+- Retrait temporaire de la page Infos Persos
+- Gestion basique du contrat d'études
+ 
+------------------------------------------------------------------
+
 ==r26==
 //Corrections
 - Erreurs de syntaxes diverses

@@ -117,8 +117,9 @@ $req_evals .= " FROM evaluations, session, modules WHERE ";
 $req_evals .= " evaluations.etudiant = '".$etudiant["id"]."' AND session.id=evaluations.session";
 $req_evals .= " AND session.periode = '".$semestre_courant."' AND modules.id=session.module ORDER BY modules.code ASC;";
 
-//evaluations des �tudiants pour les sessions auxquelles ils sont inscrits
+//evaluations des étudiants pour les sessions auxquelles ils sont inscrits
 $res_evals = mysql_query($req_evals);
+$sem_eval="";
 while($eval=mysql_fetch_array($res_evals)){
 //incr�mentation du nombre de cr�dits pr�vus
 $total_inscrit +=$eval['credits'];
@@ -129,48 +130,49 @@ if($eval['code']=="PP_EVL_".$etudiant['sem_etu'])
 	$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
 	$classe = $valide['classe'];
 	$total_acquis += $valide['creds'];
-	$sem_eval = "<li class=\"".$classe."\">";
 	//echo $n_lignes;
+	$sem_eval .= "<li class=\"".$classe."\">";
 	$sem_eval .= "<a href=\"gestion_modules.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])."\">";
 	$sem_eval .= $eval["code"]." : </a>";
 	$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
 	$sem_eval .= $eval['note_1']."</a>";
 	$sem_eval .= "/";
 	$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
-	$sem_eval .= $eval['note_2']."</a></li>\n";
+	$sem_eval .= $eval['note_2']."</a>";
+	$sem_eval .= "</li>\n";
 }else{
 //traitement des modules autres que l'�valuation
-$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
-$classe = $valide['classe'];
-$total_acquis += $valide['creds'];
-echo "<li class=\"".$classe."\">";
-//echo $n_lignes;
-echo "<a href=\"gestion_modules.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])." (".utf8_encode($eval["enseignants"]).")\">";
-echo $eval["code"]." : </a>";
-echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
-echo $eval['note_1']."</a>";
-echo "/";
-echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
-echo $eval['note_2']."</a></li>\n";
-$n_lignes -=1;
+	$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
+	$classe = $valide['classe'];
+	$total_acquis += $valide['creds'];
+	//echo $n_lignes;
+	echo "<li class=\"".$classe."\">";
+	echo "<a href=\"gestion_modules.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])." (".utf8_encode($eval["enseignants"]).")\">";
+	echo $eval["code"]." : </a>";
+	echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
+	echo $eval['note_1']."</a>";
+	echo "/";
+	echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
+	echo $eval['note_2']."</a>";
+	echo "</li>\n";
+	$n_lignes -=1;
 }
-
 }
 // *************** Evaluation des stages
 //echo "stages ::::::";
 $req = "SELECT * FROM stages WHERE etudiant='".$etudiant["id"]."' AND periode='".$semestre_courant."';";
 //echo $req;
 $res = mysql_query($req);
-while($stage=mysql_fetch_array($res)){
-$total_inscrit +=$stage['credits'];
-
-if ($stage['valide']!=1){
-$classe = "noneval";
-$comm="en cours";
-}else{
-$classe = "ok";
-$total_acquis += $stage['credits'];
-$comm="Valid&eacute;";
+while($stage=mysql_fetch_array($res))
+{
+	$total_inscrit +=$stage['credits'];
+	if ($stage['valide']!=1){
+	$classe = "noneval";
+	$comm="en cours";
+	}else{
+	$classe = "ok";
+	$total_acquis += $stage['credits'];
+	$comm="Valid&eacute;";
 }
 echo "<li class=\"".$classe."\">";
 //echo $n_lignes;
@@ -191,28 +193,30 @@ $n_lignes -=1;
 
 //**************** Tampon d'�quilibrage de l'affichage
 //passer les lignes inoccup�es pour affichage coh�rent
-while($n_lignes>2){
-echo "<li>&nbsp;</li>";
-$n_lignes -=1;
+while($n_lignes>2)
+{
+	echo "<li>&nbsp;</li>";
+	$n_lignes -=1;
 }
 
 // ************** Evaluation du tutorat
-if($etudiant['sem_etu']>2){
-$req = "SELECT tutorats.*, professeurs.nom_complet FROM tutorats, professeurs WHERE tutorats.trash != 1 AND tutorats.semestre = '".$semestre_courant;
-$req .="' AND tutorats.etudiant= '".$etudiant['id']."' AND professeurs.id= tutorats.professeur;";
-$rtut = mysql_query($req);
-$tut = mysql_fetch_array($rtut);
-$req="SELECT * FROM evaluations";
-$req .=" WHERE evaluations.tutorat ='".$tut['id']."';";
-$reval = mysql_query($req);
-if (mysql_num_rows($reval)>0){
-$eval = mysql_fetch_array($reval);}
-else{
-$eval = array(
-"note_1"=>"-", 
-"note_2"=>"-",
-"appreciation_1"=>"-",
-"appreciation_2"=>"-");
+if($etudiant['sem_etu']>2)
+{
+	$req = "SELECT tutorats.*, professeurs.nom_complet FROM tutorats, professeurs WHERE tutorats.trash != 1 AND tutorats.semestre = '".$semestre_courant;
+	$req .="' AND tutorats.etudiant= '".$etudiant['id']."' AND professeurs.id= tutorats.professeur;";
+	$rtut = mysql_query($req);
+	$tut = mysql_fetch_array($rtut);
+	$req="SELECT * FROM evaluations";
+	$req .=" WHERE evaluations.tutorat ='".$tut['id']."';";
+	$reval = mysql_query($req);
+	if (mysql_num_rows($reval)>0){
+	$eval = mysql_fetch_array($reval);}
+	else{
+	$eval = array(
+	"note_1"=>"-", 
+	"note_2"=>"-",
+	"appreciation_1"=>"-",
+	"appreciation_2"=>"-");
 }
 //echo $req;
 //un tutorat est pris en compte

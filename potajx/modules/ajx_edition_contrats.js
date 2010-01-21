@@ -34,3 +34,8 @@ function inscrire(etudiant,periode)
 	var session=ajx_get_value("session");
 	ajx("edition_contrats","inscrire","id:"+session+",etudiant:"+etudiant+",periode:"+periode,true);
 }
+
+function inscrire_obligatoire(session,etudiant,periode)
+{
+	ajx("edition_contrats","inscrire","id:"+session+",etudiant:"+etudiant+",periode:"+periode,true);
+}

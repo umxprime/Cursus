@@ -42,11 +42,15 @@
 	if ($_SESSION['auto']=="e")	header("location:login.php");
 	//if (!$droits[$_SESSION['auto']]['edit_contrats'])
 	$id = $_GET["id"];
+	$req = "SELECT etudiants.nom,etudiants.prenom,niveaux.niveau FROM etudiants,niveaux WHERE etudiants.id='".$_GET["id"]."' AND niveaux.etudiant=etudiants.id AND niveaux.periode='$semestre_courant';";
+	//echo $req;
+	$etudiant = mysql_fetch_array(mysql_query($req)) or die(mysql_error());
 	$req = "SELECT "; 
 	$req .= "modules.id,";
 	$req .= "modules.code,";
 	$req .= "modules.intitule,";
 	$req .= "modules.credits,";
+	$req .= "modules.obligatoire,";
 	$req .= "evaluations.id as evaluation_id";
 	$req .= " FROM ";
 	$req .= "`evaluations`,`session`,`modules`";
@@ -59,11 +63,38 @@
 	$inscriptions = array();
 	while($inscrit = mysql_fetch_array($inscrits))
 	{
-		array_push($inscriptions,array("id"=>$inscrit["id"],"code"=>$inscrit["code"],"intitule"=>$inscrit["intitule"],"credits"=>$inscrit["credits"],"evaluation_id"=>$inscrit["evaluation_id"]));
+		$obligatoire=true;
+		if(intval($inscrit["obligatoire"])==-1)$obligatoire=false;
+		array_push($inscriptions,array("id"=>$inscrit["id"],"code"=>$inscrit["code"],"intitule"=>$inscrit["intitule"],"credits"=>$inscrit["credits"],"obligatoire"=>$obligatoire,"evaluation_id"=>$inscrit["evaluation_id"]));
 	}
-	$req = "SELECT etudiants.nom,etudiants.prenom,niveaux.niveau FROM etudiants,niveaux WHERE etudiants.id='".$_GET["id"]."' AND niveaux.etudiant=etudiants.id AND niveaux.periode='$semestre_courant';";
-	echo $req;
-	$etudiant = mysql_fetch_array(mysql_query($req)) or die(mysql_error());
+	// Modules obligatoires à inscrire
+	$req = "SELECT ";
+	$req .= "session.id as session_id,";
+	$req .= "modules.id,";
+	$req .= "modules.code,";
+	$req .= "modules.intitule,";
+	$req .= "modules.credits";
+	$req .= " FROM ";
+	$req .= "`session`,`modules`";
+	$req .= " WHERE ";
+	$req .= "session.periode='$semestre_courant' AND ";
+	$where = array("modules.id");
+	for($i=0;$i<count($inscriptions);$i++)
+	{
+		array_push($where,"modules.id!='".$inscriptions[$i]["id"]."'");
+	}
+	$where = implode(" AND ",$where);
+	$req .= "$where AND ";
+	$niveau="".$etudiant["niveau"];
+	while(strlen($niveau)<2)$niveau="0$niveau";
+	$req .= "modules.obligatoire='$niveau' AND ";
+	$req .= "session.module=modules.id ORDER BY modules.code ASC;";
+	$missing = mysql_query($req) or die(mysql_error());
+	$obligatoires = array();
+	while($miss = mysql_fetch_array($missing))
+	{
+		array_push($inscriptions,array("session_id"=>$miss["session_id"],"id"=>$miss["id"],"code"=>$miss["code"],"intitule"=>$miss["intitule"],"credits"=>$miss["credits"],"obligatoire"=>true,"evaluation_id"=>false));
+	}
 ?>
 
 
@@ -90,13 +121,13 @@
 				<tr>
 					<td>Code</td>
 					<td>Intitulé</td>
-					<td>Désinscription</td>
+					<td>Inscription</td>
 					<td>Crédits</td>
 				</tr>
 			<?php
 				$where = array("modules.id");
 				$total = 0;
-				$seuil = 30;
+				$seuil = 32;
 				//Modules
 				for($i=0;$i<count($inscriptions);$i++)
 				{
@@ -105,7 +136,13 @@
 					echo "</td><td>";
 					echo utf8_encode($inscriptions[$i]["intitule"]);
 					echo "</td><td>";
-					echo "<a href=\"javascript:desinscrire(".$inscriptions[$i]["evaluation_id"].",$id,$semestre_courant)\">Désinscrire</a>";
+					if(!$inscriptions[$i]["obligatoire"])
+					{
+						echo "<a href=\"javascript:desinscrire(".$inscriptions[$i]["evaluation_id"].",$id,$semestre_courant)\">Désinscrire</a>";
+					}else{
+						echo "Obligatoire";
+					}
+					if(!$inscriptions[$i]["evaluation_id"])echo "<a href=\"javascript:inscrire_obligatoire(".$inscriptions[$i]["session_id"].",$id,$semestre_courant)\">Inscrire</a>";
 					echo "</td><td>";
 					echo $inscriptions[$i]["credits"]." cr";
 					echo "</td></tr>";
@@ -113,15 +150,18 @@
 					array_push($where,"modules.id!='".intval($inscriptions[$i]["id"])."'");
 				}
 				//Tutorat
-				echo "<tr><td>";
-				echo "TUT";
-				echo "</td><td>";
-				echo "Tutorat";
-				echo "</td><td>";
-				echo "</td><td>";
-				$total += credits_tutorat($etudiant["niveau"]);
-				echo credits_tutorat($etudiant["niveau"])." cr";
-				echo "</td></tr>";
+				if($etudiant["niveau"]>2)
+				{
+					echo "<tr><td>";
+					echo "TUT";
+					echo "</td><td>";
+					echo "Tutorat";
+					echo "</td><td>";
+					echo "</td><td>";
+					$total += credits_tutorat($etudiant["niveau"]);
+					echo credits_tutorat($etudiant["niveau"])." cr";
+					echo "</td></tr>";
+				}
 				//Total
 				echo "<tr><td>";
 				echo "</td><td>";
@@ -131,7 +171,6 @@
 				echo $total." cr";
 				echo "</td></tr>";
 				echo "<tr><td>";
-				if($total<$seuil) echo "<a href=\"javascript:inscrire($id,$semestre_courant);\">Inscrire</a>";
 				echo "</td><td>";
 				if($total<$seuil)
 				{
@@ -150,6 +189,8 @@
 					}
 					echo "</select>";
 				}
+				echo "</td><td>";
+				if($total<$seuil) echo "<a href=\"javascript:inscrire($id,$semestre_courant);\">Inscrire</a>";
 				echo "</td></tr>";
 			?>
 			</table>

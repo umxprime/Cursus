@@ -1,3 +1,16 @@
+==r28==
+//Corrections
+- Erreurs de syntaxes diverses
+- Erreur d'affichage pour des évaluations sur la page Coordination
+- Erreur d'affichage d'une requête sur la page Contrat d'études
+- Erreur de prise en compte des tutorats pour les semestres 1 et 2
+  sur la page Contrat d'études
+
+//Nouveautés
+- Intégration des modules obligatoires dans le contrat d'études
+ 
+------------------------------------------------------------------
+
 ==r27==
 //Corrections
 - Erreurs de syntaxes diverses

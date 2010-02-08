@@ -47,11 +47,23 @@ if(isset($_GET['nPeriode'])){//numero de periode envoy� par get
 	$periode = mysql_fetch_array($resreq);
 }
 else{//periode incluant la date syst�me actuelle
-	$requete = "select * from periodes where activite='14' and debut <='".$dateCourante."' and fin >='".$dateCourante."';";
+	//$requete = "select * from periodes where activite='14' and debut <='".$dateCourante."' and fin >='".$dateCourante."';";
+	$req = "SELECT valeur FROM reglages WHERE reglages.option='semestre_courant';";
 	//echo $requete;
-	$resreq = mysql_query($requete);
-	$periode = mysql_fetch_array($resreq);
-	$semestre_courant = $periode['id'];
+	$res = mysql_query($req);
+	$reglage = mysql_fetch_array($res);
+	$semestre_courant = $reglage['valeur'];
+	if($_SESSION["auto"]=="e")
+	{
+		$id = $_SESSION['userid'];
+		$req = "SELECT niveaux.periode FROM niveaux WHERE niveaux.etudiant='$id' ORDER BY periode DESC;";
+		$res = mysql_query($req);
+		$semestre_courant = mysql_result($res,0,"periode");
+		//echo $req;
+	}
+	$req = "SELECT * FROM periodes WHERE id=".$semestre_courant.";";
+	$res = mysql_query($req);
+	$periode = mysql_fetch_array($res);
 }
 
 ?>

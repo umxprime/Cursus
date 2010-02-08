@@ -90,7 +90,8 @@ if($ava>0){
 		$tablEvals.= "</tr>";
 
 		$neval = 1;
-		while($eval = mysql_fetch_array($resEvals)){
+		while($eval = mysql_fetch_array($resEvals))
+		{
 			//			$req = "SELECT * FROM etudiants WHERE id='".$eval['etudiant']."';";
 			//echo "requete : ".$req."\n";
 			//			$res= mysql_query($req);

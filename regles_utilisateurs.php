@@ -87,6 +87,7 @@
 	$droits["super"]["ajouter_module"] = true;
 	$droits["super"]["voir_tutorats"] = true;
 	$droits["super"]["admin_tutorats"] = true;
+	$droits["super"]["menu_reglages"] = true;
 	
 	$droits["admin"] = $droits["super"];
 	$droits["admin"]["edit_tous_niveaux"] = false;
@@ -94,6 +95,7 @@
 	$droits["admin"]["voir_tous_sites"] = false;
 	
 	$droits["coord"] = $droits["admin"];
+	$droits["coord"]["menu_reglages"] = false;
 	$droits["coord"]["ajouter_module"] = false;
 	$droits["coord"]["voir_utilisateurs"] = false;
 	$droits["coord"]["menu_utilisateurs"] = false;

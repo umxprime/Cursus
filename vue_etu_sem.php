@@ -43,6 +43,7 @@
 	// c'est � dire les semestres de 1 � 10
 	$ns=1;
 	if(isset($_GET['ns'])) $ns = $_GET['ns'];
+	$niveau=$ns;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -123,7 +124,7 @@ $sem_eval="";
 while($eval=mysql_fetch_array($res_evals)){
 //incr�mentation du nombre de cr�dits pr�vus
 $total_inscrit +=$eval['credits'];
-if($eval['code']=="PP_EVL_".$etudiant['sem_etu'])
+if(strstr($eval['code'],"PP_EVL_"))
 {
 	//traitement de l'�valuation semestrielle
 	// elle sera affich�e en bas de liste donc stockage dans une variable
@@ -139,6 +140,7 @@ if($eval['code']=="PP_EVL_".$etudiant['sem_etu'])
 	$sem_eval .= "/";
 	$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
 	$sem_eval .= $eval['note_2']."</a>";
+	$sem_eval .= " | ".$eval['credits']." Cr.";
 	$sem_eval .= "</li>\n";
 }else{
 //traitement des modules autres que l'�valuation
@@ -154,6 +156,7 @@ if($eval['code']=="PP_EVL_".$etudiant['sem_etu'])
 	echo "/";
 	echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
 	echo $eval['note_2']."</a>";
+	echo " | ".$eval['credits']." Cr.";
 	echo "</li>\n";
 	$n_lignes -=1;
 }

@@ -40,7 +40,7 @@ $outil="modules";
 include("inc_sem_courant.php");
 include("regles_utilisateurs.php");
 
-if($_SESSION['auto']=="etudiant") exit();
+if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 
 //trouver les modules ayant déjà une session dans ce semestre
 $req = "SELECT session.*, modules.intitule, modules.credits, modules.id as id_module, modules.code as module_code ";
@@ -72,7 +72,7 @@ $c = mysql_num_rows($sessions);
 		if ($n>0) $chaineNot.=" and id!='";
 		
 		//echo $_SESSION['auto'];
-		$req = "SELECT * FROM evaluations WHERE evaluations.session='".$session["id"]."';";
+		$req = "SELECT evaluations.* FROM evaluations,etudiants WHERE etudiants.id=evaluations.etudiant AND evaluations.session='".$session["id"]."';";
 		$res = mysql_query($req) or die(mysql_error());
 		$inscrits_s1 = mysql_num_rows($res);
 		$appreciation_s1 = 0;
@@ -116,7 +116,7 @@ $c = mysql_num_rows($sessions);
 		$tablModule .="<a title=\"".utf8_encode($session["intitule"])." / ".$session["credits"]." cr\" href=\"gestion_modules.php?session=".$session["id"]."&nPeriode=".$periode["id"]."\">";
 		$intitule = substr(utf8_encode($session["intitule"]),0,50);
 		if (strlen(utf8_encode($session["intitule"]))>50) $intitule.="...";
-		$tablModule .=$intitule."</a>\n</td>";
+		$tablModule .=$intitule." (".$session["credits"]."cr)</a>\n</td>";
 		$color_s1 = "color:#80B711;font-weight:bold;";
 		$color_s2 = "color:black;";
 		$eval_ok = true;
@@ -235,6 +235,7 @@ $c = mysql_num_rows($sessions);
 					<tr><td>
 						<label for="titre">Donner un titre sécifique à ce module pour ce semestre :</label>
 					</td></tr>
+					<a></a>
 					<tr><td>
 						<?php echo affiche_ligne("titre","",false); ?>
 					</td></tr>

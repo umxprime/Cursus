@@ -46,7 +46,8 @@ if($droits[$_SESSION['auto']]["menu_utilisateurs"]==true){
 if($droits[$_SESSION['auto']]["menu_coordination"]==true){
 	echo "<li";
 	echo ($outil=="coordination")?" class=\"courant\" ":"";
-	echo "><a href=\"vue_etu_sem.php?ns=1&nPeriode=$semestre_courant\">coordination</a></li>\n";
+	if(!isset($niveau))$niveau=1;
+	echo "><a href=\"vue_etu_sem.php?ns=$niveau&nPeriode=$semestre_courant\">coordination</a></li>\n";
 }
 /*else{
 	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.periode='".$semestre_courant."' ";
@@ -66,7 +67,12 @@ if($droits[$_SESSION['auto']]["menu_niveaux"]==true){
 	echo ($outil=="niveaux")?" class=\"courant\" ":"";
 	echo "><a href=\"passages_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
 }
-echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\">signaler un bug</a></li>\n";
+if($droits[$_SESSION['auto']]["menu_reglages"]==true){
+	echo "<li";
+	echo ($outil=="reglages")?" class=\"courant\" ":"";
+	echo "><a href=\"reglages.php?nPeriode=$semestre_courant\">réglages</a></li>\n";
+}
+echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\" title=\"Signaler un bug\">signaler un bug</a></li>\n";
 
 //echo "<li";
 //echo ($outil=="infoperso")?" class=\"courant\" ":"";

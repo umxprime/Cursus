@@ -1,3 +1,19 @@
+==r29==
+//Corrections
+- Erreur d'affichage sur la page Contrat d'études
+- Oubli d'ajout du nom complet des professeurs sur la page Édition
+  utilisateurs
+- Erreurs utf8 sur la page Bulletin étudiant
+- Erreur : Un étudiant ne pouvait plus se connecter si la période
+  courante était supérieure à son niveau semestriel actuel
+
+//Nouveautés
+- Accés aux contrats d'étude depuis le tutorat
+- Début d'implémentation de la page Réglages et de la table
+  associée
+
+------------------------------------------------------------------
+
 ==r28==
 //Corrections
 - Erreurs de syntaxes diverses

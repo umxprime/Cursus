@@ -107,7 +107,8 @@ html {
 	background-color: #C8C8C8;
 	color: #808080;
 }
-#global {
+#global
+{
 	position: relative;
 	width: 1024px;
 	margin-left: -512px;
@@ -116,7 +117,14 @@ html {
 	min-height: 100%;
 	background-attachment: fixed;
 	background: url(img/fond-principal.png) 0 0 repeat-y;
-	}
+}
+
+#global #contenu
+{
+	margin-left:30px;
+	margin-top:0px;
+	padding-top:0px;
+}
 
 td {
 	padding: 5px;

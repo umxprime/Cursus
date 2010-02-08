@@ -41,6 +41,7 @@ include("fonctions.php");
 $outil="tutorat";
 //echo $idd_session."|";
 include("inc_sem_courant.php");
+if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 $dateCourante = date("Y-m-d");
 $form0 ="";
 //echo $semestre['titre'];
@@ -133,6 +134,8 @@ if ($nres>0){
 				$tablEvals .= "</a>";
 			}
 		}
+		$tablEvals .= "</td><td>";
+		$tablEvals .= "<a href=\"edition_contrats.php?id=".$tutorat['etudiant']."&nPeriode=$semestre_courant\">Contrat d'étude</a>";
 		$tablEvals .= "</td>\n</tr>";
 		$ntuts++;
 	}

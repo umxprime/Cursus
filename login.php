@@ -102,8 +102,11 @@ if($_POST["action"] == "Login")
 			//particularit�s : un mode d'autorisation;
 			$autos="e";
 			//particularit�s : l'ecole d�pend du cycle en cours;
+			$req = "SELECT niveaux.periode FROM niveaux WHERE niveaux.etudiant='$eid' ORDER BY periode DESC;";
+			$res2 = mysql_query($req);
+			$periode = mysql_result($res2,0,"periode");
 			$q = "SELECT etudiants.*, cycles.nom as nom_cyc, cycles.ecole, niveaux.niveau as niv, ecoles.nom as nom_ecole from etudiants, cycles, niveaux, ecoles ";
-			$q .= "WHERE etudiants.id='".$eid."' AND niveaux.periode='".$semestre_courant."' AND niveaux.etudiant=etudiants.id";
+			$q .= "WHERE etudiants.id='".$eid."' AND niveaux.periode='".$periode."' AND niveaux.etudiant=etudiants.id";
 			$q .= " AND cycles.id=niveaux.cycle AND ecoles.id=cycles.ecole";
 		}else {//c'est un prof
 			$q="SELECT * FROM professeurs WHERE id='".$pid."';";

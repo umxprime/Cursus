@@ -210,8 +210,8 @@
 			$ecole = $params["ecole"];
 			if ($id == "new")
 			{
-				$req = "INSERT INTO $base (`nom`,`prenom`,`passw`,`log`,`logtype`,`autos`,`ecole`) VALUES";
-				$req .= "('$nom','$prenom','$passw','$log','$logtype','$autos','$ecole')";
+				$req = "INSERT INTO $base (`nom`,`prenom`,`nom_complet`,`passw`,`log`,`logtype`,`autos`,`ecole`) VALUES";
+				$req .= "('$nom','$prenom','$prenom $nom','$passw','$log','$logtype','$autos','$ecole')";
 				$res = mysql_query($req);
 				//$req = "SELECT `id` FROM $base ORDER BY `id` DESC;";
 				//$newuser = mysql_fetch_array(mysql_query($req));
@@ -220,6 +220,7 @@
 				$req = "UPDATE $base SET ";
 				$req .= "nom='$nom'";
 				$req .= ",prenom='$prenom'";
+				$req .= ",nom_complet='$prenom $nom'";
 				$req .= ",passw='$passw'";
 				$req .= ",log='$log'";
 				$req .= ",logtype='$logtype'";

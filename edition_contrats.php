@@ -42,6 +42,7 @@
 	if ($_SESSION['auto']=="e")	header("location:login.php");
 	//if (!$droits[$_SESSION['auto']]['edit_contrats'])
 	$id = $_GET["id"];
+	$ecole = $_SESSION["ecole"];
 	$req = "SELECT etudiants.nom,etudiants.prenom,niveaux.niveau FROM etudiants,niveaux WHERE etudiants.id='".$_GET["id"]."' AND niveaux.etudiant=etudiants.id AND niveaux.periode='$semestre_courant';";
 	//echo $req;
 	$etudiant = mysql_fetch_array(mysql_query($req)) or die(mysql_error());
@@ -56,6 +57,7 @@
 	$req .= "`evaluations`,`session`,`modules`";
 	$req .= " WHERE ";
 	$req .= "evaluations.etudiant='$id' AND ";
+	$req .= "modules.ecole='$ecole' AND ";
 	$req .= "evaluations.session=session.id AND ";
 	$req .= "session.periode='$semestre_courant' AND ";
 	$req .= "session.module=modules.id ORDER BY modules.code ASC;";
@@ -78,6 +80,7 @@
 	$req .= "`session`,`modules`";
 	$req .= " WHERE ";
 	$req .= "session.periode='$semestre_courant' AND ";
+	$req .= "modules.ecole='$ecole' AND ";
 	$where = array("modules.id");
 	for($i=0;$i<count($inscriptions);$i++)
 	{
@@ -107,7 +110,7 @@
 		<?php 
 			include("inc_css_thing.php");
 		?>
-		<title>Cursus <?php revision();?> / Contrat d'étude de <?php echo utf8_encode($etudiant["nom"]." ".$etudiant["prenom"]);?> <?php echo $periode['nom']?></title>
+		<title>Cursus <?php revision();?> / Contrat d'étude de <?php echo utf8_encode($etudiant["prenom"]." ".$etudiant["nom"]);?> <?php echo $periode['nom']?></title>
 		<?php
 			include("potajx/incpotajx.php");
 		?>
@@ -116,6 +119,9 @@
 		<div id="global">
 			<?php include("barre_outils.php"); ?>
 			<?php include("inc_nav_sem.php"); ?>
+			<table class="center"><tr><td>
+				<h2>Contrat d'étude de <?php echo utf8_encode($etudiant["prenom"]." ".$etudiant["nom"]);?></h2>
+			</td></tr></table>
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			<table id="contrat" class="center">
 				<tr>
@@ -139,10 +145,12 @@
 					if(!$inscriptions[$i]["obligatoire"])
 					{
 						echo "<a href=\"javascript:desinscrire(".$inscriptions[$i]["evaluation_id"].",$id,$semestre_courant)\">Désinscrire</a>";
+					}else if(!$inscriptions[$i]["evaluation_id"])
+					{
+						echo "<a href=\"javascript:inscrire_obligatoire(".$inscriptions[$i]["session_id"].",$id,$semestre_courant)\">Inscrire</a>";
 					}else{
 						echo "Obligatoire";
 					}
-					if(!$inscriptions[$i]["evaluation_id"])echo "<a href=\"javascript:inscrire_obligatoire(".$inscriptions[$i]["session_id"].",$id,$semestre_courant)\">Inscrire</a>";
 					echo "</td><td>";
 					echo $inscriptions[$i]["credits"]." cr";
 					echo "</td></tr>";
@@ -176,6 +184,7 @@
 				{
 					$req = "SELECT session.id,modules.code,modules.intitule,modules.credits FROM modules,session WHERE ";
 					$req .= implode(" AND ",$where);
+					$req .= " AND modules.ecole='$ecole'";
 					$req .= " AND modules.desuetude='0000-00-00' AND session.module=modules.id AND session.periode='$semestre_courant' AND modules.credits<=".($seuil-$total)." ORDER BY modules.code ASC;";
 					$modules = mysql_query($req) or die(mysql_error());
 					echo "<select id=\"session\">";

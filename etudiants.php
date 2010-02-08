@@ -35,6 +35,7 @@ require("connect_info.php");
 require("connexion.php");
 $dateCourante = date("Y-m-d");
 include("inc_sem_courant.php");
+include("fonctions.php");
 include("fonctions_eval.php");
 function fait_liste_eval($titre, $code,$n1, $a1, $n2, $a2, $creds)
 {
@@ -128,7 +129,7 @@ $etudiant = mysql_fetch_array($resreq);
 		include("inc_css_thing.php");
 		?>
 		<link rel="stylesheet" href="etu_style.css" type="text/css" />
-		<title><?php echo "vue bulletin de ".$etudiant["prenom"]." ".$etudiant["nom"]." | ".$periode["nom"] ?></title>
+		<title>Cursus <?php echo revision()." / Bulletin de l'étudiant ".utf8_encode($etudiant["prenom"])." ".utf8_encode($etudiant["nom"])." | ".$periode["nom"] ?></title>
 	</head>
 <body>
 <div id="global">
@@ -137,9 +138,9 @@ include("inc_nav_sem.php"); ?>
 <div id="BulletinEntete">
 	<ul class="bulletinNom">
 		<li class="titre">nom</li>
-		<li class="titreReponse"><?php echo $etudiant["nom"];?></li >
-		<li class="titre">pr&eacute;nom</li>
-		<li class="titreReponse"><?php echo $etudiant["prenom"];?></li>
+		<li class="titreReponse"><?php echo utf8_encode($etudiant["nom"]);?></li >
+		<li class="titre">prénom</li>
+		<li class="titreReponse"><?php echo utf8_encode($etudiant["prenom"]);?></li>
 		<li class="titre">semestre</li>
 		<li class="titreReponse"><?php echo $etudiant["niveau"]; ?></li>
 		<!--
@@ -160,6 +161,7 @@ $semestre = $etudiant["niveau"];
 //$tuteur_2 = $etudiant["tuteur_2"];
 $total1_credits=0;
 $total2_credits=0;
+$total_acquis = 0;
 if ($etudiant["niveau"]>2 and $_SESSION['ecole']==1){
 	$req = "select evaluations.note_1,evaluations.note_2,evaluations.appreciation_1, evaluations.appreciation_2, professeurs.nom_complet as enseignants";
 	$req .=" from tutorats, evaluations, professeurs ";

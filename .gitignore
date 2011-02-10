@@ -1,0 +1,8 @@
+.svn
+.buildpath
+.project
+.settings
+.tmp*
+manual/images/
+manual/icons/
+conf.php

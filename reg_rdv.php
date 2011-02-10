@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -35,11 +35,11 @@ require("connexion.php");
 if($_POST['id_rdv']>0){
 	$id_rdv=$_POST['id_rdv'];
 	header("Location:edit_rdv.php?rdv=".$id_rdv);
-	//$req = "UPDATE rdv SET cr='".$_POST['cr']."', ";
-	//$date = $_POST['date'];
-	//$req .= "date='".$date['annee']."-".$date['mois']."-".$date['jour']." ".implode(":",$_POST['heure']).":00'";
-	//$req .= " WHERE id='".$id_rdv."';";
-	//$res = mysql_query($req);
-	//header("Location:edit_rdv.php?rdv=".$id_rdv);
+	$req = "UPDATE rdv SET cr='".utf8_decode($_POST['cr'])."', ";
+	$date = $_POST['date'];
+	$req .= "date='".$date['annee']."-".$date['mois']."-".$date['jour']." ".implode(":",$_POST['heure']).":00'";
+	$req .= " WHERE id='".$id_rdv."';";
+	$res = mysql_query($req);
+	header("Location:edit_rdv.php?rdv=".$id_rdv);
 }
 ?>

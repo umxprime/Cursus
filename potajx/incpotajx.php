@@ -27,9 +27,9 @@
 	$page = explode(".php",$page);
 	$page = $page[0];
 	
-	echo "<script type=\"text/javascript\" src=\"potajx/modules/ajx_".$page.".js\"></script>";
 	echo "<script type=\"text/javascript\" src=\"potajx/potajx.js\"></script>";
-	
+	echo "<script type=\"text/javascript\" src=\"potajx/modules/ajx_".$page.".js\"></script>";
+	include_once("com/umxprime/limelight/classes/HtmlFieldSelect.php");
 	function ajx_span($id)
 	{
 		echo "<span id=\"ajx_$id\"></span>";

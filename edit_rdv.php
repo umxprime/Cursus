@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -36,13 +36,15 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
-<link rel="stylesheet" href="cursus.css" type="text/css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="cursusn.css" type="text/css"/>
 <?php
 require("connect_info.php");
 require("connexion.php");
 include("fonctions.php");
+include("fonctions_eval.php");
+include("regles_utilisateurs.php");
 $idRdv = ($_POST['rdv'])?$_POST['rdv']:$_GET['rdv'];
 if(!$idRdv){
 	$idRdv=$_SESSION['lerdv'];
@@ -50,9 +52,9 @@ if(!$idRdv){
 	session_register('lerdv');
 	$_SESSION['lerdv']=$idRdv;
 }
-$requete = "SELECT * FROM rdv WHERE id = '".$idRdv."';";
-$resultat = mysql_query($requete);
-$rdv = mysql_fetch_array($resultat);
+$req = "SELECT * FROM rdv WHERE id = '".$idRdv."';";
+$res = mysql_query($req);
+$rdv = mysql_fetch_array($res);
 
 $req = "select * from professeurs where id='".$rdv['id_prof']."';";
 $res = mysql_query($req);
@@ -76,44 +78,46 @@ if(isset($_POST['date'])){
 	$dateRdv = array('annee'=>$expJour[0],'mois'=>$expJour[1],'jour'=>$expJour[2]);
 	$heureRdv = array('heure'=>$expHeure[0],'minutes'=>$expHeure[1],'secondes'=>$expHeure[2]);
 }
+$semestre_courant = $sem["semestre"];
+include("inc_sem_courant.php");
 ?>
 <title>Edition d'un rendez-vous</title>
 
 </head>
 <body>
-<p>
-<h4>
-	<a href="edition_prof.php">
-		<?php echo utf8_encode($_SESSION['username']); ?>
-	</a>
-	 :: :: 
-	<a href="login.php">
-		se déconnecter
-	</a>
-</h4>
-</p>
-<p>
-<h2>
-<?php
-echo "<a href='tutorats.php?tuteur=".$prof['id']."'>";
-echo "Tutorat ".utf8_encode($prof['nom_complet'])."</a> - ".$etu['prenom']." ".$etu['nom']."/ rdv ".$rdv['ordre']." / <a href=\"sessions.php?nPeriode=".$sem['id']."\">".$sem['nom'] ?></a></h2>
-</p>
-<form id="formulaire" name="formulaire" action="reg_rdv.php"
-	method="post">
-	<?php
-	echo "<div class=\"selecteur_dates\" >Date du rendez-vous : ";
-	echo selecteurDate("edit_rdv.php?rdv=".$idRdv,"date", $dateRdv['mois'] , $dateRdv['annee'], $dateRdv['jour']);
-	echo "\n</div>";
-	echo "<div class=\"selecteur_heure\" >Heure du rendez-vous : ";
-	echo selecteurHeure("edit_rdv.php?rdv=".$idRdv,"heure", $heureRdv['heure'] , $heureRdv['minutes'], $heureRdv['secondes']);
-	echo "\n</div>";
-	echo "<div class=\"compte_rendu\"><p>Compte-rendu :</p>";
-	echo affiche_champs("cr",$rdv['cr'],80, 16);
-	echo "\n</div>";
-	?>
-<input type="submit" name="action" value="valider">
-<br />
-<input type="hidden" name="id_rdv" value="<?php echo $rdv['id']; ?>">
-</form>
+	<div id="global">
+		<?php
+		$outil="tutorat";
+		include("barre_outils.php");
+		$disableNavSemPrec=true;
+		$disableNavSemSuiv=true;
+		include("inc_nav_sem.php");
+		?>
+		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
+		<table><tr><td>
+			<h2>
+				<?php echo "Tutorat ".$etu['prenom']." ".$etu['nom']."/ rdv ".$rdv['ordre']; ?>
+			</h2>
+			<form id="formulaire" action="reg_rdv.php"
+				method="post">
+				<?php
+				echo "<div class=\"selecteur_dates\" >Date du rendez-vous : ";
+				echo selecteurDate("edit_rdv.php?rdv=".$idRdv,"date", $dateRdv['mois'] , $dateRdv['annee'], $dateRdv['jour']);
+				echo "\n</div>";
+				echo "<div class=\"selecteur_heure\" >Heure du rendez-vous : ";
+				echo selecteurHeure("edit_rdv.php?rdv=".$idRdv,"heure", $heureRdv['heure'] , $heureRdv['minutes'], $heureRdv['secondes']);
+				echo "\n</div>";
+				echo "<div class=\"compte_rendu\"><p>Compte-rendu :</p>";
+				echo affiche_champs("cr",$rdv['cr'],80, 16);
+				echo "\n</div>";
+				?>
+				<fieldset>
+					<input type="submit" name="action" value="valider"/>
+					<br/>
+					<input type="hidden" name="id_rdv" value="<?php echo $rdv['id']; ?>"/>
+				</fieldset>
+			</form>
+		</td></tr></table>
+	</div>
 </body>
 </html>

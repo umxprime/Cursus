@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -64,12 +64,12 @@
 			}
 			if(is_array($precSem))
 			{
-				echo "<li id=\"sem-precedent\"><a href=\"".$lien_suite."\">&lt;---   </a></li>";
+				if(!$disableNavSemPrec)echo "<li id=\"sem-precedent\"><a href=\"".$lien_suite."\">&lt;---   </a></li>";
 			}
-			echo "<li><h2>".$periode['nom']."</h2></li>";
+			echo "<li><h3>".$periode['annee']."</h3><h2>".$periode['nom']."</h2></li>";
 			if(is_array($nextSem))
 			{
-				echo "<li id=\"sem-suivant\"><a href=\"".$lien_precedent."\">---&gt;</a></li>";
+				if(!$disableNavSemSuiv)echo "<li id=\"sem-suivant\"><a href=\"".$lien_precedent."\">---&gt;</a></li>";
 			}
 		?>
 	</ul>

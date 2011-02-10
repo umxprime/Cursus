@@ -1,0 +1,524 @@
+	/**
+	 *
+	 * Copyright © 2007,2008 Éric CHOISY (eric@mrbbp.net) 
+	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
+	 *
+	 * This file is a part of Cursus
+	 *
+	 * Cursus is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * Cursus is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+	 * originally released under the LGPL <http://www.gnu.org/licenses/>
+	 * by Olivier LOYNET (tbsooo@free.fr)
+	 *
+	 * Cursus uses Potajx
+	 * released under the GPL <http://www.gnu.org/licenses/>
+	 * by Maxime CHAPELET (umxprime@umxprime.com)
+	 * 
+	 **/
+body, html
+{
+	height: 100%;
+}
+
+html
+{
+	background-color: #f8f8f8;
+	color: #808080;
+}
+
+#global
+{
+	position: relative;
+	width: 1024px;
+	margin-left: -512px;
+	padding-left:11px;
+	left: 50%;
+	height: auto;
+	min-height: 100%;
+	background-attachment: fixed;
+	background: url(../img/fond-principal.png) 0 0 repeat-y;
+	background-color: #f8f8f8;
+}
+
+#global #contenu
+{
+	width:1002px;
+	/*background-color:#F00;*/
+	min-height:100%;
+	height:auto;
+}
+	.nom {
+		width: 272px;
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.semestre {
+		background-color: #808080;
+		color: inherit;
+		height: 10px;
+		width: auto;
+	}
+	.off {
+		display: none;
+	}
+	.on {
+		display:compact;
+	}
+	.valide {
+		background: url(img/trame-vert.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.non_valide {
+		background: url(img/trame-rose.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.neutre {
+		background: url(img/trame-gris.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+	}
+	.sortie {
+		/*border-bottom: 1px solid #808080;*/
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.sortie_off {
+		background: url(img/trame-rose.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.sortie_on {
+		background: url(img/trame-vert.gif);
+		border-right: 1px dotted #808080;
+		border-bottom: 1px solid #808080;
+		border-top: 1px solid #808080;
+	}
+	.noborder {
+	border: 2px dotted #f00;
+}
+form image {
+	border: none;
+}
+table {
+	font : 11px "Trebuchet MS", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	left: 20px;
+	border: 0px;
+	color: #404040;
+	background-color: inherit;
+	border-spacing : 0px;
+}
+* {
+	margin:0px;
+	padding:0px;
+}
+
+td {
+	padding: 5px;
+}
+h2{
+	font: 14px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: inherit;
+	margin-left: 0px;
+	}
+.hide {
+	display: none;
+}
+img {
+	border: none;
+}
+
+#menuCursus {
+	position: relative;
+	top: 0px;
+	left: 11px;
+	padding-left: 10px;
+	width: 992px;
+	background-color: #eee;
+	color: inherit;
+	/*background: url(img/trame-gris.gif);*/
+	height: 35px;
+}
+#menuCursus a {
+	font-size: 11px;
+	text-decoration: none;
+	color: #808080;
+	background-color: inherit;
+	/*padding: 6px 10px 6px 8px;*/
+	/*padding: 6px 9px 6px 7px;*/
+	padding: 6px 6px 6px 6px;
+	/*background: url(img/trame-vert.gif);*/
+	margin: 0 -8px 0 -6px;
+}
+
+#menuCursus li a:hover {
+	/*background: url(img/trame-vert.gif);*/
+	background-color: #fff;
+	color: #60acbf;
+	/*border: 1px dotted #bbb;*/
+}
+#menuCursus li {
+	vertical-align:top;
+	display: inline-table;
+	padding: 6px 8px 6px 6px;
+	border-bottom: 1px dotted #bbb;
+	border-left: 1px dotted #bbb;
+	border-right: 1px dotted #bbb;
+	font: 10px Georgia, "Trebuchet MS", serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: #eee;
+}
+#menuCursus li.courant {
+	display: inline-table;
+	/*padding: 6px 10px 6px 8px;*/
+	padding: 6px 8px 6px 6px;
+	border-bottom: 1px dotted #bbb;
+	border-left: 1px dotted #bbb;
+	border-right: 1px dotted #bbb;
+	/*background-color: #60acbf;*/
+	color: #60acbf;
+	background-color: #fff;
+}
+#menuCursus li.nomEnseignant {
+	font-size:11px;
+	margin-left:25px;
+	color: #60acbf;
+	background-color: #fff;
+	/*border-color: #fff;*+
+	/*border: 1px solid red;*/
+	
+}
+#menuCursus li.alertes
+{
+	display:inline-table;
+	margin-left: -2px;
+}
+#menuCursus li.alertes a.ok
+{
+	background-color: #80B711;
+	color: #fff;
+}
+#menuCursus li.alertes a.ok:hover
+{
+	background-color: #fff;
+	color: #80B711;
+}
+#menuCursus li.alertes a.pb
+{
+	background-color: #E40;
+	color: #fff;
+}
+#menuCursus li.alertes a.pb:hover
+{
+	background-color: #fff;
+	color: #E40;
+}
+
+#menuCursus li.logoff {
+	margin-left: -2px;
+	display: inline-table;
+	padding: 6px 6px 6px 6px;
+}
+#menuCursus li.logoff a {
+	background-color: #80B711;
+	color: #fff;
+}
+#menuCursus li.logoff a:hover {
+	background-color: #fff;
+	color: #80B711;
+	}
+#semestre {
+	left:-18px;
+	position: relative;
+	width: 300px;
+	margin-left:auto;
+	margin-right:auto;
+	height: 65px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #f8f8f8;
+	color: inherit;
+	/*background: url(img/trame-gris.gif);*/
+}
+#semestre li {
+	display: inline-table;
+	text-align: center;
+	margin-top:auto;
+	margin-bottom:auto;
+}
+
+#semestre a {
+	position: relative;
+	height: 15px;
+	width: 45px;
+	text-indent: -5000px;
+	text-decoration: none;
+	/*border: 1px solid red;*/
+}
+#sem-precedent a{
+	width:45px;
+	display:block;
+	margin-top:auto;
+	margin-bottom:auto;
+	background: url(img/semestre.gif) 0 -15px no-repeat;
+}
+#sem-precedent a:hover {
+	background: url(img/semestre.gif) 0 -45px no-repeat;
+}
+#sem-suivant a {
+	width:45px;
+	display:block;
+	margin-top:auto;
+	margin-bottom:auto;
+	background: url(img/semestre.gif) 0 0px no-repeat;
+}
+#sem-suivant a:hover {
+	background: url(img/semestre.gif) 0 -30px no-repeat;
+}
+#semestre li h2{
+	display:block;
+	font: 18px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	color: #60acbf;
+	background-color: inherit;
+}
+#semestre li h3{
+	display:block;
+	font: 30px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	font-weight : bold;
+	color: #60acbf;
+	background-color: inherit;
+}
+#table_modules
+{
+	position:relative;
+	width:1002px;
+	left:11px;
+	
+}
+#table_modules tr
+{
+	 background-color:#f8f8f8;
+	 font-size:1.2em;
+}
+#table_modules tr:hover
+{
+	 background-color:#D8D8D8;
+}
+#table_modules td
+{
+	text-align:center;
+}
+#table_modules td.module
+{
+	background-image:url("img/ombre-ptt.png");
+	background-repeat:repeat-x;
+	text-align:center;
+	padding:5px;
+	padding-top:8px;
+}
+#table_modules a {
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:block;
+	max-width:200px;
+	margin-left:auto;
+	margin-right:auto;
+}
+#table_modules a:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+table#alertes
+{
+	font-size: 10px;
+}
+
+a.bouton
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	max-width:200px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+a.bouton:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+a.lienBouton
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+a.lienBouton:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+a.textbouton
+{
+	color:#808080;
+	text-decoration: none;
+	display:inline-block;
+	margin-left:20px;
+	margin-right:2px;
+}
+
+select
+{
+	color:#808080;
+	background-color: #F8F8F8;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	max-width:200px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+select:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+textarea
+{
+	color:#808080;
+	background-color: #F8F8F8;
+	color:#60ACBF;
+	background-color: #303030;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+table.center
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+
+td.center
+{
+	text-align:center;
+}
+
+fieldset
+{
+	border-style:none;
+}
+.displaynone
+{
+	display:none;
+}
+.displayblock
+{
+	display:inline-block;
+}
+
+.ajxLoaderDisplay
+{
+	background-image: url("../img/potajx_loading.gif");
+}
+
+.ajxLoaderHide
+{
+}
+
+#ajxLoader
+{
+	position:relative;
+	top:5px;
+	width:64px;
+	height:16px;
+	margin:0px;
+	padding:0px;
+	display:inline-block;
+}
+
+.button
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:block;
+	max-width:200px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.button:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+.line
+{
+	background-color:#f8f8f8;
+	font-size:1.2em;
+	background-image:url("img/ombre-ptt.png");
+	background-repeat:repeat-x;
+	text-align:center;
+	padding:5px;
+	padding-top:8px;
+}
+
+table.full
+{
+	width:1002px;
+	left:0px;
+}

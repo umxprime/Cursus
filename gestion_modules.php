@@ -2,7 +2,7 @@
 /**
  *
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
- * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+ * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
  *
  * This file is a part of Cursus
  *
@@ -30,31 +30,37 @@
  **/
 
 include("lesotho.php");
-//echo $idd_session."|";
+//echo $sessionId."|";
 //on requiert les variables de connexion;
 require("connect_info.php");
 //puis la connexion standard;
-//echo $idd_session."|";
+//echo $sessionId."|";
 require("connexion.php");
-//echo $idd_session."|";
+//echo $sessionId."|";
 include("fonctions.php");
-//echo $idd_session."|";
+include("fonctions_eval.php");
+//echo $sessionId."|";
 include("inc_sem_courant.php");
 include("regles_utilisateurs.php");
-(!$_GET['session'])?$idd_session = $_POST['session']:$idd_session = $_GET['session'];
-if(!$idd_session){
-	$idd_session=$_SESSION['lasession'];
-}else{
-	session_register('lasession');
-	$_SESSION['lasession']=$idd_session;
-}
-$req = "SELECT * FROM session where id = '".$idd_session."';";
+(!$_GET['session'])?$sessionId = $_POST['session']:$sessionId = $_GET['session'];
+$req = "SELECT * FROM session where id = '".$sessionId."';";
 //$req = "SELECT * FROM session, periodes, modules, evaluations, "
 $res = mysql_query($req);
 $session = mysql_fetch_array($res);
 $req2 = "SELECT * FROM periodes where id = '".$session['periode']."';";
 $res2 = mysql_query($req2);
 $semestre = mysql_fetch_array($res2);
+$datesLimiteEvalTous = explode(",",$semestre["datelimite"]);
+$limiteEvalActive = false;
+foreach ($datesLimiteEvalTous as $dateLimiteEvalEcole)
+{
+	$dateLimiteEval = explode("@",$dateLimiteEvalEcole);
+	if($dateLimiteEval[0]==$_SESSION["ecole"])
+	{
+		$limiteEvalActive = true;
+		break;
+	}
+}
 //echo $semestre['titre'];
 if($droits[$_SESSION['auto']]["edit_tous_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
@@ -70,8 +76,8 @@ $module = mysql_fetch_array($res);
 $ava=mysql_num_rows($res);
 //echo "nres :".$ava;
 if($ava>0){
-	$req = "SELECT evaluations.*, etudiants.nom, etudiants.prenom, etudiants.mail, etudiants.id as id_etudiant ";
-	$req .= "FROM evaluations, etudiants WHERE evaluations.session='".$idd_session."' and etudiants.id=evaluations.etudiant ";
+	$req = "SELECT evaluations.*, etudiants.nom, etudiants.prenom, etudiants.log, etudiants.mail, etudiants.id as id_etudiant ";
+	$req .= "FROM evaluations, etudiants WHERE evaluations.session='".$sessionId."' and etudiants.id=evaluations.etudiant ";
 	$req .= "ORDER BY etudiants.nom";
 	$resEvals = mysql_query($req);
 	echo mysql_error();
@@ -80,13 +86,15 @@ if($ava>0){
 	if ($nres>0){
 		//echo "nres :".$nres;
 		$destsMail="";
-		$tablEvals ="<table><tr>\n<th>Etudiant</th>";
-		$tablEvals .= "\t<th>Annuler <br/>inscription</th>\n";
+		$tablEvals ="<table><tr>\n<th style=\"padding:20px;\">Etudiant</th>";
+		$tablEvals .= "\t<th style=\"padding:20px;\">Mail</th>\n";
+		if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))$tablEvals .= "\t<th style=\"padding:20px;\"><a class=\"bouton\" href=\"javascript:tout_desinscrire();\">Tout désinscrire</a></th>\n";
 		for($i=1; $i<=10;$i++){
-			$tablEvals .= "\t<th><a href=\"javascript:presence($i)\">Cours<br/>#$i</a></th>\n";
+			$tablEvals .= "\t<th><a class=\"bouton\" href=\"javascript:presence($i)\">$i</a></th>\n";
 		}
-		$tablEvals .= "\t<th>Session <br/>#1</th>\n";
-		$tablEvals .= "\t<th>Rattrapage</th>\n";
+		$tablEvals .= "\t<th style=\"padding:20px;\">Session <br/>#1</th>\n";
+		$tablEvals .= "\t<th style=\"padding:20px;\">Rattrapage</th>\n";
+		$tablEvals .= "\t<th style=\"padding:20px;\"><a class=\"bouton\" href=\"javascript:publier();\">Publier</a></th>\n";
 		$tablEvals.= "</tr>";
 
 		$neval = 1;
@@ -98,12 +106,16 @@ if($ava>0){
 			//			$etudiant = mysql_fetch_array($res);
 			$tablEvals .= "<tr>\n\t<td>";
 			$tablEvals .= utf8_encode($eval['prenom']). " ".utf8_encode($eval['nom']);
-			$tablEvals .= "\n\t</td>\n\t<td>";
+			$tablEvals .= "\n\t</td>\n";
+			$tablEvals .= "\t<td class=\"center\">\n";
+			$tablEvals .= "<a class=\"bouton\" href=\"mailto:".utf8_encode($eval['prenom'])." ".utf8_encode($eval['nom'])."<".$eval["log"]."@esa-npdc.net>\">".$eval["log"]."</a>";
+			$tablEvals .= "\t</td>\n\t";
 			$destsMail .= $eval['prenom']." ".$eval['nom'];
-			$destsMail .= "<".$eval["mail"].">";
+			$destsMail .= "<".$eval["log"]."@esa-npdc.net>";
 			if($neval<$nres){$destsMail .=", ";}
 			//desinscription de l'étudiant
-			$tablEvals .= "<a href=\"desinscrire.php?eval=".$eval['id']."\">désinscrire</a></td>\n<td>";
+			if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))$tablEvals .= "<td class=\"center\">\n<a class=\"bouton\" href=\"javascript:desinscrire(".$eval['id'].",'".utf8_encode($eval['prenom'])." ".utf8_encode($eval['nom'])."');\">Désinscrire</a></td>\n";
+			$tablEvals .= "<td class=\"center\">";
 			$sauf[] = $eval['id_etudiant'];
 			for($d=1;$d<=10;$d++){
 				$tablEvals .= "<input id=\"presence_$neval-$d\" name=\"presences".$eval['id']."[]\" value=\"".$d."\" type=\"checkbox\" ";
@@ -111,23 +123,29 @@ if($ava>0){
 					$tablEvals .= "checked=\"checked\"";
 				}
 				$tablEvals .= ">\n";
-				$tablEvals .="\t</td>\n\t<td>\n";
+				$tablEvals .="\t</td>\n\t<td class=\"center\">\n";
 				//echo $d."\n";
 			}
 			//$tablEvals .="</td>\n";
-			$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
+			$tablEvals .="<a class=\"bouton\" href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
 			//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
 			$tablEvals .= (empty($eval['note_1']) or $eval['note_1']=='-')?"Éditer":$eval['note_1'];
 			$tablEvals .= "</a></td>\n";
 			$tablEvals .="<td>";
 			if(!empty($eval['note_1'])){
 				if(strpos("__efEF",$eval['note_1'])){
-					$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
+					$tablEvals .="<a class=\"bouton\" href = \"edit_eval.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
 					//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
 					$tablEvals.= (empty($eval['note_2']) or $eval['note_2']=='-')?"&eacute;diter":$eval['note_2'];
 					$tablEvals .= "</a>";
 				}
 			}
+			$tablEvals .="</td><td>";
+			$tablEvals .= "<input type=\"checkbox\" id=\"publier_".$neval."\"";
+			if ($eval['publier']==1){
+				$tablEvals .= " checked=\"checked\"";
+			}
+			$tablEvals .= "/>\n";
 			$tablEvals .= "</td>\n</tr>";
 			$neval++;
 		}
@@ -149,41 +167,62 @@ if($ava>0){
 		include("inc_css_thing.php");
 		?>
 		<title>Cursus <?php revision();?> / Gestion de module : <?php echo utf8_encode($module['intitule']) ?></title>
+		<?php
+			$_LIMELIGHT_PATH = "com/umxprime/limelight/";
+			include_once($_LIMELIGHT_PATH."core/limelight.php");
+		?>
 	</head>
 	<body>
 		<div id="global">
 		<?php
+			$outil="modules";
 			include("barre_outils.php") ;
+			$disableNavSemPrec=true;
+			$disableNavSemSuiv=true;
+			include("inc_nav_sem.php");
 		?>
-		<table class="center"><tr><td>
-		<h2><?php echo utf8_encode($module['intitule'])." / <a href=\"sessions.php?nPeriode=".$session["periode"]."\">".$semestre['nom']."</a>"; ?></h2>
-		<h2>Inscrire des étudiants à ce module</h2>
-		<form id="formulaire" action="ajouter_etudiant.php" method="post">
-		<p>
-			Nom de l'etudiant :
-			<select id="etudiant" name="etudiant">
-				<?php
-					$session = $_GET["session"];
-					$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$idd_session' AND session.module=modules.id;";
-					//echo $req;
-					$res = mysql_fetch_array(mysql_query($req));
-					$ecole = $res["module_ecole"];
-					//echo $ecole;
-					echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecole);
-				?>
-			</select>
-			<input type="hidden" name="session" value="<?php echo $idd_session; ?>"/>
-			<input type="submit" value="inscrire" />
-		</p>
+		<input type="hidden" id="session" value="<?php echo $sessionId; ?>"/>
+		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant; ?>"/>
+		<table class="center"><tr><td class="center">
+		<h2><?php echo utf8_encode($module['intitule'])?></h2>
 		<?php
-		if ($res["obligatoire"]>0){
+		if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))
+		{
+		?>
+		<h2>Inscrire des étudiants à ce module</h2>
+		<p>
+			<select class="design" id="etudiant">
+			<?php
+			$session = $_GET["session"];
+			$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$sessionId' AND session.module=modules.id;";
+			//echo $req;
+			$res = mysql_fetch_array(mysql_query($req));
+			$ecoles = explode("--",substr($res["module_ecole"],1,strlen($res["module_ecole"])-2));
+			if($droits[$_SESSION["auto"]]["voir_tous_sites"])
+			{
+				for($i=0;$i<count($ecoles);$i++)
+				{
+					echo liste_etudiants($sauf, $connexion, $semestre_courant, $ecoles[$i],false,true,false);
+				}
+			} else {
+				echo liste_etudiants($sauf, $connexion, $semestre_courant, $_SESSION["ecole"],false,true,false);
+			}
+			?>
+			</select>
+			<a class="bouton" href="javascript:inscrire();">Inscrire</a>
+		</p>
+			<?php
+			if ($res["obligatoire"]>0)
+			{
 			?>
 		<p>Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?> :
 		<a href="reg_module_obligatoire.php?id=<?php echo $res["session_id"]?>&nPeriode=<? echo $semestre_courant;?>">inscrire les étudiants</a>.</p>
-			<?php }?>
-		</form>
-		
-		<?php
+			<?php
+			}
+		} else {
+			if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
+			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
+		}
 			if($nres>0){
 		?>
 		<form id="fpresences" action="reg_presences.php" method="post">
@@ -191,8 +230,9 @@ if($ava>0){
 			echo $tablEvals;
 			?>
 			<fieldset style="border-style:none;">
-					<input type="hidden" name="session" value="<?php echo $idd_session; ?>"/>
+					<input type="hidden" name="session" value="<?php echo $sessionId; ?>"/>
 					<input type="submit" value="valider les présences"/>
+					<a class="bouton" href="javascript:appliquer();">Appliquer les modifications</a>
 			</fieldset>
 		</form>
 		<?php
@@ -205,24 +245,6 @@ if($ava>0){
 		<fieldset>
 			<input type="hidden" id="neval" value="<?php echo $neval-1;?>"/>
 		</fieldset>
-		<script type="text/javascript">
-			function presence(p)
-			{
-				var neval = document.getElementById("neval").value;
-				for(var i=1;i<=neval;i++)
-				{
-					var value = document.getElementById("presence_"+i+"-"+p).checked;
-					if (value)
-					{
-						document.getElementById("presence_"+i+"-"+p).checked=false;
-					}
-					else
-					{
-						document.getElementById("presence_"+i+"-"+p).checked=true;
-					}
-				}
-			}
-		</script>
 		</td></tr></table>
 		</div>
 	</body>

@@ -42,6 +42,7 @@
 		case "get_utilisateurs" :
 			$base = $params["base"];
 			$periode = $params["periode"];
+			$selected = $params["selected"];
 			mysql_select_db(BASE);
 			if ($base=="etudiants")
 			{
@@ -53,10 +54,13 @@
 			$oldid = -1;
 			while($user=mysql_fetch_array($users)){
 				if ($user["id"]==$oldid) array_pop($out);
-				array_push($out, $user["id"].":".strtoupper(utf8_encode($user["nom"]))." ".utf8_encode($user["prenom"]." (".$user["ecole_nom"].")"));
+				$value = $user["id"].":".strtoupper(utf8_encode($user["nom"]))." ".utf8_encode($user["prenom"]." (".$user["ecole_nom"].")");
+				if($selected==$user["id"]) $value .= ":selected";
+				array_push($out, $value);
 				$oldid = $user["id"];
 			}
-			echo implode(",",$out);
+			$values = implode(",",$out);
+			echo "ajx_select(\"liste_utilisateurs\",\"chg_utilisateur\",\"$values\",true,true)";
 			break;
 		case "get_logtype" :
 			$base = $params["base"];
@@ -72,7 +76,8 @@
 				if($user["logtype"]==$i) $option .= ":selected";
 				array_push($out, $option);
 			}
-			echo implode(",",$out);
+			$values = implode(",",$out);
+			echo "ajx_select(\"logtype\",\"update_log\",\"$values\",false,true);";
 			break;
 		case "get_valeurs" :
 			$base = $params["base"];
@@ -80,17 +85,21 @@
 			$fields = explode(";", $params["fields"]);
 			$fields = implode(",", $fields);
 			mysql_select_db(BASE);
-			$req = "SELECT $base.$fields FROM $base WHERE id='$id'";
-			$fields = mysql_fetch_array(mysql_query($req));
+			$req = "SELECT $fields FROM $base WHERE id='$id'";
+			$fields = explode(",", $fields);
+			$sqlfields = mysql_fetch_array(mysql_query($req));
 			$out = array();
 			for($i=0;$i<count($fields);$i++)
 			{
-				if ($fields[$i]) array_push($out, $fields[$i]);
+				array_push($out, $fields[$i].":".$sqlfields[$i]);
 			}
-			echo utf8_encode(implode(",",$out));
+			$fields = utf8_encode(implode(",",$out));
+			echo "ajx_inputTexts(\"$fields\");";
 			break;
 		case "get_ecoles_selon_prof" :
 			$prof = $params["prof"];
+			//echo "alert('ok')";
+			//break;
 			mysql_select_db(BASE);
 			$req = "SELECT ecole FROM professeurs WHERE id=$prof;";
 			$res = mysql_query($req);
@@ -104,7 +113,8 @@
 				if ($school["id"]==$selected) $str.=":selected";
 				array_push($out, $str);
 			}
-			echo implode(",",$out);
+			$values = implode(",",$out);
+			echo "ajx_select(\"liste_ecoles\",\"null\",\"$values\",false,true);";
 			break;
 		case "get_semestres_selon_etudiant" :
 			$etudiant = $params["etudiant"];
@@ -121,7 +131,8 @@
 				if ($i==$selected) $str.=":selected";
 				array_push($out, $str);
 			}
-			echo implode(",",$out);
+			$values = implode(",",$out);
+			echo "ajx_select(\"liste_semestres\",\"chg_semestre\",\"$values\",false,true);";
 			break;
 		case "get_cycles_selon_etudiant" :
 			$etudiant = $params["etudiant"];
@@ -140,7 +151,7 @@
 			if (!isset($params["niveau"])) $niveau = $res["niveau"];
 			if ($niveau==0)
 			{
-				echo " : ";
+				echo "ajx_select(\"liste_cycles\",null,\" : \",false, true);";
 				break;
 			}
 			$req = "SELECT id,nom FROM cycles WHERE semestre_debut<='$niveau' AND semestre_fin>='$niveau';";
@@ -152,7 +163,9 @@
 				if ($cycle["id"]==$selected) $str.=":selected";
 				array_push($out, $str);
 			}
-			echo implode(",",$out);
+			$values = implode(",",$out);
+			//echo "alert('$values');";
+			echo "ajx_select(\"liste_cycles\",null,\"$values\",false, true);";
 			break;
 		case "set_etudiants" :
 			$base = $params["base"];
@@ -237,7 +250,7 @@
 			$id = $params["id"];
 			$req = "DELETE FROM $base WHERE id='$id';";
 			mysql_query($req);
-			echo "alert('user $id deleted');";
+			echo "alert('user $id deleted');location.reload(true);";
 			break;
 	}
 ?>

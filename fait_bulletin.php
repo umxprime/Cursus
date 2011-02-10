@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -50,10 +50,9 @@ function moncode($chaine){
 if ( isset ($_GET['id_etudiant']))
 {
     $id_etudiant = $_GET['id_etudiant'];
-
-    $requete = "select etudiants.*,niveaux.niveau from etudiants, niveaux where etudiants.id ='".$id_etudiant."'";
-    $requete .= " AND niveaux.etudiant = '".$id_etudiant."' AND niveaux.periode='".$semestre_courant."';";
-
+    $requete = "select etudiants.*,niveaux.niveau,periodes.nom as periodeNom,periodes.annee as periodeAnnee FROM etudiants, niveaux, periodes where etudiants.id ='".$id_etudiant."'";
+    $requete .= " AND niveaux.etudiant = '".$id_etudiant."' AND niveaux.periode='".$semestre_courant."' AND niveaux.periode=periodes.id;";
+	//echo $requete;
     $resreq = mysql_query($requete);
     //echo "erreur : ".mysql_error();
     while ($etudiant = mysql_fetch_array($resreq))
@@ -62,12 +61,13 @@ if ( isset ($_GET['id_etudiant']))
         $nom_etudiant = str_ireplace(" ", "", $etudiant["nom"]);
         $prenom_etudiant = ($etudiant["prenom"]);
         $semestre = $etudiant["niveau"];
+        $periode = $etudiant["periodeNom"]." ".$etudiant["periodeAnnee"];
 
         $total1_credits = 0;
         $total2_credits = 0;
         $nligne = 1;
         //		echo $semestre_courant."     ---     ".$semestre;
-        if ($etudiant["niveau"] > 4)
+        if ($etudiant["niveau"] > 2)
         {
             $req = "select tutorats.niveau, evaluations.note_1,evaluations.note_2,evaluations.appreciation_1,";
             $req .= " evaluations.appreciation_2,  professeurs.nom_complet as enseignant from tutorats, evaluations, professeurs ";
@@ -77,22 +77,21 @@ if ( isset ($_GET['id_etudiant']))
             $restut = mysql_query($req);
             //echo $req;
             //echo "erreur : ".mysql_error();
-            if ($tut['niveau'] > 8)
-            {
-                $plus = 6;
-            } else if ($tut['niveau'] > 6)
-            {
-                $plus = 4;
-            } else
-            {
-                $plus = 3;
-            }
-
-
-            while ($tut = mysql_fetch_array($restut))
-            {
-
-
+			//die($tut['niveau']);
+			while ($tut = mysql_fetch_array($restut))
+			{
+				if ($tut['niveau'] > 8)
+	            {
+	                $plus = 6;
+	            } else if ($tut['niveau'] > 6)
+	            {
+	                $plus = 4;
+	            } else  if ($tut['niveau'] > 4)
+	            {
+	                $plus = 3;
+	            } else {
+	            	$plus = 2;
+	            }
                 $tut["credits"] = $plus;
                 $var1 = "intitule_module_".$nligne;
                 $var2 = "code_module_".$nligne;
@@ -109,43 +108,64 @@ if ( isset ($_GET['id_etudiant']))
                 $$var2 = "TUTO_".$nligne;
                 $$var4 = ( isset ($tut['note_1']))?$tut['note_1']:"";
                 $$var10 = ( isset ($tut['note_1']))?$tut['note_1']:"";
+                //echo $var4;
                 $$var11 = "";
-                $$var5 = ( isset ($tut['appreciation_1']))?moncode($tut['appreciation_1']):
-                    "";
-                    $$var3 = "";
-                    $$var8 = "";
-                    $$var9 = ($tut['enseignant']);
-                    $$var6 = ( isset ($tut['note_2']))?$tut['note_2']:"";
-                    $$var7 = ($tut['appreciation_2']);
-                    $vartut = "tuteur_".$nligne;
-                    $$vartut = ($tut["enseignant"]);
-
-                    $nligne++;
-                }
-                if (strlen($note1_module_1)>0?strpos("_abcdABCD", $note1_module_1) > 0:false and strlen($note1_module_2)>0?strpos("_abcdABCD", $note1_module_2) > 0:false)
-                {
-                    $total1_credits += $plus;
-                    $cred1_module_2 = $plus;
-                } else if (strlen($note1_module_1)>0?strpos("_abcdABCD", $note1_module_1) > 0:false or strlen($note2_module_1)>0?strpos("_abcdABCD", $note2_module_1) > 0:false)
-                {
-
-                    if (strlen($note1_module_2)>0?strpos("_abcdABCD", $note1_module_2) > 0:false or strlen($note2_module_2)>0?strpos("_abcdABCD", $note2_module_2) > 0:false)
-                    {
-                        $total2_credits += $plus;
-                        $cred2_module_2 = $plus;
-                    }
-                } else
-                {
-                    $cred2_module_2 = 0;
-                    $evalSup[] = $tut;
-                }
-
-            } else
-            {
-                $tuteur_1 = "";
-                $tuteur_2 = "";
-                $cred2_module_2 = "";
-            }
+                $$var5 = ( isset ($tut['appreciation_1']))?moncode($tut['appreciation_1']):"";
+                $$var3 = "";
+                $$var8 = "";
+				$$var9 = ($tut['enseignant']);
+				$$var6 = ( isset ($tut['note_2']))?$tut['note_2']:"";
+				$$var7 = ($tut['appreciation_2']);
+				$vartut = "tuteur_".$nligne;
+				$$vartut = ($tut["enseignant"]);
+				$nligne++;
+			}
+			//echo strpos("_abcdABCD", $note1_module_1)>0;
+			if (strlen($note1_module_1)>0?strpos("_abcdABCD", $note1_module_1) > 0:false)
+			{
+				$total1_credits += $plus;
+				$cred1_module_1 = $plus;
+			}else
+        	if (strlen($note2_module_1)>0?strpos("_abcdABCD", $note2_module_1) > 0:false)
+			{
+				$total2_credits += $plus;
+				$cred2_module_1 = $plus;
+			}
+        	if (strlen($note1_module_2)>0?strpos("_abcdABCD", $note1_module_2) > 0:false)
+			{
+				$total1_credits += $plus;
+				$cred1_module_2 = $plus;
+			}else
+        	if (strlen($note2_module_2)>0?strpos("_abcdABCD", $note2_module_2) > 0:false)
+			{
+				$total2_credits += $plus;
+				$cred2_module_2 = $plus;
+			}
+			/*
+			if ((strlen($note1_module_1)>0?strpos("_abcdABCD", $note1_module_1) > 0:false) and (strlen($note1_module_2)>0?strpos("_abcdABCD", $note1_module_2) > 0:false))
+			{
+				$total1_credits += $plus;
+				$cred1_module_2 = $plus;
+			} else if (strlen($note1_module_1)>0?strpos("_abcdABCD", $note1_module_1) > 0:false or strlen($note2_module_1)>0?strpos("_abcdABCD", $note2_module_1) > 0:false)
+			{
+				if (strlen($note1_module_2)>0?strpos("_abcdABCD", $note1_module_2) > 0:false or strlen($note2_module_2)>0?strpos("_abcdABCD", $note2_module_2) > 0:false)
+				{
+					echo "credits";
+					$total2_credits += $plus;
+					$cred2_module_2 = $plus;
+				}
+			} else
+			{
+				$cred2_module_2 = 0;
+				$evalSup[] = $tut;
+			}*/
+			
+		} else
+			{
+				$tuteur_1 = "";
+				$tuteur_2 = "";
+				$cred2_module_2 = "";
+			}
             if (! isset ($tuteur_1))
             {
                 $tuteur_1 = "";
@@ -154,21 +174,22 @@ if ( isset ($_GET['id_etudiant']))
             {
                 $tuteur_2 = "";
             }
+            //
             //if(!isset($cred2_module_2)){$cred2_module_2 = 0;}
             $requete = "select evaluations.*, session.module as module, modules.credits, modules.intitule, modules.code, modules.enseignants";
             $requete .= ", niveaux.niveau from evaluations, niveaux, session, modules where evaluations.etudiant = '".$id_etudiant."' ";
             $requete .= " and niveaux.niveau = '".$semestre."' and niveaux.etudiant = '".$id_etudiant."' ";
             $requete .= "and session.periode=niveaux.periode and evaluations.session=session.id and modules.id = session.module";
             $requete .= ";";
+            
             $resEvals = mysql_query($requete);
-            while ($eval = mysql_fetch_array($resEvals))
-            {
-                if ($eval['code'] != "PP_EVL_".$semestre)
-                {
-                    $var1 = "intitule_module_".$nligne;
-                    $var2 = "code_module_".$nligne;
-                    $var3 = "cred1_module_".$nligne;
-                    $var4 = "note1_module_".$nligne;
+			while ($eval = mysql_fetch_array($resEvals))
+			{
+					//echo "ok";
+					$var1 = "intitule_module_".$nligne;
+					$var2 = "code_module_".$nligne;
+					$var3 = "cred1_module_".$nligne;
+					$var4 = "note1_module_".$nligne;
                     $var10 = "note_module_".$nligne;
                     $var5 = "appr1_module_".$nligne;
                     $var6 = "note2_module_".$nligne;
@@ -181,8 +202,7 @@ if ( isset ($_GET['id_etudiant']))
                     $$var4 = verif($eval['note_1']);
                     $$var10 = verif($eval['note_1']);
                     $$var11 = "";
-                    $$var5 = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):
-                        "";
+                    $$var5 = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):"";
                         $$var3 = "";
                         $$var8 = "";
                         $$var9 = ($eval['enseignants']);
@@ -200,21 +220,20 @@ if ( isset ($_GET['id_etudiant']))
                             $evalSup[] = $eval;
                         }
                         $nligne++;
-                    } else
+                    if ($eval['code'] == "PP_EVL_".$semestre)
                     {
                         //evaluation semestrielle;
                         $note1_eval = verif($eval['note_1']);
                         $note2_eval = verif($eval['note_2']);
-                        $appr1_eval = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):
-                            "";
-                            $appr2_eval = ( isset ($eval['appreciation_2']))?moncode($eval['appreciation_2']):
-                                "";
-                                $cred1_eval = ( strlen($eval['note_1'])>0?strpos("_abcdABCD", $eval['note_1']):false )?$eval['credits']:0;
-                                $cred2_eval = ( strlen($eval['note_2'])>0?strpos("_abcdABCD", $eval['note_2']):false )?$eval['credits']:0;
-                                $total1_credits += $cred1_eval;
-                                $total2_credits += $cred2_eval;
-                            }
-                        }
+                        $appr1_eval = ( isset ($eval['appreciation_1']))?moncode($eval['appreciation_1']):"";
+						$appr2_eval = ( isset ($eval['appreciation_2']))?moncode($eval['appreciation_2']):"";
+						$cred1_eval = ( strlen($eval['note_1'])>0?strpos("_abcdABCD", $eval['note_1']):false )?$eval['credits']:0;
+						$cred2_eval = ( strlen($eval['note_2'])>0?strpos("_abcdABCD", $eval['note_2']):false )?$eval['credits']:0;
+						//$total1_credits += $cred1_eval;
+						//$total2_credits += $cred2_eval;
+					}
+				}
+				//die("</br>".$requete);
                         if (! isset ($note1_eval) and ! isset ($note2_eval))
                         {
                             $note1_eval = "";
@@ -325,7 +344,7 @@ if ( isset ($_GET['id_etudiant']))
                             $OOo->SetDataCharset('ISO 8859-1');
                             //$destDir = "C:\\wamp\\www\\crusus\\oodest\\";
                             //$docSrc = "C:\\wamp\\www\\crusus\\oosrc\\bulletin_indiv_v4.ots";
-                            $docSrc = "oosrc/bulletin_indiv.ots";
+                            $docSrc = "oosrc/bulletin_indiv.ods";
 							
 							
                             // create a new openoffice document from the template with an unique id

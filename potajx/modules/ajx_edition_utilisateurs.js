@@ -18,26 +18,73 @@
  * 
  */
 
+var ajx_module;
+
 function init()
 {
+
+	ajx_module = "edition_utilisateurs";
+	
 	addListener(ajx_get_id("valider"),'click',submit,true);
 	ajx_select(	"liste_types",
 				"init",
 				"etudiants:Étudiants,professeurs:Professeurs",
-				null, null, null, false);
+				false);
 	
 	update_utilisateurs();
-	
-	ajx_get_id("liste_utilisateurs").value="new";
-	
-	ajx_select(	"liste_ecoles",
+
+	/*
+	ajx_select(	"liste_ecoles", 
 				null,
 				"ajx",
 				"edition_utilisateurs",
 				"get_ecoles_selon_prof",
 				"prof:"+ajx_get_value("liste_utilisateurs"),
-				false, true);
+				false, true);*/
+	var params;
 	
+	params = "\"fields:nom;prenom;passw;log,base:\"+ajx_get_value(\"liste_types\")+\",id:\"+ajx_get_value(\"liste_utilisateurs\")";
+	ajx(ajx_module,"get_valeurs",params,AJX_ASYNC,2);
+	
+	params = "\"prof:\"+ajx_get_value(\"liste_utilisateurs\")";
+	ajx(ajx_module,"get_ecoles_selon_prof",params,AJX_ASYNC,2);
+	
+	params = "\"etudiant:\"+ajx_get_value(\"liste_utilisateurs\")+\",semestre:\"+ajx_get_value(\"semestre_courant\")";
+	ajx(ajx_module,"get_cycles_selon_etudiant",params,AJX_ASYNC,2);
+	
+	params = "\"etudiant:\"+ajx_get_value(\"liste_utilisateurs\")+\",semestre:\"+ajx_get_value(\"semestre_courant\")";
+	ajx(ajx_module,"get_semestres_selon_etudiant",params,AJX_ASYNC,2);
+	
+	if (ajx_get_value("liste_types") == "professeurs") {
+		ajx_cache("champs_etus");
+		ajx_montre("champs_profs");
+		params = "\"fields:autos,base:professeurs,id:\"+ajx_get_value(\"liste_utilisateurs\")";
+		ajx(ajx_module,"get_valeurs",params,AJX_ASYNC,2);
+	}
+	
+	params = "\"base:\"+ajx_get_value(\"liste_types\")+\",id:\"+ajx_get_value(\"liste_utilisateurs\")";
+	ajx(ajx_module,"get_logtype",params,AJX_ASYNC,2,true);
+	
+	if (ajx_get_value("liste_types") == "etudiants") {
+		ajx_cache("champs_profs");
+		ajx_montre("champs_etus");
+	}
+	var complete = function()
+	{
+		try {
+			ajx_get_id("liste_utilisateurs").value=-1;
+			addListener(ajx_get_id("nom"),"change",ajx_uppercase,true);
+			addListener(ajx_get_id("nom"),"change",update_log,true);
+			addListener(ajx_get_id("prenom"),"change",update_log,true);
+			addListener(ajx_get_id("log"),"change",update_log,true);
+			//update_log();
+		}
+		finally {
+			var retry = setTimeout(complete,50);
+		}
+	};
+	complete();
+	/*
 	ajx_select(	"liste_cycles",
 				null,
 				"ajx",
@@ -45,7 +92,8 @@ function init()
 				"get_cycles_selon_etudiant",
 				"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 				false, true);
-				
+	*/
+	/*
 	ajx_select(	"liste_semestres",
 				"chg_semestre",
 				"ajx",
@@ -85,6 +133,7 @@ function init()
 	ajx_get_id("prenom").onchange = update_log;
 	ajx_get_id("log").onchange = update_log;
 	update_log();
+	*/
 }
 
 addListener(window,"load",init,true);
@@ -147,40 +196,38 @@ function update_log()
 	}
 }
 
-function update_utilisateurs()
+function update_utilisateurs(selected)
 {
-	ajx_select(	"liste_utilisateurs",
+	/*ajx_select(	"liste_utilisateurs",
 				"chg_utilisateur",
 				"ajx",
 				"edition_utilisateurs",
 				"get_utilisateurs",
 				"base:"+ajx_get_value("liste_types")+",periode:"+ajx_get_value("semestre_courant"),
-				true);
+				true);*/
+	ajx(ajx_module,"get_utilisateurs","base:"+ajx_get_value("liste_types")+",periode:"+ajx_get_value("semestre_courant")+",selected:"+selected,AJX_ASYNC);
 }
 
 function chg_utilisateur()
 {
-	update_utilisateurs();
+	//update_utilisateurs();
 	if (ajx_get_value("liste_types")=="professeurs")
 	{
 		ajx_cache("champs_etus");
 		ajx_montre("champs_profs");
-		ajx_inputTexts(	"autos:autos",
+		ajx(ajx_module,"get_ecoles_selon_prof","prof:"+ajx_get_value("liste_utilisateurs"),AJX_ASYNC);
+		ajx(ajx_module,"get_valeurs","fields:nom;prenom;passw;log;autos,base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"),AJX_ASYNC);
+		/*ajx_inputTexts(	"autos:autos",
 					"edition_utilisateurs",
 					"get_valeurs",
 					"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"));
-		ajx_select(	"liste_ecoles",
-					null,
-					"ajx",
-					"edition_utilisateurs",
-					"get_ecoles_selon_prof",
-					"prof:"+ajx_get_value("liste_utilisateurs"),
-					false, true);
+		ajx(ajx_module,"get_ecoles_selon_prof","prof:"+ajx_get_value("liste_utilisateurs"));*/
 	}
 	if (ajx_get_value("liste_types")=="etudiants")
 	{
 		ajx_cache("champs_profs");
 		ajx_montre("champs_etus");
+		/*
 		ajx_select(	"liste_cycles",
 					null,
 					"ajx",
@@ -188,6 +235,9 @@ function chg_utilisateur()
 					"get_cycles_selon_etudiant",
 					"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 					false, true);
+		*/
+		ajx(ajx_module,"get_cycles_selon_etudiant","etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),AJX_ASYNC);
+		/*
 		ajx_select(	"liste_semestres",
 					"chg_semestre",
 					"ajx",
@@ -195,11 +245,17 @@ function chg_utilisateur()
 					"get_semestres_selon_etudiant",
 					"etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),
 					false, true);
+		*/
+		ajx(ajx_module,"get_semestres_selon_etudiant","etudiant:"+ajx_get_value("liste_utilisateurs")+",semestre:"+ajx_get_value("semestre_courant"),AJX_ASYNC);
 	}
+	/*
 	ajx_inputTexts(	"nom:nom,prenom:prenom,passw:passw,log:log",
 					"edition_utilisateurs",
 					"get_valeurs",
 					"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"));
+					*/
+	ajx(ajx_module,"get_valeurs","fields:nom;prenom;passw;log,base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"),AJX_ASYNC);
+	/*
 	ajx_select(	"logtype",
 				"update_log",
 				"ajx",
@@ -210,7 +266,7 @@ function chg_utilisateur()
 	ajx_get_id("nom").onchange = update_log;
 	ajx_get_id("prenom").onchange = update_log;
 	ajx_get_id("log").onchange = update_log;
-	update_log();
+	update_log();*/
 }
 
 function del_utilisateur()
@@ -218,7 +274,7 @@ function del_utilisateur()
 	ajx(	"edition_utilisateurs",
 			"del_utilisateur",
 			"base:"+ajx_get_value("liste_types")+",id:"+ajx_get_value("liste_utilisateurs"),
-			true);
+			AJX_ASYNC);
 	chg_utilisateur();
 }
 
@@ -257,9 +313,9 @@ function submit(event)
 		form += ",periode:"+ajx_get_value("semestre_courant");
 		form += ",log:"+ajx_get_value("log");
 		form += ",logtype:"+ajx_get_value("logtype");
-		var newuser = ajx_submit(	"edition_utilisateurs",
+		var newuser = ajx(	"edition_utilisateurs",
 									"set_etudiants",
-									"base:"+base+",id:"+user+","+form,true);
+									"base:"+base+",id:"+user+","+form);
 	}
 	if (base == "professeurs") {
 		var form = "nom:"+ajx_get_value("nom");
@@ -269,9 +325,9 @@ function submit(event)
 		form += ",ecole:"+ajx_get_value("liste_ecoles");
 		form += ",log:"+ajx_get_value("log");
 		form += ",logtype:"+ajx_get_value("logtype");
-		var newuser = ajx_submit(	"edition_utilisateurs",
+		var newuser = ajx(	"edition_utilisateurs",
 									"set_professeurs",
-									"base:"+base+",id:"+user+","+form,true);
+									"base:"+base+",id:"+user+","+form);
 	}
 	update_utilisateurs();
 	users = ajx_get_id("liste_utilisateurs");

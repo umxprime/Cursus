@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -23,7 +23,7 @@
 	 * originally released under the LGPL <http://www.gnu.org/licenses/>
 	 * by Olivier LOYNET (tbsooo@free.fr)
 	 *
-	 * Cursus uses Potajx
+	 * Cursus uses the Limelight Framework
 	 * released under the GPL <http://www.gnu.org/licenses/>
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
@@ -31,6 +31,7 @@
 
     include("lesotho.php");
 	include("fonctions.php");
+	include("fonctions_eval.php");
 	//on requiert les variables de connexion;
 	require("connect_info.php");
 	//puis la connexion standard;
@@ -52,7 +53,8 @@
 		?>
 		<title>Cursus <?php echo revision();?> / Édition utilisateurs</title>
 		<?php
-			include("potajx/incpotajx.php");
+			$_LIMELIGHT_PATH = "com/umxprime/limelight/";
+			include_once($_LIMELIGHT_PATH."core/limelight.php");
 		?>
 	</head>
 	<body>
@@ -62,46 +64,135 @@
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			
 			<table>
+				<tr><td><span id="ajxLoader"></span></td></tr>
 				<tr><td>
-					<?php ajx_span("liste_types"); ajx_span("liste_utilisateurs"); ?>
-					<a href="javascript:chg_utilisateur()" onclick="this.blur()">Recharger</a>
-					<a href="javascript:init()" onclick="this.blur()">Nouveau</a>
-					<a href="javascript:del_utilisateur()" onclick="this.blur()">Supprimer</a>
+					Catégorie
+					<?php
+						$listeTypesUtilisateurs = new HtmlFieldSelect();
+						$listeTypesUtilisateurs->setFieldId("categories");
+						$listeTypesUtilisateurs->setFieldOptions(Array("etudiants","professeurs"),Array("Étudiants","Professeurs"));
+						$listeTypesUtilisateurs->renderField();
+					?>
+					Filtre
+					<?php
+						$champsFiltre = new HtmlFieldInputText();
+						$champsFiltre->setFieldId("filtre");
+						$champsFiltre->renderField(); 
+					?>
+					<a class="bouton" href="javascript:gEBI('filtre').clearValue();nouvelleEntree();">Effacer filtre</a>
+					<a class="bouton" href="javascript:nouvelleEntree();">Appliquer</a>
 				</td></tr>
 				<tr><td>
-					Nom <?php ajx_span("nom");?> Prénom <?php ajx_span("prenom"); ?>
+					
+					<a class="bouton" href="javascript:nouvelleEntree();">Nouvel utilisateur</a>
+					Nom
+					<?php
+						$listeUtilisateurs = new HtmlFieldSelect();
+						$listeUtilisateurs->setFieldId("utilisateurs");
+						$listeUtilisateurs->renderField();
+					?>
+					<a class="bouton" href="javascript:chargeUtilisateur(gVBI('utilisateurs'));">Recharger utilisateur</a>
+					
+					
+					<!--<a href="javascript:supprimerUtilisateur()" onclick="this.blur()">Supprimer</a> -->
 				</td></tr>
 				<tr><td>
-					Log <?php ajx_span("log"); ?> Type <?php ajx_span("logtype"); ?>
+					Nom
+					<?php
+						$champsNomUtilisateur = new HtmlFieldInputText();
+						$champsNomUtilisateur->setFieldId("nom");
+						$champsNomUtilisateur->renderField();
+					?>
+					Prénom
+					<?php
+						$champsPrenomUtilisateur = new HtmlFieldInputText();
+						$champsPrenomUtilisateur->setFieldId("prenom");
+						$champsPrenomUtilisateur->renderField();
+					?>
 				</td></tr>
 				<tr><td>
-					Mot de passe <?php ajx_span("passw");?>
-					<a href="javascript:ajx_genMotDePasse('passw');" onclick="this.blur();" >Générer</a>
+					Log
+					<?php
+						$champsLogUtilisateur = new HtmlFieldInputText();
+						$champsLogUtilisateur->setFieldId("log");
+						$champsLogUtilisateur->renderField();
+					?>
+					Type
+					<?php
+						$listeTypesLog = new HtmlFieldSelect();
+						$listeTypesLog->setFieldId("logtype");
+						$listeTypesLog->setFieldOptions(Array(0,1,2),Array("pnom","prenomnom","Personnalisé"));
+						$listeTypesLog->renderField();
+					?>
 				</td></tr>
 				<tr><td>
-					<table id="champs_etus">
+					Mot de passe
+					<?php
+						$champsMotDePasse = new HtmlFieldInputText();
+						$champsMotDePasse->setFieldId("passw");
+						$champsMotDePasse->renderField();
+					?>
+					<a class="bouton" href="javascript:gEBI('passw').genererMotDePasse();" onclick="this.blur();" >Générer un mot de passe</a>
+				</td></tr>
+				<tr><td>
+					<table id="champsEtudiants">
 						<tr><td>
-							Semestre <?php ajx_span("liste_semestres"); ?>
+							Niveau 
+							<?php
+								$listeNiveaux = new HtmlFieldSelect();
+								$listeNiveaux->setFieldOptions(array(0,1,2,3,4,5,6,7,8,9,10,11),array("Aucun","1","2","3","4","5","6","7","8","9","10","Ancien"));
+								$listeNiveaux->setFieldId("niveau");
+								$listeNiveaux->renderField();
+							?>
 						</td></tr>
 						<tr><td>
-							Cycle <?php ajx_span("liste_cycles"); ?>
+							Cycle 
+							<?php
+								$listeCycles = new HtmlFieldSelect();
+								$listeCycles->setFieldId("cycle");
+								$listeCycles->renderField();
+							?>
+						</td></tr>
+						<tr><td>
+							Crédits de base 
+							<?php
+								$champsCredits = new HtmlFieldInputText();
+								$champsCredits->setFieldId("credits");
+								$champsCredits->setFieldText("0");
+								$champsCredits->renderField();
+							?>
 						</td></tr>
 					</table>
-					<table id="champs_profs">
+					<table id="champsProfesseurs">
 						<tr><td>
-							Auto <?php ajx_span("autos"); ?>
+							Droits 
+							<?php
+								$listeAutos = new HtmlFieldSelect();
+								$listeAutos->setFieldId("auto");
+								$listeAutos->setFieldOptions(array("p","coord_memoire","coord_semestre","coord","admin","super"),array("Professeur","Suivi Mémoire","Coordonateur de semestre","Coordonateur pédagogique","Administrateur","Tous pouvoirs"));
+								$listeAutos->renderField();
+							?>
 						</td></tr>
 						<tr><td>
-							École <?php ajx_span("liste_ecoles"); ?>
+							École
+							<?php
+								$listeEcoles = new HtmlFieldSelect();
+								$listeEcoles->setFieldId("ecole");
+								$req = "SELECT id,nom FROM ecoles;";
+								$res = mysql_query($req);
+								while($ecole = mysql_fetch_array($res))
+								{
+									$listeEcoles->appendFieldOption($ecole["id"],$ecole["nom"]);
+								}
+								$listeEcoles->renderField();
+							?>
 						</td></tr>
 					</table>
 				</td></tr>
 				<tr><td>
-					<!-- <a href="javascript:submit()" onclick="this.blur()" id="submit">Valider</a> -->
-					<a id="valider" href="" name="Valider">Valider</a>
+					<a class="bouton" id="valider" href="javascript:valider();" name="Valider">Valider</a>
 				</td></tr><tr><td>
-					<?php ajx_span("alerts"); ?>
-					<?php ajx_span("loader");?>
+					
 				</td></tr>
 			</table>
 		</div>

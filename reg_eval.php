@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -32,6 +32,7 @@
 include("lesotho.php");
 require("connect_info.php");
 require("connexion.php");
+require("inc_sem_courant.php");
 //echo $_POST['eval'];
 if($_POST['eval']>0){
 	$reqavant = "select * from evaluations where id='".$_POST['eval']."';";
@@ -62,9 +63,10 @@ if($_POST['eval']>0){
 	$res = mysql_query($req);
 	//echo mysql_error();
 	if ($avant['tutorat']!=''){
-		header("Location: tutorats.php");
+		$tuteur=$_GET["tuteur"];
+		header("Location: tutorats.php?nPeriode=$semestre_courant&tuteur=$tuteur");
 	}else{
-	header("Location: gestion_modules.php?session=".$_POST["session"]);
+	header("Location: gestion_modules.php?session=".$_POST["session"]."&nPeriode=$semestre_courant");
 	}
 }
 ?>

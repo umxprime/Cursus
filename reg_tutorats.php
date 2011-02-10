@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -65,9 +65,9 @@ if(isset($_POST['action'])){
 			$req .= " VALUES('','".date("Y-m-d H:i:s")."','','".$id_tutorat."','".$_POST['tuteur']."','".$etu['id']."','".$n."');";
 			$res = mysql_query($req);
 		}
-		$req = "INSERT INTO evaluations (id,session, etudiant, appreciation_1, appreciation_2, valide_1,";
+		$req = "INSERT INTO evaluations (session, etudiant, appreciation_1, appreciation_2, valide_1,";
 		$req .= " valide_2, note_1, note_2,presences, tutorat)";
-		$req .= "VALUES ('','',".$etu["id"].",'','','','','','','',".$id_tutorat.");";
+		$req .= "VALUES ('',".$etu["id"].",'','','','','','','',".$id_tutorat.");";
 		$r = mysql_query($req);
 	}else if($_POST['action']=="desinscrire"){
 		$req = "UPDATE tutorats set trash=1 where id=".$_POST['tutorat'];
@@ -76,6 +76,6 @@ if(isset($_POST['action'])){
 	//echo $req;
 
 	//echo mysql_error($res);
-	header("Location: tutorats.php?tuteur=".$_POST["tuteur"]);
+	header("Location: tutorats.php?tuteur=".$_POST["tuteur"]."&nPeriode=$semestre_courant");
 }
 ?>

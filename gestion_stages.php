@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -38,8 +38,11 @@ require("connect_info.php");
 require("connexion.php");
 //echo $idd_session."|";
 include("fonctions.php");
+include("fonctions_eval.php");
 //echo $idd_session."|";
+$outil="stages";
 include("inc_sem_courant.php");
+include("regles_utilisateurs.php");
 //arrive-t-on avec un identifiant de stage (édition du stage concerné ou nouveau stage);
 
 (!$_GET['session'])?$idd_session = $_POST['session']:$idd_session = $_GET['session'];
@@ -49,6 +52,7 @@ if(!$idd_session){
 	session_register('lasession');
 	$_SESSION['lasession']=$idd_session;
 }
+
 $phrase_en_cours = "Voir stages en cours";
 //quelle action;
 (!$_POST['afaire'])?$afaire = "rien":$afaire = $_POST['afaire'];
@@ -59,34 +63,37 @@ $expDate = explode(":",$dateCourante);
 $arrDateCourante= array('jour'=>$expDate[0],'mois'=>$expDate[1],'annee'=>$expDate[2]);
 	$fin = (empty($_POST['fin']))?$arrDateCourante:$_POST['fin'];
 	$debut = (empty($_POST['debut']))?$arrDateCourante:$_POST['debut'];
-
+(!$_GET['stage_id'])?$stage_id = $_POST['stage_id']:$stage_id = $_GET['stage_id'];
 //si nouveau stage : l'enregistrer et récuperer son indentifiant
 if($afaire=="nouveau"){
-	$req = "INSERT INTO stages (id, etudiant, debut, fin,lieu, rapport, credits, valide, appreciation) VALUES ";
+	$req = "INSERT INTO stages (id, etudiant, debut, fin,lieu) VALUES ";
 	$req .= "('','".$_POST["etudiant"]."','";
 	$req.= $_POST["debut"]['annee']."-".$_POST["debut"]['mois']."-".$_POST["debut"]['jour']."','";
-	$req .= $_POST["fin"]['annee']."-".$_POST["fin"]['mois']."-".$_POST["fin"]['jour']."','".$_POST["lieu"];
-	$req .= "','".$_POST["rapport"]."','".$_POST["credits"]."','".$_POST["valide"]."','".$_POST["appreciation"]."');";
+	$req .= $_POST["fin"]['annee']."-".$_POST["fin"]['mois']."-".$_POST["fin"]['jour']."','".utf8_decode($_POST["lieu"])."');";
 	//echo $req;
 	$res = mysql_query($req);
 	$stage_id = mysql_insert_id();
+	$afaire="modifier";
 }
 if($afaire=="valid_modif"){
-	$req = "UPDATE stages set etudiant='$etudiant_mod', debut='";
+	$req = "UPDATE stages set etudiant='".$_POST["etudiant_mod"]."', debut='";
 	$req .= $_POST["debut_mod"]['annee']."-".$_POST["debut_mod"]['mois']."-".$_POST["debut_mod"]['jour']."', fin='";
-	$req .= $_POST["fin_mod"]['annee']."-".$_POST["fin_mod"]['mois']."-".$_POST["fin_mod"]['jour']."', lieu='".$_POST["lieu_mod"];
+	$req .= $_POST["fin_mod"]['annee']."-".$_POST["fin_mod"]['mois']."-".$_POST["fin_mod"]['jour']."', lieu='".utf8_decode($_POST["lieu_mod"]);
 	$req .= "',rapport='".$_POST["rapport"]."', credits='".$_POST["credits"]."', valide='".$_POST["valide"]."',";
-	$req .= "appreciation='".$_POST["appreciation"]."', soutenance='".$_POST["soutenance"]."', convention='".$_POST["convention"]."' ";
+	$req .= "appreciation='".utf8_decode($_POST["appreciation"])."', soutenance='".$_POST["soutenance"]."', convention='".$_POST["convention"]."' ";
 	$req .= ", periode='".$_POST['periode_mod']."' WHERE id=".$_POST['stage_id'].";";
-//	echo $req;
+	//echo $req;
 	$res = mysql_query($req);
 	$err = mysql_error();
+	$stage_id = $_POST['stage_id'];
 }
+
 if($afaire=="supprimer"){
 	$req = "DELETE FROM stages WHERE id='".$stage_id."';";
 	$res = mysql_query($req);
+	header("location:gestion_stages.php");
 }
-(!$_GET['stage_id'])?$stage_id = $_POST['stage_id']:$stage_id = $_GET['stage_id'];
+
 if($stage_id>0){
 	$req = "SELECT stages.*, etudiants.nom, etudiants.prenom FROM stages, etudiants ";
 	$req .= "where stages.id='".$stage_id."' and etudiants.id=stages.etudiant;";
@@ -105,13 +112,15 @@ if($stage_id>0){
 
 // établissement de la liste des stages à afficher;
 // quelle requête formuler en fonction des données entrantes;
-if ($afaire=$phrase_en_cours){
-$req = "SELECT stages.*, etudiants.nom, etudiants.prenom, etudiants.mail FROM stages, etudiants ";
-$req .= "where (stages.valide = '0' or (stages.debut>='".$lim_inf."' and stages.debut<='".$lim_sup."')) and etudiants.id=stages.etudiant;";
-}else{
-	$req = "SELECT stages.*, etudiants.nom, etudiants.prenom FROM stages, etudiants ";
+if ($afaire=$phrase_en_cours)
+{
+	$req = "SELECT stages.*, etudiants.id as id_etudiant, etudiants.nom, etudiants.prenom, etudiants.mail FROM stages, etudiants ";
+	$req .= "where (stages.valide = '0' or (stages.debut>='".$lim_inf."' and stages.debut<='".$lim_sup."')) and etudiants.id=stages.etudiant;";
+}else
+{
+	$req = "SELECT stages.*, etudiants.id as id_etudiant, etudiants.nom, etudiants.prenom FROM stages, etudiants ";
 	$req .= "where stages.debut>='".$lim_inf."' and stages.debut<='".$lim_sup."' and etudiants.id=stages.etudiant;";
-	}
+}
 	//echo $req;
 $res = mysql_query($req);
 //$stages = mysql_fetch_array($res);
@@ -122,28 +131,26 @@ $nres = mysql_num_rows($res);
 		$destsMail="";
 		//$chaineNot = "SELECT * FROM etudiants WHERE id !='";
 		$tablEvals ="<table><tr>\n<th>Etudiant</th>";
-		$tablEvals .= "\t<th>Supprimer</th>\n";
-		$tablEvals .= "\t<th>Debut</th>\n";
+		$tablEvals .= "\t<th></th>\n";
+		$tablEvals .= "\t<th>Début</th>\n";
 		$tablEvals .= "\t<th>Fin</th>\n";
 		$tablEvals .= "\t<th>Lieu</th>\n";
 		$tablEvals .= "\t<th>Validation <br/>#1</th>\n";
-		$tablEvals .= "\t<th>Edition</th>\n";
+		$tablEvals .= "\t<th></th>\n";
 		$tablEvals.= "</tr>";
 
 		$neval = 1;
 		while($stage = mysql_fetch_array($res)){
 			$tablEvals .= "<tr>\n\t<td>";
-			$tablEvals .= $stage['prenom']. " ".$stage['nom'];
+			$tablEvals .= "<a class=\"bouton\" href=\"vue_bulletin.php?id_etudiant=".$stage['id_etudiant']."\">".utf8_encode($stage['prenom']). " ".utf8_encode($stage['nom'])."</a>";
 			$tablEvals .= "\n\t</td>\n\t<td>";
-			$prenomFormat = strtolower(str_replace(utf8_encode("é"),"e",$stage['prenom']));
+			$prenomFormat = strtolower(utf8_encode($stage['prenom']));
 			$nomFormat = strtolower($stage['nom']);
-			$destsMail .= $stage['prenom']." ".$stage['nom'];
+			$destsMail .= utf8_encode($stage['prenom'])." ".utf8_encode($stage['nom']);
 			$destsMail .= "<".$prenomFormat{0}.$nomFormat."@esa-cambrai.net>";
 			if($neval<$nres){$destsMail .=", ";}
 			//desinscription de l'étudiant
-			$tablEvals .= "<a href=\"#\" onClick=\"javascript:document.formulaire.stage_id.value=".$stage['id'];
-			$tablEvals .= ";document.formulaire.afaire.value='supprimer';";
-			$tablEvals .= " document.formulaire.submit();\">d&eacute;sinscrire</a></td>\n";
+			$tablEvals .= "<a class=\"bouton\" href=\"javascript:deleteStage(".$stage['id'].");\">Désinscrire</a></td>\n";
 			//$tablEvals .="</td>\n";
 			$tablEvals .="<td>";
 			$tablEvals .=$stage['debut'];
@@ -152,7 +159,7 @@ $nres = mysql_num_rows($res);
 			$tablEvals .=$stage['fin'];
 			$tablEvals .= "</td>\n";
 			$tablEvals .="<td>";
-			$tablEvals .=$stage['lieu'];
+			$tablEvals .=utf8_encode($stage['lieu']);
 			$tablEvals .= "</td>\n";
 			$tablEvals .="<td>";
 			switch($stage['valide']){
@@ -164,9 +171,7 @@ $nres = mysql_num_rows($res);
 				break;
 			}
 			$tablEvals .= "</td>\n<td>";
-			$tablEvals .= "<a href=\"#\" onClick=\"javascript:document.formulaire.stage_id.value=".$stage['id'];
-			$tablEvals .= ";document.formulaire.afaire.value='modifier';";
-			$tablEvals .= " document.formulaire.submit();\">&Eacute;diter</a></td>\n";
+			$tablEvals .= "<a class=\"bouton\" href=\"javascript:editStage(".$stage["id"].")\">Éditer</a></td>\n";
 			
 			$neval++;
 		}
@@ -181,49 +186,72 @@ $nres = mysql_num_rows($res);
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 	<?php
 	include("inc_css_thing.php");
 	?>
 
-<title>Stages <?php echo $periode['nom'] ?></title>
+	<title>Stages <?php echo $periode['nom'] ?></title>
+	<script>
+		function editStage(id)
+		{
+			
+			document.getElementById('stage_id').value=""+id;
+			document.getElementById('afaire').value='modifier';
+			document.getElementById('formulaire').submit();
+			
+		}
+		function validStageEdition()
+		{
+			document.getElementById('afaire').value='valid_modif';
+			document.getElementById('formulaire').submit();
+		}
+		function newStage()
+		{
+			document.getElementById('afaire').value='nouveau';
+			document.getElementById('formulaire').submit();
+		}
+		function deleteStage(id)
+		{
+			document.getElementById('stage_id').value=""+id;
+			document.getElementById('afaire').value='supprimer';
+			document.getElementById('formulaire').submit();
+		}
+	</script>
 </head>
 <body>
+<div id="global">
 	<?php
 	include("barre_outils.php") ;
-	//include("inc_nav_sem.php");
+	include("inc_nav_sem.php");
+	?>
+	<table class="center"><tr><td>
+	<?php
+	if($nres>0) echo $tablEvals;
+	$chaineNot.= " SELECT etudiants.*, niveaux.niveau, niveaux.etudiant FROM niveaux, etudiants WHERE niveaux.periode = '".$semestre_courant."' AND niveaux.niveau>0 AND niveaux.niveau<11 AND niveaux.etudiant=etudiants.id ORDER BY niveaux.niveau";
+	//echo $chaineNot;
+	$resNot = mysql_query($chaineNot);
 	?>
 
-<p>
-<?php if($nres>0){ 
-echo $tablEvals;
-}
-$chaineNot.= " SELECT etudiants.*, niveaux.niveau, niveaux.etudiant FROM niveaux, etudiants WHERE niveaux.periode = '".$semestre_courant."' AND niveaux.niveau<11 and niveaux.etudiant=etudiants.id ORDER BY niveaux.niveau";
-//echo $chaineNot;
-$resNot = mysql_query($chaineNot);
-?>
-
-<br />
-<form id="formulaire" name="formulaire" action="gestion_stages.php" method="post">
-	<input type="hidden" name="afaire" value="" >
+	<form id="formulaire" action="gestion_stages.php" method="post">
+		<input type="hidden" name="afaire" id="afaire" value=""/>
 <?php
 if ($stage_id >0){
-	echo "<input type=\"hidden\" name=\"stage_id\" value=\"".$stage_id."\" >";
+	echo "<input type=\"hidden\" id=\"stage_id\" name=\"stage_id\" value=\"".$stage_id."\" >";
 	}
 	else
 	{
-		echo "<input type=\"hidden\" name=\"stage_id\" value=\"-1\" >"; 
+		echo "<input type=\"hidden\" id=\"stage_id\" name=\"stage_id\" value=\"-1\" >"; 
 	}
-//echo "Stage ID : ".$stage_id;
 
 if ($stage_id >0){
 	echo "<P><h2>-------------------- Modification d'un stage --------------------------<br /></h2>";
 	echo "<div class=\"nom\">Etudiant : ";
 	echo "<input type=hidden name='etudiant_mod' value='".$stage2edit['etudiant']."' >";
-	echo $stage2edit['prenom']." ".$stage2edit['nom'];
+	echo utf8_encode($stage2edit['prenom'])." ".utf8_encode($stage2edit['nom']);
 	echo "\n</div>";
 	
-	if(!$_POST["debut_mod"]['mois'] or $_POST['afaire']=='modifier'){
+	if(!$_POST["debut_mod"]['mois'] or $_POST['afaire']=='modifier' or $_POST['afaire']=='valid_modif'){
 		$arrDeb = explode("-",$stage2edit["debut"]);
 		$debut_mod['mois']=$arrDeb[1];		
 		$debut_mod['annee']=$arrDeb[0];
@@ -233,6 +261,7 @@ if ($stage_id >0){
 		$fin_mod['annee']=$arrFin[0];
 		$fin_mod['jour']=$arrFin[2];
 	}
+	
 	echo "<div class=\"selecteur_dates\" >Date de d&eacute;but : ";
 	echo selecteurDate("gestion_stages.php","debut_mod", $debut_mod['mois'] , $debut_mod['annee'], $debut_mod['jour']);
 	echo "\n</div>";
@@ -244,19 +273,19 @@ if ($stage_id >0){
 	echo affiche_ligne("lieu_mod",$stage2edit['lieu']);
 	echo "\n</div>";
 	echo "<br />";
-	echo "Nombre de cr&eacute;dits allou&eacute;s au stage :";
+	echo "Nombre de crédits alloués au stage :";
 	echo selecteur_objets("",0,"credits","credits",$connexion,$stage2edit['credits'],liste_numero(1,20,1,"","&nbsp;"),0);
 	echo "<br /><br />";
 	echo "<div class=\"acoche\">Convention OK<input type=checkbox name=\"convention\" value=1";
 	if($stage2edit['convention']){echo " checked ";}
 	echo ">\n";
-	echo "M&eacute;moire OK<input type=checkbox name=\"memoire\" value=1";
+	echo "Mémoire OK<input type=checkbox name=\"memoire\" value=1";
 	if($stage2edit['memoire']){echo " checked ";}
 	echo ">\n";
 	echo "Soutenance OK<input type=checkbox name=\"soutnance\" value=1";
 	if($stage2edit['soutenance']){echo " checked ";}
 	echo ">\n";
-	echo "Valid&eacute;<input type=checkbox name=\"valide\" value=1";
+	echo "Validé<input type=checkbox name=\"valide\" value=1";
 	if($stage2edit['valide']){echo " checked ";}
 	echo ">\n";
 	echo "\n</div>";
@@ -268,18 +297,15 @@ if ($stage_id >0){
 	echo "appr&eacute;ciation : <br />";
 	echo affiche_champs("appreciation",$stage2edit['appreciation'],80,4);
 	echo "<br />";
-	echo "<input type=button name='valid_modif' value='Valider les modifications' ";
-	echo "onclick=\"javascript:document.formulaire.afaire.value='valid_modif';document.formulaire.submit();\" />";
+	echo "<a href=\"javascript:validStageEdition();\">Valider les modifications</a>";
 }
 
 ?>
 
 </p>
-<br /><br /><br />
-<P><h2>-------------------- Nouveau stage --------------------------<br /></h2>
+<h2>-------------------- Nouveau stage --------------------------<br /></h2>
 
-<P>Nom de l'etudiant : <select id="etudiant" name="etudiant" 
-onchange="javascript:document.formulaire.stage_id.value=-1;document.formulaire.submit();">
+<P>Nom de l'etudiant : <select id="etudiant" name="etudiant" onchange="javascript:document.getElementById('formulaire').stage_id.value=-1;document.formulaire.submit();">
 <?php
 $n=0;
 $label_sem=0;
@@ -294,7 +320,7 @@ while($etu = mysql_fetch_array($resNot)){
 	$c_select .= "\t\t<option value=\"".$etu["id"]."\"";
 	if($etu['id']==$stage2edit['etudiant']){$c_select .= " selected ";}
 	if($etu['id']==$_POST['etudiant']){$c_select .= " selected ";}
-	$c_select .= ">".$etu['nom']." ".$etu['prenom']."</option> <br />\n";
+	$c_select .= ">".utf8_encode($etu['nom'])." ".utf8_encode($etu['prenom'])."</option> <br />\n";
 }
 $c_select .= "\t<\optgroup>";
 echo $c_select;
@@ -308,17 +334,18 @@ echo "<div class=\"selecteur_dates\" >Date de d&eacute;but : ";
 	echo selecteurDate("gestion_stages.php","fin", $fin['mois'] , $fin['annee'], $fin['jour']);
 	echo "\n</div>";
 	echo "<div class=\"lieu\">Lieu du stage : ";
-	echo affiche_ligne("lieu",$_POST['lieu']);
+	echo affiche_ligne("lieu",utf8_decode($_POST['lieu']));
 	echo "\n</div>";
 	
 ?>
 
 <input type="hidden" name="session" value="<?php echo $idd_session; ?>" />
 
+<a class="bouton" href="javascript:newStage();">Nouveau Stage</a>
 
-<input type="submit" value="nouveau stage" onClick="javascript:document.formulaire.afaire.value='nouveau';" />
-<p>
-<?php //echo affiche_champs("dests",$destsMail,80,8); ?></p>
-</form>
-</body>
+<?php //echo affiche_champs("dests",$destsMail,80,8); ?>
+				</form>
+			</td></tr></table>
+		</div>
+	</body>
 </html>

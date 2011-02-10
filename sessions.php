@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -43,34 +43,38 @@ include("regles_utilisateurs.php");
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 
 //trouver les modules ayant déjà une session dans ce semestre
-$req = "SELECT session.*, modules.intitule, modules.credits, modules.id as id_module, modules.code as module_code ";
+$req = "SELECT session.*, modules.intitule, modules.credits, modules.id as id_module, modules.code as module_code, modules.ecole as modules_ecole ";
 $req .="FROM session, modules, professeurs ";
-$req .="WHERE professeurs.id='".$_SESSION['userid']."' AND session.periode='".$semestre_courant."' AND modules.id=session.module ";
-if($droits[$_SESSION['auto']]['voir_tous_modules']==false)
+$req .="WHERE professeurs.id='".$_SESSION['userid']."' AND session.periode='$semestre_courant'AND modules.id=session.module ";
+if(!$droits[$_SESSION['auto']]['voir_tous_modules'] or $_GET["vue"]==1)
 {
 	$req .="AND modules.enseignants LIKE '%".$_SESSION['username']."%' ORDER BY modules.intitule ASC;";
 }
-else if($droits[$_SESSION['auto']]['voir_tous_modules']==true)
+else if($droits[$_SESSION['auto']]['voir_tous_modules'])
 {
 	$req .= "ORDER BY modules.code ASC;";
 } else {
 	header("Location: login.php?origine=".$_SERVER['PHP_SELF']);
 }
-//$req = "select session.*, module.intitule from session, modules where session.periode = '".$periode['id']."' and modules.id=session.module ORDER BY modules.code";
-//echo $req;
 $sessions = mysql_query($req) or die();
 $c = mysql_num_rows($sessions);
-//echo "c======".$c."\n";
 
-	$chaineNot = "Select * from modules where id !='";
-	$n=0;
+
+	$chaineNot = "SELECT * FROM modules WHERE ";
+	$arrayNot = Array("id!='-1'");
 	$tablModule = "";
 	$nrow=0;
+	$ecole = $_SESSION["ecole"];
 	while($session=mysql_fetch_array($sessions) )
 	{
+		$ecoles = $session["modules_ecole"];
+		if (!strstr($ecoles,"-$ecole-") && $ecoles!=$ecole && !$droits[$_SESSION["auto"]]["voir_tous_sites"])
+		{
+			array_push($arrayNot,"id!='".$session["id_module"]."'");
+			continue;
+		}
 		$nrow++;
-		if ($n>0) $chaineNot.=" and id!='";
-		
+		array_push($arrayNot,"id!='".$session["id_module"]."'");
 		//echo $_SESSION['auto'];
 		$req = "SELECT evaluations.* FROM evaluations,etudiants WHERE etudiants.id=evaluations.etudiant AND evaluations.session='".$session["id"]."';";
 		$res = mysql_query($req) or die(mysql_error());
@@ -158,16 +162,15 @@ $c = mysql_num_rows($sessions);
 		$tablModule .="<span style='$color_s1'>$appreciation_s1 / $inscrits_s1</span> | ";
 		$tablModule .="<span style='$color_s2'>$appreciation_s2 / $inscrits_s2</span>";
 		$tablModule .="</td>";
-		$tablModule .="<td class=\"module\">";
+		//$tablModule .="<td class=\"module\">";
 		//if(!$eval_ok)$tablModule .="<a href=\"mail_fill_eval.php\">signaler</a>";
-		$tablModule .="</td>";
+		//$tablModule .="</td>";
 		$tablModule .="<td class=\"module\">";
 		if($droits[$_SESSION["auto"]]["edit_modules_adv"]) $tablModule .= "<a href=\"edition_modules.php?id=".$session['id_module']."&nPeriode=$semestre_courant\">Modifier le module</a>";
 		$tablModule .="</td></tr>";
-		
-		$chaineNot .= $session["id_module"]."'";
-		$n++;
 	}
+	$chaineNot .= implode(" AND ", $arrayNot);
+	if(!$droits[$_SESSION["auto"]]["voir_tous_sites"])$chaineNot .= " AND ecole LIKE '%-$ecole-%' ";
 	$chaineNot .= " AND (desuetude='0000-00-00' OR desuetude >'".$dateCourante."') ORDER BY code;";
 	$resNot = mysql_query($chaineNot);
 	$tablModule .="<tr>\n<td class=\"module\"></td><td class=\"module\">\n";
@@ -183,71 +186,75 @@ $c = mysql_num_rows($sessions);
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<?php include("inc_css_thing.php");	?>
 		<title>Cursus <?php echo revision();?> / Modules pour la période : <?php echo $periode['nom'];?></title>
+		<?php
+			$_LIMELIGHT_PATH = "com/umxprime/limelight/";
+			include_once($_LIMELIGHT_PATH."core/limelight.php");
+		?>
 	</head>
 	<body>
 		<div id="global">
 			<?php
-			include("barre_outils.php"); 		
+			include("barre_outils.php");
+			$plus_nav_semestre[0] = array("var"=>"vue","val"=>$_GET["vue"]);	
 			include("inc_nav_sem.php");
 			?>
-			
+			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
+			<?php
+				if($droits[$_SESSION['auto']]['voir_tous_modules'])
+				{
+			?>
+			<table class="center full">
+				<tr class="line"><td>
+						Voir
+					<?php
+						$listeVues = new HtmlFieldSelect();
+						$listeVues->setFieldId("vue");
+						$listeVues->setFieldOptions(Array("0","1"),Array("tous les modules","mes modules"));
+						$listeVues->selectOption($_GET["vue"]);
+						$listeVues->renderField();
+					?>
+				</td></tr>
+			</table>
+			<?php
+				} 
+			?>
+			<?php if($droits[$_SESSION['auto']]['edit_modules_adv']){?>
+				<table class="center full">
+					<tr><td class="center">
+						<a class="bouton" href="edition_modules.php?nPeriode=<?php echo $semestre_courant;?>&id=-1" class="button">Éditer un module</a>
+						<a class="bouton" href="edition_unites.php?nPeriode=<?php echo $semestre_courant;?>" class="button">Gérer les unités</a>
+					</td></tr>
+					<tr><td class="center">
+						<?php
+						$datesLimiteEvalTous = explode(",",$periode["datelimite"]);
+						$limiteEvalActive = false;
+						foreach ($datesLimiteEvalTous as $dateLimiteEvalEcole)
+						{
+							$dateLimiteEval = explode("@",$dateLimiteEvalEcole);
+							if($dateLimiteEval[0]==$_SESSION["ecole"])
+							{
+								$limiteEvalActive = true;
+								break;
+							}
+						}
+						if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
+						echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>"; 
+						?>
+					</td></tr>
+				</table>
+			<?php }?>
 				<table id="table_modules">
 					<tr style="text-transform:uppercase;font-weight:bold;font-size:1.2em">
 						<td>Code</td>
 						<td>Intitulé</td>
 						<td>Notes saisies</td>
 						<td>Appréciations saisies</td>
-						<td>Signaler</td>
+						<!--<td>Signaler</td>-->
 						<td></td>
 					</tr>
 					<?php echo $tablModule;	?>
 				</table>
-			
-			<?php
-			if ($droits[$_SESSION['auto']]["ajouter_module"])
-			{
-			?>
-			
-			<form id="formulaire" action="ajouter_session.php" method="post">
-			<fieldset style="border-style:none">
-				<input type="hidden" name="nPeriode" value="<?php echo $periode["id"]; ?>"/>
-				<table class="center">
-					<tr><td>
-						<h2>Ajouter un module pour ce semestre</h2>
-					</td></tr>
-					<tr><td>
-						<label for="module">Choisir le module à ajouter :</label>
-					</td></tr>
-					<tr><td>
-						<select id="module" name="module">
-						<?php
-							$n=0;
-							while($resteModule = mysql_fetch_array($resNot)){
-								//echo $resteModule['code']."\n";
-								$l[$n]['val']=$resteModule["id"];
-								$l[$n]['aff']=$resteModule["code"]." / ".$resteModule["intitule"];
-								$n++;
-							}
-							echo affiche_options($l,"",0);
-						?>
-						</select>
-					</td></tr>
-					<tr><td>
-						<label for="titre">Donner un titre sécifique à ce module pour ce semestre :</label>
-					</td></tr>
-					<a></a>
-					<tr><td>
-						<?php echo affiche_ligne("titre","",false); ?>
-					</td></tr>
-					<tr><td>
-						<input type="submit" value="ajouter"/>
-					</td></tr>
-				</table>
-				</fieldset>
-			</form>
-			<?php
-			}
-			?>
+				<table class="center full"><tr style="height:30px;"><td class="line"></td></tr></table>
 		</div>
 	</body>
 </html>

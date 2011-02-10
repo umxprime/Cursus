@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -65,7 +65,9 @@
 	}
 	
 	?>
+	
 		<form id="formulaire" action="ajouter_activite.php" method="post">
+		<fieldset>
 			<?php
 			echo "<div class=\"selecteur_periode\">P&eacute;riode : ";
 			echo selecteur_objets("activites.php", "activites", "nom", "id", $connexion, $id_clef,0,1);
@@ -86,11 +88,13 @@
 			}
 			else{
 				?>
-		<input type="submit" name="action" value="ajouter">
+		<input type="submit" name="action" value="ajouter"/>
 				<?php
 			}
 			?>
-		<input type="hidden" name="table" value="<?php echo $table ?>">
+		<input type="hidden" name="table" value="<?php echo $table ?>"/>
+		</fieldset>
 		</form>
+		
 	</body>
 </html>

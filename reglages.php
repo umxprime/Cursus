@@ -38,7 +38,7 @@ require("connexion.php");
 //echo $idd_session."|";
 include("regles_utilisateurs.php");
 include("fonctions.php");
-$outil="reglages";
+include("fonctions_eval.php");
 //echo $idd_session."|";
 include("inc_sem_courant.php");
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
@@ -56,6 +56,7 @@ if(!$droits[$_SESSION['auto']]["menu_reglages"]) header("Location:sessions.php?n
 		<div id="global">
 			
 			<?php
+				$outil="reglages";
 				include("barre_outils.php"); 
 				include("inc_nav_sem.php");
 			?>

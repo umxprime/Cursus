@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -38,6 +38,7 @@ require("connexion.php");
 //echo $idd_session."|";
 include("regles_utilisateurs.php");
 include("fonctions.php");
+include("fonctions_eval.php");
 $outil="tutorat";
 //echo $idd_session."|";
 include("inc_sem_courant.php");
@@ -45,9 +46,10 @@ if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_cou
 $dateCourante = date("Y-m-d");
 $form0 ="";
 //echo $semestre['titre'];
-if (isset($_POST['tuteur'])){
+if (isset($_POST['tuteur']) or isset($_GET['tuteur'])){
 	//$req = "SELECT * FROM tutorats where professeur = '".$_POST['tuteur']."' AND semestre='".$_POST['periode']."' AND trash !=1;";
 	$tuteur = $_POST['tuteur'];
+	$tuteur = isset($_GET['tuteur'])?$_GET['tuteur']:$tuteur;
 	$rprof = "SELECT * FROM professeurs WHERE id='".$tuteur."';";
 	$resprof = mysql_query($rprof);
 	$prof = mysql_fetch_array($resprof);
@@ -73,12 +75,25 @@ $res = mysql_query($req);
 //echo $req;
 $nres=mysql_num_rows($res);
 
+$req = "SELECT * FROM periodes WHERE id='".$_GET["nPeriode"]."'";
+$periode = mysql_fetch_array(mysql_query($req));
+$datesLimiteEvalTous = explode(",",$periode["datelimite"]);
+$limiteEvalActive = false;
+foreach ($datesLimiteEvalTous as $dateLimiteEvalEcole)
+{
+	$dateLimiteEval = explode("@",$dateLimiteEvalEcole);
+	if($dateLimiteEval[0]==$_SESSION["ecole"])
+	{
+		$limiteEvalActive = true;
+		break;
+	}
+}
 if ($nres>0){
 	
 	//echo "nres :".$nres;
 	$chaineNot = "SELECT * FROM etudiants WHERE id !='";
 	$tablEvals ="<table><tr>\n<th>Etudiant</th>";
-	$tablEvals .= "\t<th>Annuler <br/>inscription</th>\n";
+	if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))$tablEvals .= "\t<th>Annuler <br/>inscription</th>\n";
 	for($i=1; $i<=5;$i++){
 		$tablEvals .= "\t<th>Rdv<br/>#".$i."</th>\n";
 	}
@@ -100,17 +115,18 @@ if ($nres>0){
 		$etudiant = mysql_fetch_array($resEtu);
 		$tablEvals .= "<tr>\n\t<td>";
 		$tablEvals .= utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);
-		$tablEvals .= "\n\t</td>\n\t<td>";
+		$tablEvals .= "\n\t</td>\n\t";
 		//desinscription de l'étudiant
-		$tablEvals .= "<a href=\"javascript:desinscrire(".$tutorat["id"].")\">désinscrire</a></td>\n<td>";
+		if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))$tablEvals .= "<td><a class=\"bouton\" href=\"javascript:desinscrire(".$tutorat["id"].",'".utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom'])."')\">désinscrire</a></td>";
+		$tablEvals .=  "\n<td>";
 		$sauf[] = $etudiant['id'];
 		for($d=1;$d<=5;$d++){
 			if(is_array($rdv[$d-1])){
-				$tablEvals .= "<a href ='edit_rdv.php?rdv=".$rdv[$d-1]['id']."'>";
+				$tablEvals .= "<a class=\"bouton\" href=\"edit_rdv.php?rdv=".$rdv[$d-1]['id']."\">";
 				if (strlen($rdv[$d-1]['cr'])>1){
 					$tablEvals .= "modifier";
 				}else{
-					$tablEvals .= "cr&eacute;er";
+					$tablEvals .= "créer";
 				}
 				$tablEvals .= "<a>\n";
 			}
@@ -121,7 +137,7 @@ if ($nres>0){
 		$req = "SELECT * FROM evaluations WHERE tutorat = '".$tutorat['id']."';";
 		$resEval = mysql_query($req);
 		$eval = mysql_fetch_array($resEval);
-		$tablEvals .="<a href = \"edit_tutorats.php?eval=".$eval['id']."\">";
+		$tablEvals .="<a class=\"bouton\" href=\"edit_tutorats.php?eval=".$eval['id']."&nPeriode=$semestre_courant\">";
 		//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."\">";
 		$tablEvals .= (empty($eval['note_1']))?"&eacute;diter":$eval['note_1'];
 		$tablEvals .= "</a></td>\n";
@@ -129,14 +145,17 @@ if ($nres>0){
 		if(!empty($eval['note_1'])){
 			if(strpos("__efEF",$eval['note_1'])){
 				//$tablEvals .="<a href = \"edit_eval.php?eval=".$eval['id']."&session_name()=".session_id()."\">";
-				$tablEvals .="<a href = \"edit_tutorats.php?eval=".$eval['id']."\">";
+				$tablEvals .="<a class=\"bouton\" href=\"edit_tutorats.php?eval=".$eval['id']."\">";
 				$tablEvals.= (empty($eval['note_2']) )?"&eacute;diter":$eval['note_2'];
 				$tablEvals .= "</a>";
 			}
 		}
 		$tablEvals .= "</td><td>";
-		$tablEvals .= "<a href=\"edition_contrats.php?id=".$tutorat['etudiant']."&nPeriode=$semestre_courant\">Contrat d'étude</a>";
+		$tablEvals .= "<a class=\"bouton\" href=\"edition_contrats.php?id=".$tutorat['etudiant']."&nPeriode=$semestre_courant\">Contrat d'étude</a>";
+		$tablEvals .= "</td><td>";
+		$tablEvals .= "<a class=\"bouton\" href=\"vue_bulletin.php?id_etudiant=".$tutorat['etudiant']."&nPeriode=$semestre_courant\">Bulletin</a>";
 		$tablEvals .= "</td>\n</tr>";
+		//vue_bulletin.php?id_etudiant=784&nPeriode=26
 		$ntuts++;
 	}
 	$tablEvals .="\n</table>";
@@ -150,10 +169,10 @@ if ($nres>0){
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<?php include("inc_css_thing.php");	?>
 		<script type="text/javascript">
-			function desinscrire(id) {
+			function desinscrire(id,nom) {
 				document.getElementById('action').value="desinscrire";
 				document.getElementById('tutorat').value=""+id;
-				document.getElementById('formulaire2').submit();
+				if(window.confirm("Êtes-vous certain de vouloir désinscrire "+nom+" des tutorats ?"))document.getElementById('formulaire2').submit();
 			}
 		</script>
 		<title>Cursus <?php revision();?> / Tutorats : <?php echo utf8_encode($nomTuteur); ?></title>
@@ -162,13 +181,19 @@ if ($nres>0){
 		<div id="global">
 			
 			<?php
-				include("barre_outils.php"); 
+				include("barre_outils.php");
+				$plus_nav_semestre[0] = array("var"=>"tuteur","val"=>"$tuteur");
 				include("inc_nav_sem.php");
+			?>
+			<?php
+			 
 			?>
 			<table>
 			<tr><td>
-			<?php 
-				echo $form0;
+			<?php
+			if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
+			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>"; 
+			echo $form0;
 			?>
 			
 			<p>
@@ -184,8 +209,12 @@ if ($nres>0){
 				//echo $chaineNot;
 				$resNot = mysql_query($chaineNot);
 			?>
+			<?php
+				if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true)/*|| $droits[$_SESSION['auto']]["edit_evaluations_toujours_actif"]*/)
+				{ 
+			?>
 			<h2>Inscrire un étudiant en tutorat</h2>
-			<form id="formulaire2" action="reg_tutorats.php" method="post">
+			<form id="formulaire2" action="reg_tutorats.php?nPeriode=<?php echo $semestre_courant;?>" method="post">
 				
 				<fieldset style="border-style:none;">
 					Nom de l'etudiant :
@@ -201,6 +230,9 @@ if ($nres>0){
 					<input type="submit" value="inscrire"/>
 				</fieldset>
 			</form>
+			<?php 
+				}
+			?>
 			</td></tr>
 			</table>
 		</div>

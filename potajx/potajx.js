@@ -19,7 +19,17 @@
  *
  **/
 
-function ajx(page,action,params,evaluate){
+var ajx_busy=false;
+var ajx_thread=null;
+var AJX_ASYNC=1;
+var AJX_SYNC=2;
+
+function ajx(page,action,params,mode,id,reset)
+{
+	if(ajx_get_id("ajx_loader")) ajx_get_id("ajx_loader").className = "displayblock";
+	var retry = function(){
+			ajx(page,action,params,mode,id,reset);
+	};
 	var xhr_object = null;
 	if (window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
@@ -28,22 +38,43 @@ function ajx(page,action,params,evaluate){
 	else { // XMLHttpRequest non supporté par le navigateur
 		alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 	}
-	if(ajx_get_id("ajx_loader"))
+	var timeout = 10;
+	if(id && mode==AJX_ASYNC)
 	{
-		ajx_get_id("ajx_loader").innerHTML = "Loading";
-	}
-	xhr_object.open("GET", "potajx/potajx.php?page="+page+"&action="+action+"&params="+params, false);
-	xhr_object.send(null);
-	if (xhr_object.readyState == 4) {
-		if(ajx_get_id("ajx_loader"))
-		{
-			ajx_get_id("ajx_loader").innerHTML = "";
-		}
-		if (evaluate){
-			eval(xhr_object.responseText);
+		if(ajx_thread!=id && ajx_busy){
+			var timer = setTimeout(retry,timeout);
 			return 0;
 		}
-		return xhr_object.responseText;
+		params=eval(params);
+		ajx_thread=id;
+	}
+	ajx_busy=true;
+	xhr_object.open("GET", "potajx/potajx.php?page="+page+"&action="+action+"&params="+params, mode==AJX_ASYNC);
+	xhr_object.send(null);
+	if(mode==AJX_ASYNC)
+	{
+		xhr_object.onreadystatechange = function()
+		{
+			if (xhr_object.readyState == 4) {
+				if(ajx_get_id("ajx_loader"))
+				{
+					ajx_get_id("ajx_loader").className = "displaynone";
+				}
+				eval(xhr_object.responseText);
+				ajx_busy = false;
+				if(reset) ajx_thread=null;
+				return 0;
+			}
+		};
+	}else{
+		if (xhr_object.readyState == 4) {
+			if(ajx_get_id("ajx_loader"))
+			{
+				ajx_get_id("ajx_loader").className = "displaynone";
+			}
+			ajx_busy = false;
+			return xhr_object.responseText;
+		}
 	}
 }
 
@@ -77,8 +108,14 @@ function ajx_content(id,content)
 	ajx_get_id("ajx_"+id).innerHTML=content;
 }
 
-function ajx_select(id,onchangefunc,values,page,action,params,addnew,baseselected)
+function ajx_fill(id,val)
 {
+	ajx_get_id(id).innerHTML = val;
+}
+
+function ajx_select(id,onchangefunc,values,addnew,baseselected)
+{
+	//alert(ajx_busy);
 	var element = ajx_get_id("ajx_"+id);
 	var selected;
 	if (ajx_get_id(id))
@@ -89,12 +126,7 @@ function ajx_select(id,onchangefunc,values,page,action,params,addnew,baseselecte
 	var content="";
 	content+="<select id="+id+">";
 	var a_values;
-	if (values=="ajx")
-	{
-		a_values = ajx(page,action,params,false);
-		a_values = a_values.split(",");
-	}
-	else a_values = values.split(",");
+	a_values = values.split(",");
 
 	if (addnew) content += "<option value='new'>Nouvel Enregistrement</option>";
 	for(var i=0;i<a_values.length;i++)
@@ -113,35 +145,22 @@ function ajx_select(id,onchangefunc,values,page,action,params,addnew,baseselecte
 	ajx_get_id(id).onchange=eval(onchangefunc);
 }
 
-function ajx_inputTexts(fields,page,action,params)
+function ajx_inputTexts(fields)
 {
 	/*
 	 * Ecrit un lot d' <input type="text"/> dans des blocs html identifiés par des id, selon des champs de bdd
 	 * Arguments :
 	 * fields = "id_html1:champs_bdd1,id_html2:champs_bdd2,..."
-	 * page = "nom_de_la_lib_php_associée_à_la_page_à_traiter"
-	 * action = "nom_de_la_fonction_à_utiliser_dans_la_lib"
-	 * params = "param1:value1,param2:value2,..." paramêtres à passer dans la fonction déclarée dans action
 	 */
-	var a_elements = fields.split(",");
-	var a_req = [];
-	var a_fields = [];
-	var i;
-	for (i = 0; i < a_elements.length; i++)
+	fields = fields.split(",");
+	for (i = 0; i < fields.length; i++)
 	{
-		var elements = a_elements[i].split(":");
-		a_fields.push(elements[0]);
-		a_req.push(elements[1]);
-	}
-	a_req = a_req.join(";");
-	var values = ajx(page,action,"fields:"+a_req+","+params,false);
-	values = values.split(",");
-	for (i = 0; i < a_fields.length; i++)
-	{
-		var element = ajx_get_id("ajx_"+a_fields[i]);
+		var field = fields[i].split(":")[0];
+		var value = fields[i].split(":")[1];
+		var element = ajx_get_id("ajx_"+field);
 		var content = "";
-		if (!values[i]) values[i]="";
-		content += "<input id=\""+a_fields[i]+"\" type=\"text\" value=\""+values[i]+"\"/>";
+		if (!value) value="";
+		content += "<input id=\""+field+"\" type=\"text\" value=\""+value+"\"/>";
 		element.innerHTML = content;
 	}
 }
@@ -194,4 +213,16 @@ function addListener(element, type, expression, bubbling) {
 		return true;
 	} else
 		return false;
+}
+
+function ajx_uppercase(evt)
+{
+	evt.target.value = evt.target.value.toUpperCase();
+}
+
+function ajx_instore(str)
+{
+	var reg_virgule=new RegExp("(,)", "g");
+	var reg_dpoint=new RegExp("(:)", "g");
+	return encodeURIComponent(str.replace(reg_virgule,"%#%").replace(reg_dpoint,"%##%"));
 }

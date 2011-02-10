@@ -83,15 +83,15 @@ if(isset($_GET["id_module"])){
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <head>
 <?php 
 include("inc_css_thing.php");
 ?>
 <title>Edition article <?php echo $article['titre'] ?></title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<form id="formulaire" name="formulaire" action="reg_article.php" method="post">
+<form id="formulaire" action="reg_article.php" method="post">
 <table style="text-align: left; width: 626px; height: 228px;"
  border="1" cellpadding="2" cellspacing="2">
   <tbody>
@@ -124,6 +124,7 @@ include("inc_css_thing.php");
       <td>
       <?php echo selecteur_objets("",0,"ordre","ordre",$connexion,$ligne['ordre'],liste_numero(0,20,1,"",""),0); ?>
      </td>
+     </tr>
     <tr>
       <td colspan="2" rowspan="1" style="width: 70px;">
       R&eacute;sum&eacute;
@@ -152,9 +153,11 @@ include("inc_css_thing.php");
 	</tr>
   </tbody>
 </table>
-<input type="hidden" name="old_id" value="<?php echo ($ligne["id"])?$ligne["id"]:-1; ?>">
-<input type="hidden" name="auteur" value="<?php echo ($ligne["auteur"])?$ligne["auteur"]:$_SESSION["userid"]; ?>">
-<input type="submit" name="action" value="valider les modifications">
+<fieldset>
+<input type="hidden" name="old_id" value="<?php echo ($ligne["id"])?$ligne["id"]:-1; ?>"/>
+<input type="hidden" name="auteur" value="<?php echo ($ligne["auteur"])?$ligne["auteur"]:$_SESSION["userid"]; ?>"/>
+<input type="submit" name="action" value="valider les modifications"/>
+</fieldset>
 </form>
 </body>
 </html>

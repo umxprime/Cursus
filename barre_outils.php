@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -38,6 +38,11 @@ echo "><a href=\"sessions.php?nPeriode=$semestre_courant\">modules</a></li>\n";
 echo "<li";
 echo ($outil=="tutorat")?" class=\"courant\" ":"";
 echo "><a href=\"tutorats.php?nPeriode=$semestre_courant\">tutorats</a></li>\n";
+if($droits[$_SESSION['auto']]["menu_stages"]==true){
+	echo "<li";
+	echo ($outil=="stages")?" class=\"courant\" ":"";
+	echo "><a href=\"gestion_stages.php?nPeriode=$semestre_courant\">stages</a></li>\n";
+}
 if($droits[$_SESSION['auto']]["menu_utilisateurs"]==true){
 	echo "<li";
 	echo ($outil=="utilisateurs")?" class=\"courant\" ":"";
@@ -47,25 +52,13 @@ if($droits[$_SESSION['auto']]["menu_coordination"]==true){
 	echo "<li";
 	echo ($outil=="coordination")?" class=\"courant\" ":"";
 	if(!isset($niveau))$niveau=1;
-	echo "><a href=\"vue_etu_sem.php?ns=$niveau&nPeriode=$semestre_courant\">coordination</a></li>\n";
+	echo "><a href=\"vue_coordination.php?ns=$niveau&nPeriode=$semestre_courant\">coordination</a></li>\n";
 }
-/*else{
-	$req = "select session.id, modules.code, modules.obligatoire, modules.id from session, modules where session.periode='".$semestre_courant."' ";
-	$req .= " and modules.id=session.module and modules.code LIKE 'PP_EVL_%' and modules.enseignants like'%".$_SESSION['username']."%';";
-	//echo $req;
-	$res = mysql_query($req);
-	$nc=0;
-	while($arr = mysql_fetch_array($res)){
-			echo "<li";
-			echo ($outil=="coordination")?" class=\"courant\" ":"";
-			echo "><a href=\"vue_etu_sem.php?ns=".($arr['obligatoire']*1)."&nPeriode=$semestre_courant\">coordination</a></li>\n";
-		}
-		
-	}*/
 if($droits[$_SESSION['auto']]["menu_niveaux"]==true){
 	echo "<li";
 	echo ($outil=="niveaux")?" class=\"courant\" ":"";
-	echo "><a href=\"passages_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
+	//echo "><a href=\"passages_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
+	echo "><a href=\"edition_niveaux.php?nPeriode=$semestre_courant\">niveaux</a></li>\n";
 }
 if($droits[$_SESSION['auto']]["menu_reglages"]==true){
 	echo "<li";
@@ -78,7 +71,9 @@ echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\" title=\"Signale
 //echo ($outil=="infoperso")?" class=\"courant\" ":"";
 //echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
 echo "<li class=\"nomEnseignant\">".utf8_encode($_SESSION['username'])."</li>\n";
-echo "<li class=\"logoff\"><a href=\"login.php\">d&eacute;connexion</a></li>\n";
+include "inc_alertes.php";
+echo "<li class=\"alertes\"><a href=\"vue_alertes.php?id=".$_SESSION["userid"]."&nPeriode=$semestre_courant\" class=\"".(($nAlertes>0)?"pb":"ok")." ".(($outil=="alertes")?"courant":"")."\">"."$nAlertes</a></li>\n";
+echo "<li class=\"logoff\"><a href=\"login.php\">déconnexion</a></li>\n";
 ?>
 </ul>
 </div>

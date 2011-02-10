@@ -28,6 +28,11 @@
 		$param = explode(":",$value);
 		$params[$param[0]] = $param[1];
 	}
-	include("../inc_sem_courant.php");
+	function ajx_restore($str)
+	{
+		$str = str_replace("%#%",",",$str);
+		$str = str_replace("%##%",":",$str);
+		return utf8_decode($str);
+	}
 	include("modules/ajx_".$_GET["page"].".php");
 ?>

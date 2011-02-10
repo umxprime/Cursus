@@ -2,7 +2,7 @@
     /**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -68,6 +68,7 @@
 	
 	$droits = array();
 	
+	$droits["super"]["menu_stages"] = true;
 	$droits["super"]["menu_utilisateurs"] = true;
 	$droits["super"]["menu_coordination"] = true;
 	$droits["super"]["menu_modules"] = true;
@@ -88,6 +89,8 @@
 	$droits["super"]["voir_tutorats"] = true;
 	$droits["super"]["admin_tutorats"] = true;
 	$droits["super"]["menu_reglages"] = true;
+	$droits["super"]["voir_memoires"] = true;
+	$droits["super"]["edit_evaluations_toujours_actif"] = true;
 	
 	$droits["admin"] = $droits["super"];
 	$droits["admin"]["edit_tous_niveaux"] = false;
@@ -95,23 +98,28 @@
 	$droits["admin"]["voir_tous_sites"] = false;
 	
 	$droits["coord"] = $droits["admin"];
+	$droits["coord"]["edit_evaluations_toujours_actif"] = false;
 	$droits["coord"]["menu_reglages"] = false;
-	$droits["coord"]["ajouter_module"] = false;
 	$droits["coord"]["voir_utilisateurs"] = false;
 	$droits["coord"]["menu_utilisateurs"] = false;
 	
 	$droits["coord_semestre"] = $droits["coord"];
+	$droits["coord_semestre"]["ajouter_module"] = false;
 	$droits["coord_semestre"]["edit_modules_adv"] = false;
 	$droits["coord_semestre"]["menu_niveaux"] = false;
 	$droits["coord_semestre"]["edit_niveaux"] = false;
 	
-	$droits["p"] = $droits["coord_semestre"];
-	$droits["p"]["edit_tous_evaluations"] = false;
-	$droits["p"]["edit_tous_modules"] = false;
-	$droits["p"]["edit_coordination"] = false;
-	$droits["p"]["admin_tutorats"] = false;
-	$droits["p"]["voir_tous_modules"] = false;
-	$droits["p"]["menu_coordination"] = false;
+	$droits["coord_memoire"] = $droits["coord_semestre"];
+	$droits["coord_memoire"]["edit_tous_evaluations"] = false;
+	$droits["coord_memoire"]["edit_tous_modules"] = false;
+	$droits["coord_memoire"]["edit_coordination"] = false;
+	$droits["coord_memoire"]["admin_tutorats"] = false;
+	$droits["coord_memoire"]["voir_tous_modules"] = false;
+	$droits["coord_memoire"]["menu_stages"] = false;
+	$droits["coord_memoire"]["menu_coordination"] = false;
+	
+	$droits["p"] = $droits["coord_memoire"];
+	$droits["p"]["voir_memoires"] = false;
 	
 	//chdroits($droits,"*","*");
 	//chdroits($droits,"*","*",true);

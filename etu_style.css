@@ -1,5 +1,6 @@
 	/**
 	 * 
+	 * Copyright © 2007,2008 Éric CHOISY (eric@mrbbp.net) 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
 	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
@@ -31,7 +32,8 @@
 	.bulletinNom {
 		font: 13px Georgia, serif;
 		position: relative;
-		top: 15px;
+		top: 10px;
+		margin-top: 20px;
 	}
 	.bulletinNom li {
 		display: inline;
@@ -45,7 +47,9 @@
 		padding: 8px 10px 6px 13px;
 		color: inherit;
 	}
-	.bulletinNom li.titreReponse {
+
+.bulletinNom li.titreReponse
+{
 	font: 13px Georgia, "Trebuchet MS", Verdana, sans-serif;
 	text-transform: capitalize;
 	background-color: #eee;
@@ -54,33 +58,40 @@
 	border-right: 1px dotted #ddd;
 	border-left: 1px dotted #ddd;
 	border-top: 1px dotted #ddd;
-	}
-	#BulletinEntete {
+}
+
+#BulletinEntete
+{
 	position: relative;
 	left: 11px;
 	padding-left: 10px;
-	width: 728px;
-	background-color: #fff;
+	width: 900px;
+	background-color: #f8f8f8;
 	color: inherit;
 	height: 35px;
 	margin-top: -20px;
 	border-bottom: 1px dotted #ddd;
 }
-.bulletinSeul li.traitNom {
-	padding-bottom: 20px;
+
+.bulletinSeul li.traitNom
+{
+	padding-bottom: 9px;
 	border-bottom: 1px dotted #ddd;
 	padding-left: 10px;
 	margin: 0 11px 0 11px;
 	background: url(img/ombre.png) repeat-x;
 	padding-top: 20px;
 }
-.bulletinSeul li.traitseul{
+
+.bulletinSeul li.traitseul
+{
 	padding-bottom: 20px;
 	border-bottom: 1px dotted #ddd;
 	padding-left: 10px;
 	margin: 0px 11px 0 11px;
 	padding-top: 10px;
 }
+
 .bulletinSeul li {
 	position: relative;
 	list-style: none;

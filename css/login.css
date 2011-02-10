@@ -1,0 +1,81 @@
+@CHARSET "UTF-8";
+
+#login
+{
+	background: url(../img/fond-cursus.gif) no-repeat;
+	height:100%;
+	padding-top: 232px;
+	padding-bottom: 20px;
+}
+#login ul
+{
+	font: 13px "Trebuchet MS", Verdana, Helvetica, sans-serif;
+	list-style: none;
+	position: relative;
+	top: 15px;
+}
+#login ul li
+{
+	display: inline;
+	padding: 20px 10px 9px 10px;
+}
+
+#login ul li.label
+{
+	text-transform: uppercase;
+	position: relative;
+	font-size: 12px;
+	top:-3px;
+	padding: 18px 10px 16px 30px;
+	color: #303030;
+}
+
+#login ul li.champs
+{
+	font: 13px Georgia, "Trebuchet MS", Verdana, sans-serif;
+	text-transform: capitalize;
+	/*background-color: #fff;*/
+	color: #60acbf;
+	padding-bottom:8px;
+	/*
+	border-right: 1px dotted #ddd;
+	border-left: 1px dotted #ddd;
+	border-top: 1px dotted #ddd;*/
+}
+
+#login ul li.bouton a
+{
+	text-decoration:none;
+	text-transform: uppercase;
+	position: relative;
+	font-size: 12px;
+	top: -4px;
+	margin-left:30px;
+	padding: 8px 28px 6px 28px;
+	border: 1px dotted #ddd;
+	color: #303030;
+}
+#login ul li.bouton a:hover
+{
+	color: #60ACBF;
+	background-color:#303030;
+}
+
+#login input
+{
+	font-size: 25px;
+	font-family: Georgia;
+	color: #60ACBF;
+	/*color: #60acbf;*/
+	background-color: #303030;
+	border: 1px solid #ddd;
+}
+
+.traitOmbre
+{
+	/*padding-bottom: 20px;*/
+	/*border-bottom: 1px dotted #ddd;*/
+	padding-left: 0px;
+	background: url(../img/ombre.png) repeat-x;
+	padding-top: 35px;
+}

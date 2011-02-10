@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -69,9 +69,8 @@ function affiche_options($liste, $coche, $nouveau){
 	return $c_select;
 }
 
-function affiche_ligne($nom,$valeur, $taille){
+function affiche_ligne($nom,$valeur, $taille=64){
 	//$c_ligne = $nom." : ";
-	if(!$taille){$taille=64;}
 	$c_ligne = "<input type=\"text\" id=\"$nom\" name=\"".$nom."\" size=\"".$taille."\" ";
 	$c_ligne .= "value=\"".utf8_encode($valeur)."\" >";
 	$c_ligne .= "<br />\n";
@@ -85,18 +84,18 @@ function affiche_pass($nom,$valeur){
 	return $c_ligne;
 }
 function affiche_ligne_courte($nom,$valeur){
-	$c_ligne = "<input type=\"text\" name=\"".$nom."\" size=\"8\" ";
+	$c_ligne = "<input type=\"text\" id=\"".$nom."\" name=\"".$nom."\" size=\"8\" ";
 	$c_ligne .= "value=\"".$valeur."\" >";
 	$c_ligne .= "<br />\n";
 	return $c_ligne;
 }
 
-function affiche_champs($nom, $valeur,$large, $haut){
+function affiche_champs($nom, $valeur,$large=false, $haut=false){
 	if(!$large){$large=64;}
 	if(!($haut)){$haut=8;}
 	//$c_champs = $nom." : ";
 	$c_champs = "<textarea name=\"".$nom."\" cols=\"".$large."\" rows=\"".$haut."\">";
-	$c_champs .= utf8_encode($valeur);
+	$c_champs .= htmlentities($valeur);
 	$c_champs .= "</textarea><br />\n";
 	return $c_champs;
 }
@@ -213,7 +212,7 @@ function liste_modules($table, $col_affs, $col_vals, $conn, $order, $semestre){
 }
 
 function selecteur_objets($page, $table, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau){
-	$c_sel = "<select class=\"select_".$table."\" name=\"".$col_vals."\" ";
+	$c_sel = "<select class=\"select_".$table."\" id=\"".$col_vals."\" name=\"".$col_vals."\" ";
 	if(strlen($page)){
 		$c_sel .= "onchange = \"javascript:document.formulaire.action='".$page."';document.formulaire.submit()\"";
 	}
@@ -229,7 +228,7 @@ function selecteur_objets($page, $table, $col_affs, $col_vals, $conn, $coche, $l
 	return $c_sel;
 }
 function selecteurObjets($page, $table,$nom, $col_affs, $col_vals, $conn, $coche, $liste, $nouveau, $order){
-	$c_sel = "<select class=\"select_".$table."\" name=\"".$nom."\" ";
+	$c_sel = "<select class=\"select_".$table."\" id=\"$nom\" name=\"$nom\" ";
 	if(strlen($page)){
 		$c_sel .= "onchange = \"javascript:document.getElementById('formulaire').action='".$page."';document.getElementById('formulaire').submit()\"";
 	}
@@ -447,7 +446,7 @@ function generatePassword ($length = 8)
 	return $password;
 
 }
-function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
+function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semestres=false,$group=true){
 	$req = "SELECT etudiants.*, niveaux.niveau, niveaux.cycle as cycle, niveaux.id as id_niveau, cycles.id as cycle_id, cycles.ecole as ecole FROM etudiants, niveaux, cycles WHERE ";
 	$req .="niveaux.periode='".$perid."' AND niveaux.niveau>0";
 	$req .=" AND niveaux.niveau <11 AND etudiants.id =niveaux.etudiant AND niveaux.cycle=cycles.id ";
@@ -455,15 +454,17 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
 	{
 		$req .= "AND cycles.ecole= $ecole ";
 	}
-	if (!is_array($sauf)){
+	if (!is_array($sauf))
+	{
 		
 	}else{
-	foreach($sauf as $et){
-		$req .="AND etudiants.id!='$et' ";
+		foreach($sauf as $et){
+			$req .="AND etudiants.id!='$et' ";
+		}
 	}
-	}
-	$req .= " ORDER BY niveaux.niveau, etudiants.nom;";
-	echo $req;
+	if($group)$req .= " ORDER BY niveaux.niveau, etudiants.nom;";
+	else $req .= " ORDER BY etudiants.nom;";
+	//echo $req;
 	$c_select = "";
 	//$c_select .= $req;
 	$res = mysql_query($req, $conn);
@@ -472,9 +473,20 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
 	$n=0;
 	$label_sem=0;
 	//$c_select="";
-	while($etu = mysql_fetch_array($res)){
+	if($semestres)
+	{
+		$c_select .= "<optgroup label=\"Semestres\">";
+		for($i=1;$i<=10;$i++)
+		{
+			$c_select .= "\t\t<option value=\"s$i\">Étudiants en semestre $i</option>\n";
+		}
+		$c_select .= "</optgroup>";
+	}
+	while($etu = mysql_fetch_array($res))
+	{
 		//echo $resteModule['code']."\n";
-		if ($label_sem != $etu['niveau']){
+		if ($label_sem != $etu['niveau'] && $group)
+		{
 			if($label_sem!=0){$c_select .= "\t<\optgroup>";}
 			$c_select .="\t<optgroup label='semestre ".$etu['niveau']."'>";
 			$label_sem=$etu['niveau'];
@@ -482,7 +494,7 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false){
 		$c_select .= "\t\t<option value=\"".$etu["id"]."\"";
 		$c_select .= ">".utf8_encode($etu["nom"])." ".utf8_encode($etu['prenom'])."</option> <br />\n";
 	}
-	$c_select .= "\t<\optgroup>";
+	if($group)$c_select .= "\t<\optgroup>";
 	return $c_select;
 }
 function clean_chaine($ch){
@@ -495,11 +507,11 @@ function clean_chaine($ch){
 }
 function selecteur_semestres($conn,$coche,$nom,$page){
 	$req = "SELECT periodes.* FROM periodes, activites WHERE activites.nom='semestre'";
-	$req .= " AND periodes.activite=activites.id;";
+	$req .= " AND periodes.activite=activites.id ORDER BY periodes.annee DESC;";
 	$res = mysql_query($req);
 	$n=0;
 	while($sem = mysql_fetch_array($res)){
-		$liste[$n]['aff'] = $sem['nom'];
+		$liste[$n]['aff'] = $sem['annee'].", ".$sem['nom'];
 				$liste[$n]['val']=$sem['id'];
 				$n++;
 	}

@@ -75,49 +75,68 @@ if($_GET["eval"]>0){
 <body>
 <div id="global">
 <?php 
+	$outil="modules";
 	include("barre_outils.php");
+	$disableNavSemPrec=true;
+	$disableNavSemSuiv=true;
+	include("inc_nav_sem.php");
 ?>
 <table class="center"><tr><td>
-<h2><?php echo $periode['nom']; ?></h2>
-<h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <?php echo utf8_encode($module['intitule']);?></h2>
+<h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <a class="bouton" href="gestion_modules.php?nPeriode=<?php echo $semestre_courant;?>&session=<?php echo $eval['session'];?>"><?php echo utf8_encode($module['intitule']);?></a></h2>
 <h2>Première session</h2>
 <form id="evaluation" method="post" action="reg_eval.php">
 
 	<?php
-	echo affiche_champs("appreciation_1",$eval['appreciation_1'],80,8);
-	echo "<br />NOTE : <select name=\"note_1\" width=\"40\" STYLE=\"width: 40px\">";
-	echo "<option value='' ";
-	echo (!strpos("__abcdefABCDEF",verif($eval['note_1'])))?"selected ":"";
-	echo ">-</option>\n";
-	for($l=1; $l<7; $l++)
-	{
-		$carac=chr(64+$l);
-		echo "<option value='".$carac."' ";
-		echo ($eval['note_1']==$carac)?"selected ":"";
-		echo ">".$carac."</option>\n";
-	}
-	
-	echo "</select></p>\n<p>";
-	if(!empty($eval['note_1'])){
-		if(strpos("__efEF",$eval['note_1'])){
-			echo "<h2>Deuxième session</h2></p><p>";
-			echo affiche_champs("appreciation_2",$eval['appreciation_2'],80,false);
-			echo "<br/>NOTE : <select name=\"note_2\">";
-			echo "<option value='' ";
-			echo (!strpos("__abcdefABCDEF",verif($eval['note_2'])))?"selected ":"";
-			echo ">-</option>\n";
-			for($l=1; $l<7; $l++){
-				$carac=chr(64+$l);
-				echo "<option value='".$carac."' ";
-				echo ($eval['note_2']==$carac)?"selected ":"";
-				echo ">".$carac."</option>\n";
-			}
-			echo "</select></p>\n";
+		echo affiche_champs("appreciation_1",$eval['appreciation_1'],80,8);
+		echo "<br />NOTE : <select name=\"note_1\" width=\"40\" STYLE=\"width: 40px\">";
+		echo "<option value='' ";
+		echo (!strpos("__abcdefABCDEF",verif($eval['note_1'])))?"selected ":"";
+		echo ">-</option>\n";
+		for($l=1; $l<7; $l++)
+		{
+			$carac=chr(64+$l);
+			echo "<option value='".$carac."' ";
+			echo ($eval['note_1']==$carac)?"selected ":"";
+			echo ">".$carac."</option>\n";
 		}
-	}
-	echo "<input type=\"hidden\" name=\"eval\" value=\"".$eval['id']."\" >";
-	echo "<input type=\"hidden\" name=\"session\" value=\"".$eval['session']."\" >";
-	echo "<input type=\"submit\" value=\"enregistrer l'évaluation\" >";
+		
+		echo "</select></p>\n<p>";
+		if(!empty($eval['note_1'])){
+			if(strpos("__efEF",$eval['note_1'])){
+				echo "<h2>Deuxième session</h2></p><p>";
+				echo affiche_champs("appreciation_2",$eval['appreciation_2'],80,false);
+				echo "<br/>NOTE : <select name=\"note_2\">";
+				echo "<option value='' ";
+				echo (!strpos("__abcdefABCDEF",verif($eval['note_2'])))?"selected ":"";
+				echo ">-</option>\n";
+				for($l=1; $l<7; $l++){
+					$carac=chr(64+$l);
+					echo "<option value='".$carac."' ";
+					echo ($eval['note_2']==$carac)?"selected ":"";
+					echo ">".$carac."</option>\n";
+				}
+				echo "</select></p>\n";
+			}
+		}
+		echo "<input type=\"hidden\" name=\"eval\" value=\"".$eval['id']."\" >";
+		echo "<input type=\"hidden\" name=\"session\" value=\"".$eval['session']."\" >";
+		$datesLimiteEvalTous = explode(",",$periode["datelimite"]);
+		$limiteEvalActive = false;
+		foreach ($datesLimiteEvalTous as $dateLimiteEvalEcole)
+		{
+			$dateLimiteEval = explode("@",$dateLimiteEvalEcole);
+			if($dateLimiteEval[0]==$_SESSION["ecole"])
+			{
+				$limiteEvalActive = true;
+				break;
+			}
+		}
+		if($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true/*|| $droits[$_SESSION['auto']]["edit_evaluations_toujours_actif"]*/)
+		{
+			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
+		} else {
+			echo "<input type=\"submit\" value=\"enregistrer l'évaluation\" >";
+		}
 	}
 
 }?>

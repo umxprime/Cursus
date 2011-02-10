@@ -2,7 +2,7 @@
 	/**
 	 * 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -57,7 +57,7 @@ if($ok_edit==1){
 	//echo $req;
 	$res = mysql_query($req);
 	$err  = mysql_error();
-	echo $err;
+	//echo $err;
 	if (mysql_num_rows($res)<3){
 		echo "<br />creation des niveaux...";
 		$req2 = "insert into niveaux (periode, etudiant, niveau, cycle)";
@@ -79,24 +79,27 @@ if($ok_edit==1){
 		$etudiants[$n_et]['cycle']=$arr['cycle'];
 		$n_et++;
 	}
+	//print_r($etudiants);
 
 	if($_POST["action"]==$message_rec)
 	{
 		for($n_et = 0; $n_et<count($etudiants); $n_et++)
 		{
-			echo $_POST["etudiant_".$n_et]."<br/>";
+			//echo $_POST["etudiant_".$n_et]."<br/>";
 			$arrData = explode("_",$_POST["etudiant_".$n_et]);
 			$idniv=$arrData[1];
 			$newSem = $arrData[0];
+			//echo $newSem;
 			if ($newSem != $etudiants[$n_et]['semestre'])
 			{
 				$req = "update niveaux set niveau='".$newSem."' where id ='".$idniv."';";
-				$res=mysql_query($req);
-				echo mysql_error($res);
+				$res = mysql_query($req);
+				//echo $req;
+				echo mysql_error();
 				if($today<=$periode['fin'] and $today >= $periode['debut']){
 					$req = "update etudiants set semestre='".$newSem."' where id ='".$etudiants[$n_et]['id']."';";
 					$res=mysql_query($req);
-					echo mysql_error($res);
+					echo mysql_error();
 				}
 				//echo "semestre chang&eacute; pour : ".$etudiants[$n_et]['nom']." <br />\n";
 				$etudiants[$n_et]['semestre']=$_POST["etudiant_".$n_et];
@@ -142,7 +145,7 @@ echo "</form>";
 	cellpadding="2" cellspacing="2">
 	<tbody>
 		<tr>
-			<th>Nom de l'&eacute;tudiant</th>
+			<th>Nom de l'étudiant</th>
 			<?php for($i=$arr_cycle['semestre_debut'];$i<=$arr_cycle['semestre_fin'];$i++)
 			echo "<th>S".$i."</th>";
 			?>
@@ -158,13 +161,14 @@ echo "</form>";
 				}
 				echo " type=\"radio\" /></td>\n";
 			}
-echo "<td><a href=\"exclure_etudiant.php?id_etudiant=".$etudiants[$n_et]['id']."&nPeriode=".$semestre_courant."&cycle=".$cycle."\">changer</a></td>\n";
+			echo "<td><a href=\"exclure_etudiant.php?id_etudiant=".$etudiants[$n_et]['id']."&nPeriode=".$semestre_courant."&cycle=".$cycle."\">changer</a></td>\n";
 		 } ?>
 		 </tr>
 	</tbody>
 </table>
 	<fieldset style="border-style: none;">
 		<input type=hidden name="nPeriode" value="<?php echo $semestre_courant; ?>"/>";
+		<input type=hidden name="cycle" value="<?php echo $cycle; ?>"/>";
 		<input type="submit" name="action" value="<?php echo $message_rec; ?>" />
 	</fieldset>
 </form>

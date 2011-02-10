@@ -1,6 +1,56 @@
+==r31==
+//Nouveautés
+- Limelight : nouveau framework basé sur l'ancien Potajx
+- Page Édition de module portée en AJAX temporairement avec l'ancien
+  framework
+- Page Niveaux améliorée et codée en AJAX
+- Page Login recodée en AJAX
+- Ajout d'un lien pour créer un module sur dans la section Modules
+- Mise à jour du guide d'utilisation
+- Page Utilisateurs utilise le nouveau Framework
+- Amélioration de la lisibilité des périodes
+- Les tuteurs accèdent au contrat d'étude et au bulletin
+- Gestion (ajout/accès/suppression) des sessions sur la page
+  d'édition des modules plutôt que sur la page des sessions
+- Nouveau code pour la page Niveaux
+- Accés à la page stages dans le menu
+- Possibilité d'inscrire tous les étudiants d'un semestre sur la page
+  gestion de module
+- Validation requise pour des désinscriptions afin d'éviter certaines
+  erreurs de manipulations
+- Visualisation de l'intégralité du cursus de l'étudiant et du cumul
+  d'ECTS sur son parcours
+- Nouvelle page d'alertes signalant les notes et évaluations à saisir
+  par période, pour les modules et les tutorats
+- Amélioration des feuilles de styles
+
+//Corrections
+- Erreurs de syntaxes diverses
+- Problème d'édition des tutorats
+- Amélioration de la navigation dans les tutorats
+
+//À faire
+- Intégrer le nouveau Framework sur toutes les pages
+- Améliorer la lisibilité et l'accés aux modules
+- Intégrer la page réglages pour gérer les paramètres de cursus
+- Intégrer des unités de modules
+- Améliorer la page stages
+- Améliorer les feuilles de style
+- Intégrer des semestres type "Auditeur libre" pour ne pas créditer
+  les étudiants en décalage sur un niveau semestriel
+- Permettre une activation/désactivation de la publication des notes
+  et des évaluations sur le bulletin en ligne
+- Éditer les bulletins papier en PDF
+- Afficher les modules obligatoires sur les résumés de bulletins
+
+
+------------------------------------------------------------------
+
 ==r30==
 //Nouveautés
 - Ajout du guide d'utilisation au svn
+
+------------------------------------------------------------------
 
 ==r29==
 //Corrections

@@ -1,7 +1,8 @@
 	/**
-	 * 
+	 *
+	 * Copyright © 2007,2008 Éric CHOISY (eric@mrbbp.net) 
 	 * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
-	 * Copyright © 2008,2009 Maxime CHAPELET (umxprime@umxprime.com)
+	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
 	 *
 	 * This file is a part of Cursus
 	 *
@@ -104,7 +105,7 @@ body, html {
 }
 html {
 	/*background: url(img/motif-trans.png);*/
-	background-color: #C8C8C8;
+	background-color: #f8f8f8;
 	color: #808080;
 }
 #global
@@ -117,6 +118,7 @@ html {
 	min-height: 100%;
 	background-attachment: fixed;
 	background: url(img/fond-principal.png) 0 0 repeat-y;
+	background-color: #f8f8f8;
 }
 
 #global #contenu
@@ -155,6 +157,7 @@ img {
 	height: 35px;
 }
 #menuCursus a {
+	font-size: 11px;
 	text-decoration: none;
 	color: #808080;
 	background-color: inherit;
@@ -172,7 +175,8 @@ img {
 	/*border: 1px dotted #bbb;*/
 }
 #menuCursus li {
-	display: inline;
+	vertical-align:top;
+	display: inline-table;
 	padding: 6px 8px 6px 6px;
 	border-bottom: 1px dotted #bbb;
 	border-left: 1px dotted #bbb;
@@ -183,7 +187,7 @@ img {
 	background-color: #eee;
 }
 #menuCursus li.courant {
-	display: inline;
+	display: inline-table;
 	/*padding: 6px 10px 6px 8px;*/
 	padding: 6px 8px 6px 6px;
 	border-bottom: 1px dotted #bbb;
@@ -194,42 +198,71 @@ img {
 	background-color: #fff;
 }
 #menuCursus li.nomEnseignant {
-	font-size: 13px;
-	text-transform: capitalize;
-	margin-left: 25px;
+	font-size:11px;
+	margin-left:25px;
 	color: #60acbf;
 	background-color: #fff;
 	/*border-color: #fff;*+
 	/*border: 1px solid red;*/
-	line-height: 22px;
-	padding-bottom: 5px;
+	
 }
+#menuCursus li.alertes
+{
+	display:inline-table;
+	margin-left: -2px;
+}
+#menuCursus li.alertes a.ok
+{
+	background-color: #80B711;
+	color: #fff;
+}
+#menuCursus li.alertes a.ok:hover
+{
+	background-color: #fff;
+	color: #80B711;
+}
+#menuCursus li.alertes a.pb
+{
+	background-color: #E40;
+	color: #fff;
+}
+#menuCursus li.alertes a.pb:hover
+{
+	background-color: #fff;
+	color: #E40;
+}
+
 #menuCursus li.logoff {
-	margin-left: -5px;
-	display: inline;
-	padding: 6px 8px 6px 6px;
+	margin-left: -2px;
+	display: inline-table;
+	padding: 6px 6px 6px 6px;
 }
 #menuCursus li.logoff a {
 	background-color: #80B711;
 	color: #fff;
 }
 #menuCursus li.logoff a:hover {
-	background-color: #FF8500;
-	color: #444;
+	background-color: #fff;
+	color: #80B711;
 	}
 #semestre {
+	left:-18px;
 	position: relative;
-	left: 11px;
-	padding-left: 10px;
-	width: 992px;
-	height: 35px;
-	margin-bottom: 20px;
+	width: 300px;
+	margin-left:auto;
+	margin-right:auto;
+	height: 65px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	background-color: #f8f8f8;
 	color: inherit;
 	/*background: url(img/trame-gris.gif);*/
 }
 #semestre li {
 	display: inline-table;
+	text-align: center;
+	margin-top:auto;
+	margin-bottom:auto;
 }
 
 #semestre a {
@@ -243,6 +276,8 @@ img {
 #sem-precedent a{
 	width:45px;
 	display:block;
+	margin-top:auto;
+	margin-bottom:auto;
 	background: url(img/semestre.gif) 0 -15px no-repeat;
 }
 #sem-precedent a:hover {
@@ -251,6 +286,8 @@ img {
 #sem-suivant a {
 	width:45px;
 	display:block;
+	margin-top:auto;
+	margin-bottom:auto;
 	background: url(img/semestre.gif) 0 0px no-repeat;
 }
 #sem-suivant a:hover {
@@ -258,8 +295,16 @@ img {
 }
 #semestre li h2{
 	display:block;
-	font: 14px "Trebuchet MS", Verdana, sans-serif;
+	font: 18px "Trebuchet MS", Verdana, sans-serif;
 	text-transform: uppercase;
+	color: #60acbf;
+	background-color: inherit;
+}
+#semestre li h3{
+	display:block;
+	font: 30px "Trebuchet MS", Verdana, sans-serif;
+	text-transform: uppercase;
+	font-weight : bold;
 	color: #60acbf;
 	background-color: inherit;
 }
@@ -308,12 +353,187 @@ img {
 	background-color: #303030;
 }
 
+table#alertes
+{
+	font-size: 10px;
+}
+
+a.bouton
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	max-width:200px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+a.bouton:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+a.bouton2
+{
+	color:#FFFFFF;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	max-width:200px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+a.bouton2:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+a.lienBouton
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+a.lienBouton:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+a.textbouton
+{
+	color:#808080;
+	text-decoration: none;
+	display:inline-block;
+	margin-left:20px;
+	margin-right:2px;
+}
+
+select
+{
+	color:#808080;
+	background-color: #F8F8F8;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	max-width:200px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+select:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+textarea
+{
+	color:#808080;
+	background-color: #F8F8F8;
+	color:#60ACBF;
+	background-color: #303030;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:inline-block;
+	margin-left:2px;
+	margin-right:2px;
+}
+
 table.center
 {
 	margin-left:auto;
 	margin-right:auto;
 }
+
+td.center
+{
+	text-align:center;
+}
+
 fieldset
 {
 	border-style:none;
+}
+.displaynone
+{
+	display:none;
+}
+.displayblock
+{
+	display:inline-block;
+}
+
+.ajxLoaderDisplay
+{
+	background-image: url("img/potajx_loading.gif");
+}
+
+.ajxLoaderHide
+{
+}
+
+#ajxLoader
+{
+	position:relative;
+	top:5px;
+	width:64px;
+	height:16px;
+	margin:0px;
+	padding:0px;
+	display:inline-block;
+}
+
+.button
+{
+	color:#808080;
+	text-decoration: none;
+	border-style:dotted;
+	padding:5px;
+	border-width:1px;
+	display:block;
+	max-width:200px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.button:hover
+{
+	color:#60ACBF;
+	background-color: #303030;
+}
+
+.line
+{
+	background-color:#f8f8f8;
+	font-size:1.2em;
+	background-image:url("img/ombre-ptt.png");
+	background-repeat:repeat-x;
+	text-align:center;
+	padding:5px;
+	padding-top:8px;
+}
+
+table.full
+{
+	width:1002px;
+	left:0px;
 }

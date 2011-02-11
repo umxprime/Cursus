@@ -225,7 +225,7 @@ if($ava>0){
 		}
 			if($nres>0){
 		?>
-		<form id="fpresences" action="reg_presences.php" method="post">
+		<form id="fpresences" action="reg_session.php" method="post">
 			<?php
 			echo $tablEvals;
 			?>

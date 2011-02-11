@@ -53,7 +53,7 @@ if($_POST["session"]>0){
 	//mysql_free_result($res);
 	mysql_free_result($resres);
 	//echo mysql_error($res);
-	$chaine_header = "Location: gestion_modules.php?session=".$_POST['session'];
+	$chaine_header = "Location: edition_session.php?session=".$_POST['session'];
 	//echo $chaine_header;
 	//header($chaine_header);
 	header($chaine_header);

@@ -117,7 +117,7 @@ $c = mysql_num_rows($sessions);
 		$tablModule .="<tr>\n<td class=\"module\">\n";
 		$tablModule .= $session["module_code"];
 		$tablModule .="</td>\n<td class=\"module\">\n";
-		$tablModule .="<a title=\"".utf8_encode($session["intitule"])." / ".$session["credits"]." cr\" href=\"gestion_modules.php?session=".$session["id"]."&nPeriode=".$periode["id"]."\">";
+		$tablModule .="<a title=\"".utf8_encode($session["intitule"])." / ".$session["credits"]." cr\" href=\"edition_session.php?session=".$session["id"]."&nPeriode=".$periode["id"]."\">";
 		$intitule = substr(utf8_encode($session["intitule"]),0,50);
 		if (strlen(utf8_encode($session["intitule"]))>50) $intitule.="...";
 		$tablModule .=$intitule." (".$session["credits"]."cr)</a>\n</td>";

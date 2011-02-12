@@ -29,15 +29,8 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-include("regles_utilisateurs.php");
-include("inc_sem_courant.php");
+require "include/necessaire.php";
+
 $id = ($_POST['id'])?$_POST['id']:$_GET['id'];
 /*
 sécurité : édition interdite aux étudiants

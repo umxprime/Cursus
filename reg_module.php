@@ -29,9 +29,8 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
+require "include/necessaire.php";
+
 $reg=0;
 //echo $_POST['action'];
 if(strlen($_POST['action'])>1){

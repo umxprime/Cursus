@@ -29,16 +29,7 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-$outil="modules";
-include("inc_sem_courant.php");
-include("regles_utilisateurs.php");
+require "include/necessaire.php";
 
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 
@@ -194,6 +185,7 @@ $c = mysql_num_rows($sessions);
 	<body>
 		<div id="global">
 			<?php
+			$outil="modules";
 			include("barre_outils.php");
 			$plus_nav_semestre[0] = array("var"=>"vue","val"=>$_GET["vue"]);	
 			include("inc_nav_sem.php");

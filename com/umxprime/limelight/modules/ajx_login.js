@@ -30,6 +30,7 @@ function init()
 {
 	AJX.newRequest("init");
 	AJX.setAction("init", "init", "message:Test d'initialisation");
+	//AJX.debug("init");
 	AJX.send("init");
 	AJX.newRequest("connexion");
 	addListener(gEBI("username"),"keypress",toucheClavier);

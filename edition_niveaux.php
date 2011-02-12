@@ -29,17 +29,8 @@
 	 * 
 	 **/
 
-    include("lesotho.php");
-	include("fonctions.php");
-	include("fonctions_eval.php");
-	//on requiert les variables de connexion;
-	require("connect_info.php");
-	//puis la connexion standard;
-	require("connexion.php");
-	$outil="niveaux";
-	include("inc_sem_courant.php");
-	include("regles_utilisateurs.php");
-	//exit();
+    require "include/necessaire.php";
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -60,8 +51,11 @@
 			include_once($_LIMELIGHT_PATH."core/limelight.php");
 		?>
 		<div id="global">
-			<?php include("barre_outils.php"); ?>
-			<?php include("inc_nav_sem.php"); ?>
+			<?php
+			$outil="niveaux";
+			include("barre_outils.php");
+			include("inc_nav_sem.php");
+			?>
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			
 			<table class="center">

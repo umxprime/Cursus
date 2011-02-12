@@ -29,14 +29,8 @@
  *
  **/
 
-include("lesotho.php");
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-$dateCourante = date("Y-m-d");
-include("inc_sem_courant.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
+require "include/necessaire.php";
+
 function fait_liste_eval($titre, $code,$n1, $a1, $n2, $a2, $creds)
 {
 	//echo "ctrl-".strlen($n1)."-<br />\n";

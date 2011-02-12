@@ -28,20 +28,8 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-include("lesotho.php");
-//echo $idd_session."|";
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-//echo $idd_session."|";
-require("connexion.php");
-//echo $idd_session."|";
-include("regles_utilisateurs.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-$outil="tutorat";
-//echo $idd_session."|";
-include("inc_sem_courant.php");
+require "include/necessaire.php";
+
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 $dateCourante = date("Y-m-d");
 $form0 ="";
@@ -181,9 +169,10 @@ if ($nres>0){
 		<div id="global">
 			
 			<?php
-				include("barre_outils.php");
-				$plus_nav_semestre[0] = array("var"=>"tuteur","val"=>"$tuteur");
-				include("inc_nav_sem.php");
+			$outil="tutorat";
+			include("barre_outils.php");
+			$plus_nav_semestre[0] = array("var"=>"tuteur","val"=>"$tuteur");
+			include("inc_nav_sem.php");
 			?>
 			<?php
 			 

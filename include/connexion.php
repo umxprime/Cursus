@@ -29,6 +29,22 @@
 	 * 
 	 **/
 
+include_once("conf.php");
+	
+$host = $_SERVER['HTTP_HOST'];
+$host = explode($conf["WebHost"],$host);
+
+if (count($host)>1){
+	define(NOM, $conf["WebHostSqlLog"]);
+	define(PASSE, $conf["WebHostSqlPassw"]);
+	define(BASE, $conf["WebHostDatabase"]);	
+} else {
+	define(NOM, $conf["LocalSqlLog"]);
+	define(PASSE, $conf["LocalSqlPassw"]);
+	define(BASE, $conf["LocalDatabase"]);
+}
+define(SERVEUR, "localhost");
+
 $connexion = mysql_pconnect (SERVEUR, NOM, PASSE);
 
 if (!$connexion)

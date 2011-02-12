@@ -30,14 +30,8 @@
  **/
 
 //on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-include("lesotho.php");
-include("inc_sem_courant.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
+require "include/necessaire.php";
+
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 //si un mumero de semestre d'etude est transmis (pas la p�riode temporelle, le semestre d'enseignement
 // c'est � dire les semestres de 1 � 10

@@ -29,11 +29,8 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
-//error_reporting(E_ALL);
-//echo $_POST['session'];
+require "include/necessaire.php";
+
 if($_POST["session"]>0){
 	$id_session=$_POST["session"];
 	$req = "SELECT * FROM evaluations WHERE session='".$id_session."';";

@@ -28,19 +28,8 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-include("lesotho.php");
-//echo $idd_session."|";
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-//echo $idd_session."|";
-require("connexion.php");
-//echo $idd_session."|";
-include("regles_utilisateurs.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-//echo $idd_session."|";
-include("inc_sem_courant.php");
+require "include/necessaire.php";
+
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 if(!$droits[$_SESSION['auto']]["menu_reglages"]) header("Location:sessions.php?nPeriode=$semestre_courant");
 ?>

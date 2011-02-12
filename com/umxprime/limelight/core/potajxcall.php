@@ -22,8 +22,7 @@
 	session_start();
 	$_ROOT_PATH="../../../../";
 	$_LIMELIGHT_PATH = "com/umxprime/limelight/";
-	include($_ROOT_PATH."connect_info.php");
-	include($_ROOT_PATH."connexion.php");
+	include($_ROOT_PATH."include/connexion.php");
 	$action = $_GET["action"];
 	$getparams = explode(",",$_GET["params"]);
 	foreach($getparams as $value){

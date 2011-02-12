@@ -28,14 +28,8 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
+require "include/necessaire.php";
 
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
-include("inc_sem_courant.php");
 if($_GET["eval"]>0){
 	$id_eval=$_GET["eval"];
 	$req = "SELECT * FROM evaluations WHERE id='".$id_eval."';";

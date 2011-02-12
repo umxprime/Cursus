@@ -29,19 +29,8 @@
  *
  **/
 
-include("lesotho.php");
-//echo $sessionId."|";
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-//echo $sessionId."|";
-require("connexion.php");
-//echo $sessionId."|";
-include("fonctions.php");
-include("fonctions_eval.php");
-//echo $sessionId."|";
-include("inc_sem_courant.php");
-include("regles_utilisateurs.php");
+include "include/necessaire.php";
+
 (!$_GET['session'])?$sessionId = $_POST['session']:$sessionId = $_GET['session'];
 $req = "SELECT * FROM session where id = '".$sessionId."';";
 //$req = "SELECT * FROM session, periodes, modules, evaluations, "

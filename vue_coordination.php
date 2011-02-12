@@ -29,16 +29,8 @@
  *
  **/
 
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-require("connexion.php");
-include("lesotho.php");
-$outil="coordination";
-include("inc_sem_courant.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
+require "include/necessaire.php";
+
 $ns = 1;
 if(isset($_GET['ns'])) $ns = $_GET['ns'];
 $niveau = $ns;
@@ -55,6 +47,7 @@ $niveau = $ns;
 	<body>
 		<div id="global">
 			<?php
+			$outil="coordination";
 			include("barre_outils.php");
 			include("inc_nav_sem.php");
 			

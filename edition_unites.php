@@ -28,13 +28,7 @@
 	 * by Maxime CHAPELET (umxprime@umxprime.com)
 	 * 
 	 **/
-    include("lesotho.php");
-	include("fonctions.php");
-	require("connect_info.php");
-	require("connexion.php");
-	$outil="unités d'évaluation";
-	include("inc_sem_courant.php");
-	include_once("regles_utilisateurs.php");
+    require "include/necessaire.php";
 ?>
 
 
@@ -54,8 +48,11 @@
 	</head>
 	<body>
 		<div id="global">
-			<?php include("barre_outils.php"); ?>
-			<?php include("inc_nav_sem.php"); ?>
+			<?php
+			$outil="unités d'évaluation";
+			include("barre_outils.php");
+			include("inc_nav_sem.php");
+			?>
 			<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 			<table class="center"><tr><td>
 			<h1>Unités</h1>

@@ -29,20 +29,8 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-//echo $idd_session."|";
-//on requiert les variables de connexion;
-require("connect_info.php");
-//puis la connexion standard;
-//echo $idd_session."|";
-require("connexion.php");
-//echo $idd_session."|";
-include("fonctions.php");
-include("fonctions_eval.php");
-//echo $idd_session."|";
-$outil="stages";
-include("inc_sem_courant.php");
-include("regles_utilisateurs.php");
+require "include/necessaire.php";
+
 //arrive-t-on avec un identifiant de stage (édition du stage concerné ou nouveau stage);
 
 (!$_GET['session'])?$idd_session = $_POST['session']:$idd_session = $_GET['session'];
@@ -222,6 +210,7 @@ $nres = mysql_num_rows($res);
 <body>
 <div id="global">
 	<?php
+	$outil="stages";
 	include("barre_outils.php") ;
 	include("inc_nav_sem.php");
 	?>

@@ -29,7 +29,7 @@
 	 * 
 	 **/
 
-	include("lesotho.php");
+require "include/necessaire.php";
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -40,11 +40,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="cursusn.css" type="text/css"/>
 <?php
-require("connect_info.php");
-require("connexion.php");
-include("fonctions.php");
-include("fonctions_eval.php");
-include("regles_utilisateurs.php");
+
 $idRdv = ($_POST['rdv'])?$_POST['rdv']:$_GET['rdv'];
 if(!$idRdv){
 	$idRdv=$_SESSION['lerdv'];

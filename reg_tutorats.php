@@ -29,10 +29,8 @@
 	 * 
 	 **/
 	
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
-include("inc_sem_courant.php");
+require "include/necessaire.php";
+
 $reg=0;
 //echo $_POST['action'];
 if(isset($_POST['action'])){

@@ -29,9 +29,8 @@
 	 * 
 	 **/
 	
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
+require "include/necessaire.php";
+
 if($_POST['id_rdv']>0){
 	$id_rdv=$_POST['id_rdv'];
 	header("Location:edit_rdv.php?rdv=".$id_rdv);

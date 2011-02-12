@@ -29,16 +29,8 @@
 	 * 
 	 **/
 
-	include("lesotho.php");
-	include("fonctions.php");
-	include("fonctions_eval.php");
-	//on requiert les variables de connexion;
-	require("connect_info.php");
-	//puis la connexion standard;
-	require("connexion.php");
-	$outil="coordination";
-	include("inc_sem_courant.php");
-	include("regles_utilisateurs.php");
+	require "include/necessaire.php";
+	
 	if ($_SESSION['auto']=="e")	header("location:login.php");
 	//if (!$droits[$_SESSION['auto']]['edit_contrats'])
 	$id = $_GET["id"];
@@ -124,9 +116,12 @@
 	</head>
 	<body>
 		<div id="global">
-			<?php include("barre_outils.php"); ?>
-			<?php $plus_nav_semestre = array(array("var"=>"id","val"=>$_GET['id']));?>
-			<?php include("inc_nav_sem.php"); ?>
+			<?php
+			$outil="coordination";
+			include "barre_outils.php";
+			$plus_nav_semestre = array(array("var"=>"id","val"=>$_GET['id']));
+			include "inc_nav_sem.php";
+			?>
 			<table class="center"><tr><td>
 				<h2>Contrat d'étude de <?php echo utf8_encode($etudiant["prenom"]." ".$etudiant["nom"]);?><?php echo "<a class=\"bouton\" href=\"vue_bulletin.php?nPeriode=$semestre_courant&id_etudiant=$id\">Voir bulletin</a>";?></h2>
 			</td></tr></table>

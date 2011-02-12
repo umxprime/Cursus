@@ -71,7 +71,6 @@ echo "<li><a href=\"http://bugs.esa-npdc.net\" target=\"_blank\" title=\"Signale
 //echo ($outil=="infoperso")?" class=\"courant\" ":"";
 //echo "><a href=\"edition_prof.php?nPeriode=$semestre_courant\" title=\"Modifier votre mot de passe et indentifiant\">infos perso</a></li>\n";
 echo "<li class=\"nomEnseignant\">".utf8_encode($_SESSION['username'])."</li>\n";
-include "inc_alertes.php";
 echo "<li class=\"alertes\"><a href=\"vue_alertes.php?id=".$_SESSION["userid"]."&nPeriode=$semestre_courant\" class=\"".(($nAlertes>0)?"pb":"ok")." ".(($outil=="alertes")?"courant":"")."\">"."$nAlertes</a></li>\n";
 echo "<li class=\"logoff\"><a href=\"login.php\">déconnexion</a></li>\n";
 ?>

@@ -29,12 +29,8 @@
 	 * 
 	 **/
 
-//on requiert les variables de connexion;
-require ("connect_info.php");
-//puis la connexion standard;
-require ("connexion.php");
-include ("inc_sem_courant.php");
-include ("fonctions_eval.php");
+require "include/necessaire.php";
+
 //les classes de traitement des fichiers openOffice
 include_once ('tbs_class.php');
 include_once ('tbsooo_class.php');

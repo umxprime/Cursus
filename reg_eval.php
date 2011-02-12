@@ -29,10 +29,8 @@
 	 * 
 	 **/
 
-include("lesotho.php");
-require("connect_info.php");
-require("connexion.php");
-require("inc_sem_courant.php");
+require "include/necessaire.php";
+
 //echo $_POST['eval'];
 if($_POST['eval']>0){
 	$reqavant = "select * from evaluations where id='".$_POST['eval']."';";

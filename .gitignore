@@ -7,3 +7,6 @@
 manual/images/
 manual/icons/
 conf.php
+fpdf/*
+!fpdf/pdf.php
+*.pdf

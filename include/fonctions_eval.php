@@ -55,6 +55,72 @@ function valide_eval($n1, $n2, $creds)
 	return $ret;
 }
 
+function validerEvaluationPDF($n1, $n2, $a1, $a2, $cr)
+{
+	$credits=0;
+	$acquis=false;
+	if (verif($n1)=="-")
+	{
+		$credits = "-";
+		$couleurTitreFond = "#D8D8D8";
+		$couleurTitreTexte = "#404040";
+		$couleurECTSTexte = "#404040";
+		$couleurECTSFond = "white";
+	}else if(strpos("_ABCDabcd",verif($n1)) || strpos("_ABCDabcd",verif($n2)))
+	{
+		$acquis=true;
+		$couleurTitreTexte = "white";
+		$couleurTitreFond = "#80B711";
+		$couleurECTSTexte = "#80B711";
+		$couleurECTSFond = "white";
+		$credits=$cr;
+	}else{
+		$couleurTitreTexte = "white";
+		$couleurTitreFond = "#FF8500";
+		$couleurECTSTexte = "#FF8500";
+		$couleurECTSFond = "white";
+	}
+	if(strpos("_ABCDabcd",verif($n1)))
+	{
+		$couleurNote1Texte = "white";
+		$couleurNote1Fond = "#80B711";
+	} else if (verif($n1)=="-"){
+		$couleurNote1Texte = "white";
+		$couleurNote1Fond = "#D8D8D8";
+	}else{
+		$couleurNote1Texte = "white";
+		$couleurNote1Fond = "#FF8500";
+	}
+	if(strpos("_ABCDabcd",verif($n2)))
+	{
+		$couleurNote2Texte = "white";
+		$couleurNote2Fond = "#80B711";
+	} else {
+		$couleurNote2Texte = "white";
+		$couleurNote2Fond = "#FF8500";
+	}
+	return array("acquis"=>$acquis,"credits"=>$credits,
+	"couleurTitreFond"=>$couleurTitreFond,"couleurTitreTexte"=>$couleurTitreTexte,
+	"couleurECTSFond"=>$couleurECTSFond,"couleurECTSTexte"=>$couleurECTSTexte,
+	"couleurNote1Fond"=>$couleurNote1Fond,"couleurNote1Texte"=>$couleurNote1Texte,
+	"couleurNote2Fond"=>$couleurNote2Fond,"couleurNote2Texte"=>$couleurNote2Texte
+	);
+	/*
+	$unRattrapage = false;
+	$note1Ok = false;
+	$appreciationOk = false;
+	if ($evaluation["appreciation_1"]!='') $appreciationOk=true;
+	if (verif($evaluation["note_1"])!='-') $noteOk=true;
+	if ($noteOk && $evaluation["valide_1"]=='0')
+	{
+		$unRattrapage = true;
+		$noteOk = false;
+		$appreciationOk = false;
+		if ($evaluation["appreciation_2"]!='') $appreciationOk=true;
+		if (verif($evaluation["note_2"])!='-') $noteOk=true;
+	}*/
+}
+
 function credits_tutorat($n)
 {
 	if($n>8)

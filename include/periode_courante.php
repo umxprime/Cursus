@@ -35,14 +35,14 @@
 //si aucune periode n'est transf�r�e, il prend, par d�faut le semestre dans lequel la date actuelle est incluse
 $dateCourante = date("Y-m-d");
 if(isset($_GET['nPeriode'])){//numero de periode envoy� par get
-	$semestre_courant = $_GET['nPeriode'];
-	$requete = "select * from periodes where id = ".$semestre_courant.";";
+	$periode_courante = $_GET['nPeriode'];
+	$requete = "select * from periodes where id = ".$periode_courante.";";
 	$resreq = mysql_query($requete);
 	$periode = mysql_fetch_array($resreq);
 } else if(isset($_POST['nPeriode']))
 {//num de periode envoy� par post
-	$semestre_courant=$_POST['nPeriode'];
-	$requete = "select * from periodes where id = ".$semestre_courant.";";
+	$periode_courante=$_POST['nPeriode'];
+	$requete = "select * from periodes where id = ".$periode_courante.";";
 	$resreq = mysql_query($requete);
 	$periode = mysql_fetch_array($resreq);
 }
@@ -52,17 +52,18 @@ else{//periode incluant la date syst�me actuelle
 	//echo $requete;
 	$res = mysql_query($req);
 	$reglage = mysql_fetch_array($res);
-	$semestre_courant = $reglage['valeur'];
+	$periode_courante = $reglage['valeur'];
 	if($_SESSION["auto"]=="e")
 	{
 		$id = $_SESSION['userid'];
 		$req = "SELECT niveaux.periode FROM niveaux WHERE niveaux.etudiant='$id' ORDER BY periode DESC;";
 		$res = mysql_query($req);
-		$semestre_courant = mysql_result($res,0,"periode");
+		$periode_courante = mysql_result($res,0,"periode");
 		//echo $req;
 	}
-	$req = "SELECT * FROM periodes WHERE id=".$semestre_courant.";";
+	$req = "SELECT * FROM periodes WHERE id=".$periode_courante.";";
 	$res = mysql_query($req);
 	$periode = mysql_fetch_array($res);
 }
+$semestre_courant = $periode_courante;
 ?>

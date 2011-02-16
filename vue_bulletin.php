@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
  * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
  *
@@ -22,11 +22,13 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
  *
- * Cursus uses Potajx
+ * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
- *
+ * 
  **/
 
 require "include/necessaire.php";
@@ -139,7 +141,7 @@ $etudiant = mysql_fetch_array($resreq);
 						href="vue_cursus.php?id=<?php echo $etudiant["id"];?>&nPeriode=<?php echo $semestre_courant;?>">Cursus
 					global</a></li>
 					<li><a class="bouton" style="border-bottom-style: none;"
-						href="fait_bulletin.php?id_etudiant=<?php echo $id_etudiant; ?>&nPeriode=<?php echo $semestre_courant; ?>">Éditer
+						href="editer_bulletin.php?id=<?php echo $id_etudiant; ?>&nPeriode=<?php echo $semestre_courant; ?>">Éditer
 					le bulletin</a></li>
 				</ul>
 			</div>

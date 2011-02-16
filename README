@@ -1,0 +1,2 @@
+Cursus uses the FPDF class and you need to download it and install it in the fpdf directory.
+You will also need to make the Georgia font conversion for FPDF and place it in the fpdf/font folder.

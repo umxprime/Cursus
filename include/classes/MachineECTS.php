@@ -22,36 +22,20 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
- * 
- * Cursus uses FPDF released by Olivier PLATHEY
  *
  * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
  * 
  **/
+
+class MachineECTS
+{
+	protected $coco;
+	static $blah="oh";
 	
-// Cursus configuration file template
-$conf=array();
-
-// Host
-$conf["WebHost"]="esa-npdc.net";
-
-// Local Login
-$conf["LocalSqlLog"]="root";
-
-// Local Password
-$conf["LocalSqlPassw"]="root";
-
-// Host Login
-$conf["WebHostSqlLog"]="root";
-
-// Host Password
-$conf["WebHostSqlPassw"]="root";
-
-// MySQL Database
-$conf["LocalDatabase"]="cursus";
-
-// MySQL Database
-$conf["WebHostDatabase"]="cursus";
-?>
+	function __construct()
+	{
+		$this->coco = "ok";
+	}
+}

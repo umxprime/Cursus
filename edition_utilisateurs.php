@@ -22,6 +22,8 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
  *
  * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>

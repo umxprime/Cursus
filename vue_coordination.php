@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
  * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
  *
@@ -22,11 +22,13 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
  *
- * Cursus uses Potajx
+ * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
- *
+ * 
  **/
 
 require "include/necessaire.php";

@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
  * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
  *
@@ -22,11 +22,13 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
  *
- * Cursus uses Potajx
+ * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
- *
+ * 
  **/
 
 include "include/necessaire.php";
@@ -83,7 +85,7 @@ if($ava>0){
 		}
 		$tablEvals .= "\t<th style=\"padding:20px;\">Session <br/>#1</th>\n";
 		$tablEvals .= "\t<th style=\"padding:20px;\">Rattrapage</th>\n";
-		$tablEvals .= "\t<th style=\"padding:20px;\"><a class=\"bouton\" href=\"javascript:publier();\">Publier</a></th>\n";
+		$tablEvals .= "\t<th style=\"padding:20px;\"><a class=\"bouton\" href=\"javascript:publier();\">...</a></th>\n";
 		$tablEvals.= "</tr>";
 
 		$neval = 1;
@@ -220,8 +222,9 @@ if($ava>0){
 			?>
 			<fieldset style="border-style:none;">
 					<input type="hidden" name="session" value="<?php echo $sessionId; ?>"/>
+					<input type="hidden" name="nPeriode" value="<?php echo $periode_courante; ?>"/>
 					<input type="submit" value="valider les présences"/>
-					<a class="bouton" href="javascript:appliquer();">Appliquer les modifications</a>
+					<!-- <a class="bouton" href="javascript:appliquer();">Appliquer les modifications</a> -->
 			</fieldset>
 		</form>
 		<?php

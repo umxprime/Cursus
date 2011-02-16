@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
  * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
  *
@@ -22,11 +22,13 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
  *
- * Cursus uses Potajx
+ * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
- *
+ * 
  **/
 
 //on requiert les variables de connexion;
@@ -41,6 +43,11 @@ $niveau=$ns;
 $etudiant_id = $_GET["id"];
 $req = "SELECT id,nom,prenom,credits FROM etudiants WHERE id='$etudiant_id'";
 $etudiant = mysql_fetch_array(mysql_query($req));
+
+$req = "SELECT niveaux.id,niveaux.niveau,niveaux.periode,periodes.annee as anneePeriode,periodes.nom as nomPeriode FROM niveaux,periodes WHERE niveaux.niveau>0 AND niveaux.niveau<11 AND niveaux.etudiant='$etudiant_id' AND niveaux.periode=periodes.id ORDER BY periodes.annee ASC, periodes.nom ASC;";
+//echo $req;
+$res_sem = mysql_query($req);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -91,6 +98,7 @@ $etudiant = mysql_fetch_array(mysql_query($req));
 					?>
 					</select>
 				</li>
+				<li><a href="editer_bulletin.php?id=<?php echo $etudiant_id;?>&all=1" class="bouton">Éditer le cursus</a></li>
 			</ul>
 		</div>
 		
@@ -98,9 +106,6 @@ $etudiant = mysql_fetch_array(mysql_query($req));
 			
 			<?php
 			//récupérer les étudiants inscit dans le semestre d'étude durant la période choisie
-			$req = "SELECT niveaux.id,niveaux.niveau,niveaux.periode,periodes.annee as anneePeriode,periodes.nom as nomPeriode FROM niveaux,periodes WHERE niveaux.niveau>0 AND niveaux.niveau<11 AND niveaux.etudiant='$etudiant_id' AND niveaux.periode=periodes.id ORDER BY periodes.annee ASC, periodes.nom ASC;";
-			//echo $req;
-			$res_sem = mysql_query($req);
 			//pour chaque etudiant afficher un mini bulletin avec ses modules, son tutorat et son évaluation
 			$global_inscrit=0;
 			$global_acquis=$etudiant["credits"];

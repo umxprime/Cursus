@@ -22,36 +22,35 @@
  * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
  * originally released under the LGPL <http://www.gnu.org/licenses/>
  * by Olivier LOYNET (tbsooo@free.fr)
- * 
- * Cursus uses FPDF released by Olivier PLATHEY
  *
  * Cursus uses the Limelight Framework
  * released under the GPL <http://www.gnu.org/licenses/>
  * by Maxime CHAPELET (umxprime@umxprime.com)
  * 
  **/
+
+require_once "Evaluation.php";
+require_once "Tutorat.php";
+
+/*class BoiteAOutils
+{
+	public $Evaluation;
+	public $Tutorat;
+	private $Session;
+	private $Module;
+	private $Etudiant;
+	private $Professeur;
+	private $Niveau;
+	private $Periode;
+	private $Cycle;
+	private $Ecole;
+	private $Stage;
+	private $Rdv;
 	
-// Cursus configuration file template
-$conf=array();
-
-// Host
-$conf["WebHost"]="esa-npdc.net";
-
-// Local Login
-$conf["LocalSqlLog"]="root";
-
-// Local Password
-$conf["LocalSqlPassw"]="root";
-
-// Host Login
-$conf["WebHostSqlLog"]="root";
-
-// Host Password
-$conf["WebHostSqlPassw"]="root";
-
-// MySQL Database
-$conf["LocalDatabase"]="cursus";
-
-// MySQL Database
-$conf["WebHostDatabase"]="cursus";
-?>
+	public function __construct()
+	{
+		$this->Evaluation = Evaluation;
+		$this->Tutorat = Tutorat;
+	}
+}
+$BoiteAOutils = new BoiteAOutils();*/

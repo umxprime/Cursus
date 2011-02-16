@@ -52,7 +52,7 @@
 				{
 					continue;
 				}
-				if($user["periode"]==$periode-1 && $user["niveau"]>10)continue;
+				if($user["periode"]==$periode-1 && ($user["niveau"]>10 && $user["niveau"]!=33))continue;
 				if($user["periode"]==$periode-1)$user["niveau"]=-1;
 				$user["nom"]=utf8_encode(strtoupper($user["nom"]));
 				$user["prenom"]=utf8_encode($user["prenom"]);

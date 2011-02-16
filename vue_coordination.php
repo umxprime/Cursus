@@ -57,9 +57,9 @@ $niveau = $ns;
 			{
 				if($droits[$_SESSION['auto']]['edit_coordination_s13'])
 				{
-					$coords=array(-1,33,1,2,3,4,5,6,7,8,9,10,13);
+					$coords=array(-1,1,2,3,4,5,6,7,8,9,10,13);
 				}else{
-					$coords=array(-1,33,1,2,3,4,5,6,7,8,9,10);
+					$coords=array(-1,1,2,3,4,5,6,7,8,9,10);
 				}
 				echo "<div id=\"choixSemestre\">";
 				echo "<ul>";

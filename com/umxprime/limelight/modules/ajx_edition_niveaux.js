@@ -81,7 +81,6 @@ function faitListeEtudiants(etudiants,listeCycles)
 		if(etudiants[i]["niveau"]==13) ligne="<tr style='color:#60ACBF;background-color:#AAA;'>\n";
 		if(etudiants[i]["niveau"]==33) ligne="<tr style='color:#60ACBF;background-color:#303030;'>\n";
 		ligne += "<td>\n";
-		ligne += etudiants[i]["niveau"];
 		ligne += i+1;
 		ligne += "</td>\n";
 		ligne += "<td>\n";

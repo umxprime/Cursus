@@ -136,7 +136,7 @@ require "include/necessaire.php";
 							Niveau 
 							<?php
 								$listeNiveaux = new HtmlFieldSelect();
-								$listeNiveaux->setFieldOptions(array(0,1,2,3,4,5,6,7,8,9,10,11),array("Aucun","1","2","3","4","5","6","7","8","9","10","Ancien"));
+								$listeNiveaux->setFieldOptions(array(0,1,2,3,4,5,6,7,8,9,10,13,33),array("Aucun","1","2","3","4","5","6","7","8","9","10","Ancien","Auditeur libre"));
 								$listeNiveaux->setFieldId("niveau");
 								$listeNiveaux->renderField();
 							?>

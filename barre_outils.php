@@ -39,7 +39,7 @@ echo ($outil=="modules")?" class=\"courant\" ":"";
 echo "><a href=\"sessions.php?nPeriode=$semestre_courant\">modules</a></li>\n";
 echo "<li";
 echo ($outil=="tutorat")?" class=\"courant\" ":"";
-echo "><a href=\"tutorats.php?nPeriode=$semestre_courant\">tutorats</a></li>\n";
+echo "><a href=\"edition_tutorats.php?nPeriode=$semestre_courant\">tutorats</a></li>\n";
 if($droits[$_SESSION['auto']]["menu_stages"]==true){
 	echo "<li";
 	echo ($outil=="stages")?" class=\"courant\" ":"";

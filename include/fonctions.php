@@ -467,8 +467,8 @@ function generatePassword ($length = 8)
 }
 function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semestres=false,$group=true){
 	$req = "SELECT etudiants.*, niveaux.niveau, niveaux.cycle as cycle, niveaux.id as id_niveau, cycles.id as cycle_id, cycles.ecole as ecole FROM etudiants, niveaux, cycles WHERE ";
-	$req .="niveaux.periode='".$perid."' AND niveaux.niveau>0";
-	$req .=" AND niveaux.niveau <11 AND etudiants.id =niveaux.etudiant AND niveaux.cycle=cycles.id ";
+	$req .="niveaux.periode='".$perid."' AND ((niveaux.niveau>0";
+	$req .=" AND niveaux.niveau <11) OR niveaux.niveau=33) AND etudiants.id =niveaux.etudiant AND niveaux.cycle=cycles.id ";
 	if ($ecole && !$all)
 	{
 		$req .= "AND cycles.ecole= $ecole ";
@@ -483,7 +483,7 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semes
 	}
 	if($group)$req .= " ORDER BY niveaux.niveau, etudiants.nom;";
 	else $req .= " ORDER BY etudiants.nom;";
-	//echo $req;
+	echo $req;
 	$c_select = "";
 	//$c_select .= $req;
 	$res = mysql_query($req, $conn);
@@ -499,6 +499,7 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semes
 		{
 			$c_select .= "\t\t<option value=\"s$i\">Étudiants en semestre $i</option>\n";
 		}
+		$c_select .= "\t\t<option value=\"s33\">Étudiants en auditeur libre</option>\n";
 		$c_select .= "</optgroup>";
 	}
 	while($etu = mysql_fetch_array($res))
@@ -507,7 +508,9 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semes
 		if ($label_sem != $etu['niveau'] && $group)
 		{
 			if($label_sem!=0){$c_select .= "\t<\optgroup>";}
-			$c_select .="\t<optgroup label='semestre ".$etu['niveau']."'>";
+			$label = "semestre ".$etu['niveau'];
+			if($etu['niveau']==33) $label = "auditeur libre";
+			$c_select .="\t<optgroup label='$label'>";
 			$label_sem=$etu['niveau'];
 		}
 		$c_select .= "\t\t<option value=\"".$etu["id"]."\"";

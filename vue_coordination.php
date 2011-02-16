@@ -89,7 +89,7 @@ $niveau = $ns;
 				$req_etu = "SELECT etudiants.id, etudiants.nom, etudiants.prenom, niveaux.niveau as sem_etu ";
 				$req_etu .= " FROM etudiants, niveaux, cycles WHERE ";
 				if($ns>0)$req_etu .= "niveaux.niveau ='".$ns."' AND niveaux.periode='".$semestre_courant."'";
-				else $req_etu .= "niveaux.niveau>0 AND niveaux.niveau<11 AND niveaux.periode='".$semestre_courant."'";
+				else $req_etu .= "((niveaux.niveau>0 AND niveaux.niveau<11) OR niveaux.niveau=33) AND niveaux.periode='".$semestre_courant."'";
 				$req_etu .= "AND etudiants.id= niveaux.etudiant AND niveaux.cycle=cycles.id AND cycles.ecole='".$_SESSION["ecole"]."' ORDER BY etudiants.nom;";
 				$res_etu = mysql_query($req_etu);
 				//pour chaque etudiant afficher un mini bulletin avec ses modules, son tutorat et son �valuation
@@ -123,40 +123,46 @@ $niveau = $ns;
 					while($eval=mysql_fetch_array($res_evals))
 					{
 						//incr�mentation du nombre de cr�dits pr�vus
-						$total_inscrit +=$eval['credits'];
+						if($etudiant["sem_etu"]!=33)$total_inscrit +=$eval['credits'];
 						if(strstr($eval['code'],"PP_EVL_"))
 						{
 							//traitement de l'�valuation semestrielle
 							// elle sera affich�e en bas de liste donc stockage dans une variable
 							$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
 							$classe = $valide['classe'];
-							$total_acquis += $valide['creds'];
+							if($etudiant["sem_etu"]!=33)$total_acquis += $valide['creds'];
 							//echo $n_lignes;
 							$sem_eval .= "<li class=\"".$classe."\">";
 							$sem_eval .= "<a href=\"edition_session.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])."\">";
-							$sem_eval .= $eval["code"]." : </a>";
-							$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
+							$sem_eval .= $eval["code"]."</a>";
+							if($etudiant["sem_etu"]!=33)
+							{
+							$sem_eval .= " : <a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
 							$sem_eval .= $eval['note_1']."</a>";
 							$sem_eval .= "/";
 							$sem_eval .= "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
 							$sem_eval .= $eval['note_2']."</a>";
 							$sem_eval .= " | ".$eval['credits']." Cr.";
+							}
 							$sem_eval .= "</li>\n";
 						}else{
 							//traitement des modules autres que l'�valuation
 							$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
 							$classe = $valide['classe'];
-							$total_acquis += $valide['creds'];
+							if($etudiant["sem_etu"]!=33)$total_acquis += $valide['creds'];
 							//echo $n_lignes;
 							echo "<li class=\"".$classe."\">";
 							echo "<a href=\"edition_session.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])." (".utf8_encode($eval["enseignants"]).")\">";
-							echo $eval["code"]." : </a>";
-							echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
+							echo $eval["code"]."</a>";
+							if($etudiant["sem_etu"]!=33)
+							{
+							echo " : <a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_1'])."\">";
 							echo $eval['note_1']."</a>";
 							echo "/";
 							echo "<a href=\"edit_eval.php?eval=".$eval["eval_id"]."\" title=\"".utf8_encode($eval['appreciation_2'])."\">";
 							echo $eval['note_2']."</a>";
 							echo " | ".$eval['credits']." Cr.";
+							}
 							echo "</li>\n";
 							$n_lignes -=1;
 						}
@@ -227,13 +233,15 @@ $niveau = $ns;
 						//un tutorat est pris en compte
 						$valide = valide_eval($eval["note_1"],$eval["note_2"],credits_tutorat($tut['niveau']));
 						$classe = $valide['classe'];
-						$total_acquis += $valide['creds'];
+						if($etudiant["sem_etu"]!=33)$total_acquis += $valide['creds'];
 				
-						echo  "\t<li class=\"".$classe."\"><a href=\"#\" title=\"".$tut["nom_complet"]."\">Tutorat</a> : ";
-						echo "<a href='#' title=\"".$eval["appreciation_1"]."\">".$eval["note_1"]."</a> / ";
+						echo  "\t<li class=\"".$classe."\"><a href=\"#\" title=\"".$tut["nom_complet"]."\">Tutorat</a>";
+						if($etudiant["sem_etu"]!=33)
+						{
+						echo ": <a href='#' title=\"".$eval["appreciation_1"]."\">".$eval["note_1"]."</a> / ";
 						echo "<a href='#' title=\"".$eval["appreciation_2"]."\">".$eval["note_2"]."</a>\n";
 						echo " | ".credits_tutorat($etudiant['sem_etu'])." Cr.</li>";
-				
+						}
 						$n_lignes -=1;
 				
 				

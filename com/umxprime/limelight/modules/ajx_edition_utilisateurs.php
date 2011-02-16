@@ -130,6 +130,10 @@
 				exit();
 			}
 			$req = "SELECT cycles.id, cycles.nom FROM cycles WHERE cycles.semestre_debut<='$niveau' AND cycles.semestre_fin>='$niveau' ORDER BY cycles.nom";
+			if($niveau>10)
+			{
+				$req = "SELECT cycles.id, cycles.nom FROM cycles ORDER BY cycles.nom";
+			}
 			$res = mysql_query($req);
 			$cycles = array();
 			$cycles["text"] = array();

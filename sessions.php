@@ -167,7 +167,7 @@ $c = mysql_num_rows($sessions);
 	$chaineNot .= " AND (desuetude='0000-00-00' OR desuetude >'".$dateCourante."') ORDER BY code;";
 	$resNot = mysql_query($chaineNot);
 	$tablModule .="<tr>\n<td class=\"module\"></td><td class=\"module\">\n";
-	$tablModule .="<a href=\"edition_tutorats.php?session=".$session["id"]."&periode=".$periode['id']."\">";
+	$tablModule .="<a href=\"edition_tutorats.php?nPeriode=$periode_courante\">";
 	$tablModule .="Tutorat</a>\n</td class=\"module\"><td class=\"module\"></td><td class=\"module\"></td><td class=\"module\"></td></tr>";
 	//afficher les modules
 ?>

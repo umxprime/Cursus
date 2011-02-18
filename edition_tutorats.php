@@ -173,8 +173,6 @@ if ($nres>0){
 			<table>
 			<tr><td>
 			<?php
-			if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
-			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
 			if($droits[$_SESSION['auto']]['admin_tutorats'])
 			{ 
 				$req = "SELECT nom,prenom,id FROM professeurs WHERE 1 ";
@@ -206,7 +204,11 @@ if ($nres>0){
 				$resNot = mysql_query($chaineNot);
 			?>
 			<?php
-				if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true)/*|| $droits[$_SESSION['auto']]["edit_evaluations_toujours_actif"]*/)
+				if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
+				{
+				echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
+				}
+				else
 				{ 
 			?>
 			<h2>Inscrire un étudiant en tutorat</h2>

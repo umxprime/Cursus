@@ -35,7 +35,6 @@ require "include/necessaire.php";
 
 if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_courant");
 $dateCourante = date("Y-m-d");
-$form0 ="";
 //echo $semestre['titre'];
 if (isset($_POST['tuteur']) or isset($_GET['tuteur'])){
 	//$req = "SELECT * FROM tutorats where professeur = '".$_POST['tuteur']."' AND semestre='".$_POST['periode']."' AND trash !=1;";
@@ -48,13 +47,6 @@ if (isset($_POST['tuteur']) or isset($_GET['tuteur'])){
 }else{
 	$tuteur = $_SESSION['userid'];
 	$nomTuteur = $_SESSION['username'];
-}
-if($droits[$_SESSION['auto']]['admin_tutorats']){
-	
-	$form0 .= "<form id=\"formulaire\" name=\"formulaire\" action=\"tutorats.php?nPeriode=$semestre_courant\" method=\"post\">";
-	$form0 .= selecteurObjets("tutorats.php?nPeriode=$semestre_courant","professeurs","tuteur","nom_complet","id",$connexion,$tuteur,0,0,"nom");
-	$form0 .="<input type=\"hidden\" name=\"nPeriode\" value=\"".$semestre_courant."\">";
-	$form0 .= "</form>";
 }
 if($droits[$_SESSION['auto']]['voir_tutorats']){
 	$req = "SELECT * FROM tutorats WHERE professeur = '".$tuteur."' AND semestre='".$semestre_courant."' AND trash !=1;";
@@ -161,14 +153,11 @@ if ($nres>0){
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<?php include("inc_css_thing.php");	?>
-		<script type="text/javascript">
-			function desinscrire(id,nom) {
-				document.getElementById('action').value="desinscrire";
-				document.getElementById('tutorat').value=""+id;
-				if(window.confirm("Êtes-vous certain de vouloir désinscrire "+nom+" des tutorats ?"))document.getElementById('formulaire2').submit();
-			}
-		</script>
 		<title>Cursus <?php revision();?> / Tutorats : <?php echo utf8_encode($nomTuteur); ?></title>
+		<?php
+			$_LIMELIGHT_PATH = "com/umxprime/limelight/";
+			include_once($_LIMELIGHT_PATH."core/limelight.php");
+		?>
 	</head>
 	<body>
 		<div id="global">
@@ -179,15 +168,28 @@ if ($nres>0){
 			$plus_nav_semestre[0] = array("var"=>"tuteur","val"=>"$tuteur");
 			include("inc_nav_sem.php");
 			?>
-			<?php
-			 
-			?>
+			<input type="hidden" id="nPeriode" value="<?php echo $periode_courante;?>"/>
+			<input type="hidden" id="tuteur_id" value="<?php echo $tuteur;?>"/>
 			<table>
 			<tr><td>
 			<?php
 			if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
-			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>"; 
-			echo $form0;
+			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
+			if($droits[$_SESSION['auto']]['admin_tutorats'])
+			{ 
+				$req = "SELECT nom,prenom,id FROM professeurs WHERE 1 ";
+				if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND ecole='".$_SESSION["ecole"]."' ";
+				$req.= "ORDER BY nom,prenom;"; 
+				$res = mysql_query($req); 
+				$listeEnseignants = new HtmlFieldSelect();
+				$listeEnseignants->setFieldId("tuteur");
+				while($enseignant = mysql_fetch_array($res))
+				{
+					$listeEnseignants->appendFieldOption($enseignant["id"],utf8_encode($enseignant["nom"]." ".$enseignant["prenom"]));
+				}
+				$listeEnseignants->setLabel("Tuteur :");
+				$listeEnseignants->renderField();
+			}
 			?>
 			
 			<p>

@@ -18,8 +18,7 @@
 	 * along with Potajx.  If not, see <http://www.gnu.org/licenses/>.
 	 * 
 	 */
-	$rootpath="../";
-	include($rootpath."connect_info.php");
+	$rootpath="../include/";
 	include($rootpath."connexion.php");
 	$action = $_GET["action"];
 	$getparams = explode(",",$_GET["params"]);

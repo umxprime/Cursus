@@ -165,7 +165,14 @@ require "include/necessaire.php";
 							<?php
 								$listeAutos = new HtmlFieldSelect();
 								$listeAutos->setFieldId("auto");
-								$listeAutos->setFieldOptions(array("p","coord_memoire","coord_semestre","coord","admin","super"),array("Professeur","Suivi Mémoire","Coordonateur de semestre","Coordonateur pédagogique","Administrateur","Tous pouvoirs"));
+								$valeurRegles = array("p","coord_memoire","coord_semestre","coord","admin","super");
+								$nomRegles = array("Professeur","Suivi Mémoire","Coordonateur de semestre","Coordonateur pédagogique","Administrateur","Tous pouvoirs");
+								while($valeurRegles[count($valeurRegles)-1]!=$_SESSION["auto"])
+								{
+									array_pop($valeurRegles);
+									array_pop($nomRegles);
+								}
+								$listeAutos->setFieldOptions($valeurRegles,$nomRegles);
 								$listeAutos->renderField();
 							?>
 						</td></tr>
@@ -174,7 +181,9 @@ require "include/necessaire.php";
 							<?php
 								$listeEcoles = new HtmlFieldSelect();
 								$listeEcoles->setFieldId("ecole");
-								$req = "SELECT id,nom FROM ecoles;";
+								$req = "SELECT id,nom FROM ecoles WHERE 1 ";
+								if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND id='".$_SESSION["ecole"]."' ";
+								$req.= ";";
 								$res = mysql_query($req);
 								while($ecole = mysql_fetch_array($res))
 								{
@@ -186,7 +195,7 @@ require "include/necessaire.php";
 					</table>
 				</td></tr>
 				<tr><td>
-					<a class="bouton" id="valider" href="javascript:valider();" name="Valider">Valider</a>
+					<a class="bouton" id="valider" href="javascript:validerLog();" name="Valider">Valider</a>
 				</td></tr><tr><td>
 					
 				</td></tr>

@@ -23,6 +23,7 @@
 	$_ROOT_PATH="../../../../";
 	$_LIMELIGHT_PATH = "com/umxprime/limelight/";
 	include($_ROOT_PATH."include/connexion.php");
+	include($_ROOT_PATH."include/regles_utilisateurs.php");
 	$action = $_GET["action"];
 	$getparams = explode(",",$_GET["params"]);
 	foreach($getparams as $value){

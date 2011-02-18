@@ -37,37 +37,18 @@
 			//echo "alert('$message')";
 			//echo "document.body.innerHTML+=\"$message<br/>\\n\";";
 			break;
-		case "validationLog":
-			$req = "SELECT etudiants.log as etulog, professeurs.log as proflog FROM etudiants,professeurs WHERE (etudiants.log='$log' OR professeurs.log='$log') AND $base.id!='$utilisateur';";
-			$res = mysql_query($req);
-			$valide="true";
-			if(mysql_num_rows($res)) $valide="false";
-			echo "validationLog('$log',$valide)";
-			break;
+		/*
 		case "chargeListeUtilisateurs":
 			switch ($base)
 			{
 				case "etudiants":
-					$req = "SELECT $base.nom, $base.prenom, $base.id FROM $base ";
-					if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.= ",niveaux,cycles ";
-					$req.= "WHERE ($base.nom LIKE '%$filtre%' OR $base.prenom LIKE '%$filtre%') ";
-					if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.= "AND $base.id=niveaux.etudiant AND niveaux.cycle=cycles.id AND cycles.ecole='".$_SESSION["ecole"]."' ";
-					$req.= "ORDER BY $base.nom ASC,$base.prenom ASC";
+					$req = "SELECT $base.nom, $base.prenom, $base.id FROM $base WHERE ($base.nom LIKE '%$filtre%' OR $base.prenom LIKE '%$filtre%') ORDER BY $base.nom ASC,$base.prenom ASC";
 					break;
 				case "professeurs":
-					$req = "SELECT nom,prenom,id FROM professeurs WHERE (nom LIKE '%$filtre%' OR prenom LIKE '%$filtre%') ";
-					if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND ecole='".$_SESSION["ecole"]."' ";
-					$valeurRegles = array("p","coord_memoire","coord_semestre","coord","admin","super");
-					while($valeurRegles[count($valeurRegles)-1]!=$_SESSION["auto"])
-					{
-						array_pop($valeurRegles);
-					}
-					for($i=0;$i<count($valeurRegles);$i++)$valeurRegles[$i] = "autos='".$valeurRegles[$i]."'";
-					$req.= "AND (".implode(" OR ",$valeurRegles).") ";
-					$req.= "ORDER BY nom,prenom;";
+					$req = "SELECT nom,prenom,id FROM professeurs WHERE nom LIKE '%$filtre%' OR prenom LIKE '%$filtre%' ORDER BY nom;";
 					break;
 			}
-			//echo "alert(".json_encode($req).");";exit();
+			//echo "alert(".json_encode($req).");";
 			$res = mysql_query($req);
 			$users=array();
 			$users["text"]=array();
@@ -100,7 +81,7 @@
 			switch($base)
 			{
 				case "etudiants" :
-					$req = "SELECT $base.nom,$base.prenom,$base.log,$base.passw,$base.logtype,$base.credits FROM $base WHERE $base.id='$utilisateur';";
+					$req = "SELECT $base.nom,$base.prenom,$base.log,$base.passw,$base.logtype FROM $base WHERE $base.id='$utilisateur';";
 					$res = mysql_query($req);
 					$user = mysql_fetch_array($res);
 					$req = "SELECT niveaux.niveau,niveaux.cycle,niveaux.periode FROM $base,niveaux WHERE $base.id='$utilisateur' AND niveaux.etudiant=$base.id AND niveaux.periode='$periode' ORDER BY niveaux.niveau DESC;";
@@ -130,12 +111,10 @@
 			echo "gEBI('log').value=user['log'];";
 			echo "gEBI('passw').value=user['passw'];";
 			echo "gEBI('logtype').value=user['logtype'];";
-			echo "gEBI('utilisateurs').blur();";
 			switch($base)
 			{
 				case "etudiants":
 					echo "gEBI('niveau').value=user['niveau'];";
-					echo "gEBI('credits').value=user['credits'];";
 					echo "chargeCycleSelonSemestre(user['cycle']);";
 					echo "gEBI('utilisateurs').updateSelectedOption(user['nom']+' '+user['prenom'],$utilisateur);";
 					break;
@@ -148,19 +127,12 @@
 			}
 			break;
 		case "chargeCyclesSelonSemestre" :
-			$req = "SELECT cycles.id, cycles.nom FROM cycles WHERE cycles.semestre_debut<='$niveau' AND cycles.semestre_fin>='$niveau' ";
-			if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND cycles.ecole='".$_SESSION["ecole"]."' ";
-			$req.= "ORDER BY cycles.nom";
 			if($niveau==0)
 			{
-				$req = "SELECT cycles.id, cycles.nom FROM cycles WHERE ecole='".$_SESSION["ecole"]."' ORDER BY cycles.semestre_debut;";
+				echo "gEBI('cycle').clearOptions();";
+				exit();
 			}
-			if($niveau>10)
-			{
-				$req = "SELECT cycles.id, cycles.nom FROM cycles WHERE 1 ";
-				if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND cycles.ecole='".$_SESSION["ecole"]."' ";
-				$req.= "ORDER BY cycles.semestre_debut";
-			}
+			$req = "SELECT cycles.id, cycles.nom FROM cycles WHERE cycles.semestre_debut<='$niveau' AND cycles.semestre_fin>='$niveau' ORDER BY cycles.nom";
 			$res = mysql_query($req);
 			$cycles = array();
 			$cycles["text"] = array();
@@ -185,12 +157,12 @@
 				case "etudiants":
 					switch($id){
 						case -1:
-							$req = "INSERT INTO $base (nom,prenom,log,logtype,passw,credits) VALUES('$nom','$prenom','$log','$logtype','$passw','$credits');";
+							$req = "INSERT INTO $base (nom,prenom,log,logtype,passw) VALUES('$nom','$prenom','$log','$logtype','$passw');";
 							$res = mysql_query($req);
 							$id = mysql_insert_id();
 							break;
 						default :
-							$req = "UPDATE $base SET `nom`='$nom', `prenom`='$prenom', `log`='$log', `logtype`='$logtype', `passw`='$passw', `credits`='$credits' WHERE $base.id='$id';";
+							$req = "UPDATE $base SET `nom`='$nom', `prenom`='$prenom', `log`='$log', `logtype`='$logtype', `passw`='$passw' WHERE $base.id='$id';";
 							$res = mysql_query($req);
 					}					
 					$req = "DELETE FROM niveaux WHERE niveaux.periode='$periode' AND niveaux.etudiant='$id';";
@@ -200,19 +172,12 @@
 					echo "chargeUtilisateur($id);";
 					break;
 				case "professeurs":
-					switch($id){
-						case -1:
-							$req = "INSERT INTO $base (nom,prenom,nom_complet,log,logtype,passw,autos,ecole) VALUES('$nom','$prenom','$prenom $nom','$log','$logtype','$passw','$auto','$ecole');";
-							$res = mysql_query($req);
-							$id = mysql_insert_id();
-							break;
-						default :
-							$req = "UPDATE $base SET `nom`='$nom', `prenom`='$prenom', `nom_complet`='$prenom $nom', `log`='$log', `logtype`='$logtype', `passw`='$passw', `autos`='$auto', `ecole`='$ecole' WHERE $base.id='$id';";
-							$res = mysql_query($req);
-					}
+					$req = "UPDATE $base SET `nom`='$nom', `prenom`='$prenom', `nom_complet`='$prenom $nom', `log`='$log', `logtype`='$logtype', `passw`='$passw', `autos`='$auto', `ecole`='$ecole' WHERE $base.id='$id';";
+					$res = mysql_query($req);
 					echo "chargeUtilisateur($id);";
 					break;
 			}
 			break;
+		*/
 	}
 ?>

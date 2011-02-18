@@ -231,7 +231,7 @@ $niveau = $ns;
 						}
 						//echo $req;
 						//un tutorat est pris en compte
-						$valide = valide_eval($eval["note_1"],$eval["note_2"],credits_tutorat($tut['niveau']));
+						$valide = valide_eval($eval["note_1"],$eval["note_2"],credits_tutorat($etudiant["sem_etu"]));
 						$classe = $valide['classe'];
 						if($etudiant["sem_etu"]!=33)$total_acquis += $valide['creds'];
 				
@@ -246,7 +246,7 @@ $niveau = $ns;
 				
 				
 				
-						$total_inscrit += credits_tutorat($tut['niveau']);
+						$total_inscrit += credits_tutorat($etudiant["sem_etu"]);
 				
 					}
 				

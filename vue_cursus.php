@@ -68,7 +68,8 @@ $res_sem = mysql_query($req);
 		<?php
 		$outil="coordination";
 		include("barre_outils.php");
-		//include("inc_nav_sem.php");
+		$plus_nav_semestre[]=array("var"=>"id","val"=>$etudiant_id);
+		include("inc_nav_sem.php");
 		?>
 		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 		<input type="hidden" id="etudiant_id" value="<?php echo $etudiant_id;?>"/>

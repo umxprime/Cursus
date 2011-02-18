@@ -87,7 +87,7 @@
 				$req .= ")";
 			}
 			
-			//echo "alert(\"$req\");";
+			//echo "alert('$req');";break;
 			$res = mysql_query($req);
 			if($id<0) $id = mysql_insert_id();
 			

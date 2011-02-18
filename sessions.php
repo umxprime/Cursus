@@ -167,7 +167,7 @@ $c = mysql_num_rows($sessions);
 	$chaineNot .= " AND (desuetude='0000-00-00' OR desuetude >'".$dateCourante."') ORDER BY code;";
 	$resNot = mysql_query($chaineNot);
 	$tablModule .="<tr>\n<td class=\"module\"></td><td class=\"module\">\n";
-	$tablModule .="<a href=\"tutorats.php?session=".$session["id"]."&periode=".$periode['id']."\">";
+	$tablModule .="<a href=\"edition_tutorats.php?session=".$session["id"]."&periode=".$periode['id']."\">";
 	$tablModule .="Tutorat</a>\n</td class=\"module\"><td class=\"module\"></td><td class=\"module\"></td><td class=\"module\"></td></tr>";
 	//afficher les modules
 ?>
@@ -187,7 +187,7 @@ $c = mysql_num_rows($sessions);
 	<body>
 		<div id="global">
 			<?php
-			$outil="modules";
+			$outil="sessions";
 			include("barre_outils.php");
 			$plus_nav_semestre[0] = array("var"=>"vue","val"=>$_GET["vue"]);	
 			include("inc_nav_sem.php");

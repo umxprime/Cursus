@@ -111,7 +111,9 @@ else
 								<option value="-1">Nouveau</option>
 								<?php
 									
-									$req = "SELECT id,intitule,code,desuetude,credits FROM modules WHERE desuetude='0000-00-00' or desuetude>'".$periode["debut"]."' ORDER BY code ASC;";
+									$req = "SELECT id,intitule,code,desuetude,credits FROM modules WHERE (desuetude='0000-00-00' OR desuetude>'".$periode["debut"]."') ";
+									if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND ecole LIKE '%-".$_SESSION["ecole"]."-%' ";
+									$req.= "ORDER BY code ASC;";
 									$modules = mysql_query($req);
 									$inscrit = array();
 									$actif = array();
@@ -177,7 +179,6 @@ else
 							<?php
 								$req = "SELECT periodes.nom,periodes.annee,periodes.id,session.id as session_id FROM session,periodes WHERE session.module='$id' AND session.periode=periodes.id;";
 								$res = mysql_query($req);
-								//echo $req;
 								$periodes = Array();
 								$used = Array(1);
 								while($periode = mysql_fetch_array($res))
@@ -192,7 +193,8 @@ else
 								}
 								echo implode("<br/>",$periodes);
 								//echo implode(" AND ",$used);
-								$req = "SELECT periodes.id,periodes.annee,periodes.nom FROM periodes WHERE ".implode(" AND ",$used)." AND activite='14' ORDER BY periodes.annee DESC;";
+								$req = "SELECT periodes.id,periodes.annee,periodes.nom FROM periodes,reglages WHERE ".implode(" AND ",$used)." AND periodes.activite=reglages.valeur AND reglages.option='activite_semestre' ORDER BY periodes.annee DESC;";
+								//echo $req;
 								$res = mysql_query($req);
 								if ($droits[$_SESSION['auto']]["ajouter_module"])
 								{
@@ -334,7 +336,19 @@ else
 			      <input id="pre_requis" type="text" size="60" value="<?php echo htmlentities($ligne["pre_requis"]);?>"/>
 			      </td>
 			      <td style="width: 105px;">
-					<?php echo selecteurObjets("","modules","ajout_pre_requis","code","code",$connexion,$ligne['code'],0,0,"code"); ?>
+					<?php
+					$req = "SELECT id,intitule,code,desuetude,credits FROM modules WHERE (desuetude='0000-00-00' OR desuetude>'".$periode["debut"]."') AND id!='$id' ";
+					if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND ecole LIKE '%-".$_SESSION["ecole"]."-%' ";
+					$req.= "ORDER BY code ASC;";
+					$res = mysql_query($req); 
+					$listePrerequis = new HtmlFieldSelect();
+					$listePrerequis->setFieldId("ajout_pre_requis");
+					while($prerequis = mysql_fetch_array($res))
+					{
+						$listePrerequis->appendFieldOption($prerequis["id"],$prerequis["code"]);
+					}
+					$listePrerequis->renderField();
+					?>
 					</td>
 			      <td style="width: 58px;"><a href="javascript:ajout_pre_requis();">Ajouter un pré requis</a></td>
 			    </tr>
@@ -343,7 +357,20 @@ else
 			      <td colspan="5" rowspan="1" style="width: 52px;">
 			      <input id="enseignants" type="text" size="60" value="<?php echo htmlentities($ligne["enseignants"]);?>"/>
 			      </td>
-			      <td style="width: 105px;"><?php echo selecteurObjets("","professeurs","ajout_prof","nom_complet","nom_complet",$connexion,"",0,0,"prenom"); ?>
+			      <td style="width: 105px;">
+					<?php
+					$req = "SELECT nom,prenom,id FROM professeurs WHERE 1 ";
+					if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND ecole='".$_SESSION["ecole"]."' ";
+					$req.= "ORDER BY nom,prenom;"; 
+					$res = mysql_query($req); 
+					$listeEnseignants = new HtmlFieldSelect();
+					$listeEnseignants->setFieldId("ajout_prof");
+					while($enseignant = mysql_fetch_array($res))
+					{
+						$listeEnseignants->appendFieldOption($enseignant["id"],utf8_encode($enseignant["prenom"]." ".$enseignant["nom"]));
+					}
+					$listeEnseignants->renderField();
+					?>
 					</td>
 			      <td style="width: 58px;"><a href="javascript:ajout_prof();">Ajouter un enseignant</a></td>
 			    </tr>
@@ -370,7 +397,7 @@ else
 				    {
 				    	$id = $ecole["id"];
 				    	?>
-				    	<input id="ecole_<?php echo $ecole["id"]?>" type="checkbox" <?php echo strstr($ligne["ecole"],"-$id-")?"checked":"";?>/>
+				    	<input id="ecole_<?php echo $ecole["id"]?>" type="checkbox" <?php echo (strstr($ligne["ecole"],"-$id-") || ($id==$_SESSION["ecole"] && $_GET['id']==-1))?"checked":"";?>/>
 				    	<?php 
 				    	echo $ecole["nom"];
 				    }

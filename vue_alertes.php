@@ -162,13 +162,13 @@ if($_SESSION['auto']=="e") header("Location:etudiants.php?nPeriode=$semestre_cou
 							{ 
 							?>
 							pour le module
-							<a href="gestion_modules.php?session=<?php echo $evaluation["idSession"];?>&nPeriode=<?php echo $semestre_courant;?>" class="lienBouton">
+							<a href="edition_session.php?session=<?php echo $evaluation["idSession"];?>&nPeriode=<?php echo $semestre_courant;?>" class="lienBouton">
 							<?php echo "[".$evaluation["codeModule"]."] ".utf8_encode($evaluation["intituleModule"]);?>
 							</a>
 							<?php
 							} else { 
 							?>
-							en <a href="tutorats.php?nPeriode=<?php echo $semestre_courant;?>" class="lienBouton">tutorat</a>
+							en <a href="edition_tutorats.php?nPeriode=<?php echo $semestre_courant;?>" class="lienBouton">tutorat</a>
 							<?php
 							} 
 							?>

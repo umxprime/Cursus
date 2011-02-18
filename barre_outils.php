@@ -35,8 +35,8 @@
 <ul>
 <?php
 echo "<li";
-echo ($outil=="modules")?" class=\"courant\" ":"";
-echo "><a href=\"sessions.php?nPeriode=$semestre_courant\">modules</a></li>\n";
+echo ($outil=="sessions")?" class=\"courant\" ":"";
+echo "><a href=\"sessions.php?nPeriode=$semestre_courant\">sessions</a></li>\n";
 echo "<li";
 echo ($outil=="tutorat")?" class=\"courant\" ":"";
 echo "><a href=\"edition_tutorats.php?nPeriode=$semestre_courant\">tutorats</a></li>\n";

@@ -36,13 +36,13 @@
 	<ul>
 		<?php
 			$plus = (!isset($plus_nav_semestre))?array():$plus_nav_semestre;
-			$req = "SELECT * FROM periodes WHERE activite='14' ";
+			$req = "SELECT periodes.* FROM periodes,reglages WHERE periodes.activite=reglages.valeur AND reglages.option='activite_semestre' ";
 			$req .="AND debut >='".$periode["fin"]."' ";
 			$req .="ORDER BY debut LIMIT 1;";
 			$res = mysql_query($req);
 			$nextSem = mysql_fetch_array($res);
 			$nexts = $nextSem["id"];
-			$req = "SELECT * FROM periodes WHERE activite='14' ";
+			$req = "SELECT periodes.* FROM periodes,reglages WHERE periodes.activite=reglages.valeur AND reglages.option='activite_semestre' ";
 			$req .="AND fin <='".$periode["debut"]."' ";
 			$req .="ORDER BY fin DESC LIMIT 1;";
 			//echo $req;

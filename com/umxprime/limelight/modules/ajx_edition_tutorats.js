@@ -1,4 +1,3 @@
-<?php
 /**
  * 
  * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
@@ -31,13 +30,26 @@
  * 
  **/
 
-	switch ($action)
-	{
-		case "init" :
-			//echo "alert('$message');";
-			//echo "document.body.innerHTML+=\"$message<br/>\\n\";";
-			break;
-		default :
-			break;
-	}
-?>
+function init()
+{
+	AJX.newRequest("init");
+	AJX.setAction("init", "init", "message:Test d'initialisation");
+	AJX.send("init");
+	addListener(gEBI("tuteur"),"change",changeTuteur);
+	gEBI("tuteur").value = gVBI("tuteur_id");
+}
+
+addListener(window,"load",init);
+
+function changeTuteur()
+{
+	var nPeriode = gVBI("nPeriode");
+	var tuteur = gVBI("tuteur");
+	window.location = "?nPeriode="+nPeriode+"&tuteur="+tuteur;
+}
+
+function desinscrire(id,nom) {
+	document.getElementById('action').value="desinscrire";
+	document.getElementById('tutorat').value=""+id;
+	if(window.confirm("Êtes-vous certain de vouloir désinscrire "+nom+" des tutorats ?"))document.getElementById('formulaire2').submit();
+}

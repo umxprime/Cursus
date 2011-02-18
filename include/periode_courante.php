@@ -53,8 +53,16 @@ else{//periode incluant la date syst�me actuelle
 	$req = "SELECT valeur FROM reglages WHERE reglages.option='semestre_courant';";
 	//echo $requete;
 	$res = mysql_query($req);
-	$reglage = mysql_fetch_array($res);
-	$periode_courante = $reglage['valeur'];
+	if(mysql_num_rows($res))
+	{
+		$reglage = mysql_fetch_array($res);
+		$periode_courante = $reglage['valeur'];
+	} else {
+		$req = "SELECT id FROM periodes ORDER BY debut DESC;";
+		$res = mysql_query($req);
+		$periode_courante = mysql_result($res,0,"id");
+		
+	}
 	if($_SESSION["auto"]=="e")
 	{
 		$id = $_SESSION['userid'];

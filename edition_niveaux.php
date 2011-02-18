@@ -67,7 +67,9 @@ require "include/necessaire.php";
 					<?php
 						$listeEcoles = new HtmlFieldSelect();
 						$listeEcoles->setFieldId("ecoles");
-						$req = "SELECT id,nom FROM ecoles;";
+						$req = "SELECT id,nom FROM ecoles WHERE 1 ";
+						if(!$droits[$_SESSION["auto"]]["voir_tous_sites"]) $req.="AND id='".$_SESSION["ecole"]."' ";
+						$req.= ";";
 						$res = mysql_query($req);
 						while($ecole = mysql_fetch_array($res))
 						{

@@ -1,34 +1,34 @@
-	/**
-	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
-	 *
-	 * This file is a part of Cursus
-	 *
-	 * Cursus is free software: you can redistribute it and/or modify
-	 * it under the terms of the GNU General Public License as published by
-	 * the Free Software Foundation, either version 3 of the License, or
-	 * (at your option) any later version.
-	 *
-	 * Cursus is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
-	 *
-	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
-	 * originally released under the LGPL <http://www.gnu.org/licenses/>
-	 * by Olivier LOYNET (tbsooo@free.fr)
-	 *
-	 * Cursus uses the Limelight Framework
-	 * released under the GPL <http://www.gnu.org/licenses/>
-	 * by Maxime CHAPELET (umxprime@umxprime.com)
-	 * 
-	 **/
-
-LOGTYPE_PNOM = 0;
-LOGTYPE_PRENOMNOM = 1;
-LOGTYPE_PERSONNALISE = 2;
+/**
+ * 
+ * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+ * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
+ *
+ * This file is a part of Cursus
+ *
+ * Cursus is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Cursus is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+ * originally released under the LGPL <http://www.gnu.org/licenses/>
+ * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
+ *
+ * Cursus uses the Limelight Framework
+ * released under the GPL <http://www.gnu.org/licenses/>
+ * by Maxime CHAPELET (umxprime@umxprime.com)
+ * 
+ **/
 
 function init()
 {
@@ -77,7 +77,7 @@ function faitListeEtudiants(etudiants,listeCycles)
 	{
 		
 		var ligne="<tr style='color:#FFFFFF;background-color:#80B711;'>\n";
-		if(etudiants[i]["niveau"]==-1) ligne="<tr style='color:#FFFFFF;background-color:#FF7500;'>\n";
+		if(etudiants[i]["niveau"]==0) ligne="<tr style='color:#FFFFFF;background-color:#FF7500;'>\n";
 		if(etudiants[i]["niveau"]==13) ligne="<tr style='color:#60ACBF;background-color:#AAA;'>\n";
 		if(etudiants[i]["niveau"]==33) ligne="<tr style='color:#60ACBF;background-color:#303030;'>\n";
 		ligne += "<td>\n";
@@ -102,7 +102,7 @@ function faitListeEtudiants(etudiants,listeCycles)
 		niveau.setFieldId("niveau_"+etudiants[i]["id"]);
 		var niveauxVals = new Array();
 		var niveauxTxt = new Array();
-		niveauxVals.push(-1);
+		niveauxVals.push(0);
 		niveauxTxt.push("-");
 		niveauxVals.push(33);
 		niveauxTxt.push("Auditeur libre");
@@ -135,6 +135,7 @@ function faitListeEtudiants(etudiants,listeCycles)
 function changeNiveauEtudiant(evt)
 {
 	var id = evt.target.id.split("_")[1];
+	//alert(gVBI("cycle_"+id));return;
 	var niveau = gVBI("niveau_"+id);
 	AJX.setAction("changeNiveauEtudiant", "changeNiveauEtudiant", "periode:"+gVBI("semestre_courant")+",ecole:"+gVBI("ecoles")+",cycle:"+gVBI("cycle_"+id)+",id:"+id+",niveau:"+niveau);
 	AJX.send("changeNiveauEtudiant");

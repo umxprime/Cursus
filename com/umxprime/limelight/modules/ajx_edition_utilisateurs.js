@@ -1,30 +1,34 @@
-	/**
-	 * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
-	 *
-	 * This file is a part of Cursus
-	 *
-	 * Cursus is free software: you can redistribute it and/or modify
-	 * it under the terms of the GNU General Public License as published by
-	 * the Free Software Foundation, either version 3 of the License, or
-	 * (at your option) any later version.
-	 *
-	 * Cursus is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
-	 *
-	 * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
-	 * originally released under the LGPL <http://www.gnu.org/licenses/>
-	 * by Olivier LOYNET (tbsooo@free.fr)
-	 *
-	 * Cursus uses the Limelight Framework
-	 * released under the GPL <http://www.gnu.org/licenses/>
-	 * by Maxime CHAPELET (umxprime@umxprime.com)
-	 * 
-	 **/
+/**
+ * 
+ * Copyright © 2007,2008,2009 Roland DECAUDIN (roland@xcvbn.net)
+ * Copyright © 2008,2009,2010,2011 Maxime CHAPELET (umxprime@umxprime.com)
+ *
+ * This file is a part of Cursus
+ *
+ * Cursus is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Cursus is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Cursus.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Cursus uses a modified version of TinyButStrong and TinyButStrongOOo
+ * originally released under the LGPL <http://www.gnu.org/licenses/>
+ * by Olivier LOYNET (tbsooo@free.fr)
+ * 
+ * Cursus uses FPDF released by Olivier PLATHEY
+ *
+ * Cursus uses the Limelight Framework
+ * released under the GPL <http://www.gnu.org/licenses/>
+ * by Maxime CHAPELET (umxprime@umxprime.com)
+ * 
+ **/
 
 LOGTYPE_PNOM = 0;
 LOGTYPE_PRENOMNOM = 1;
@@ -39,14 +43,17 @@ function init()
 	addListener(gEBI("utilisateurs"),"change",changeUtilisateur);
 	addListener(gEBI("nom"),"change",changeNom);
 	addListener(gEBI("prenom"),"change",changePrenom);
-	addListener(gEBI("log"),"change",changeLog);
+	//addListener(gEBI("log"),"change",changeLog);
+	addListener(gEBI("log"),"blur",faitLog);
 	addListener(gEBI("logtype"),"change",changeLogType);
+	addListener(gEBI("logtype"),"blur",changeLogType);
 	addListener(gEBI("niveau"),"change",changeNiveau);
 	addListener(gEBI("filtre"),"change",nouvelleEntree);
 	AJX.newRequest("chargeListeUtilisateurs");
 	AJX.newRequest("chargeInfosUtilisateurs");
 	AJX.newRequest("chargeCyclesSelonSemestre");
 	AJX.newRequest("valider");
+	AJX.newRequest("validationLog");
 	changeCategorie();
 }
 
@@ -66,6 +73,7 @@ function nouvelleEntree()
 	gEBI("cycle").clearOptions();
 	gEBI("nom").focus();
 	gEBI("auto").value ="p";
+	changeNiveau();
 }
 
 function changeCategorie()
@@ -98,10 +106,23 @@ function chargeUtilisateur(id)
 function changeNom()
 {
 	gEBI("nom").value = gVBI("nom").toUpperCase();
-	faitLog();
+	changeLog();
 }
 
 function changePrenom()
+{
+	prenom = gVBI("prenom").toLowerCase();
+	prenom = prenom.substr(0,1).toUpperCase()+prenom.substr(1);
+	gEBI("prenom").value = prenom;
+	changeLog();
+}
+
+function changeLog()
+{
+	if(gVBI("logtype")!=LOGTYPE_PERSONNALISE) faitLog();
+}
+
+function changeLogType()
 {
 	faitLog();
 }
@@ -121,20 +142,40 @@ function faitLog()
 		break;
 	case LOGTYPE_PERSONNALISE:
 		log = gVBI("log");
-		gEBI("log").focus();
+		if(log.length<3)
+		{
+			alert("Veuillez saisir un log personnalisé d'au moins 3 caractères");
+			gEBI("log").focus();
+			return;
+		}
 		break;
 	}
+	gEBI("log").value=no_accent(log);
+}
+
+function validerLog()
+{
+	var id = gVBI("utilisateurs");
+	var base = gVBI("categories");
+	var log = gVBI("log");
+	AJX.setAction("validationLog", "validationLog", "log:"+log+",base:"+base+",utilisateur:"+id);
+	//AJX.debug("validationLog");
+	AJX.send("validationLog");
+}
+
+function validationLog(log,valide)
+{
 	gEBI("log").value = log;
-}
-
-function changeLog()
-{
-	if(gVBI("logtype")!=LOGTYPE_PERSONNALISE) faitLog();
-}
-
-function changeLogType()
-{
-	faitLog();
+	if(valide)
+	{
+		soumettre();
+	}else{
+		//gEBI("log").value = log;
+		alert("Le log "+log+" existe déjà, veuillez changer le type ou personnalisez le log.");
+		//gEBI("log").value="";
+		if(gVBI("logtype")==LOGTYPE_PERSONNALISE) gEBI("log").focus();
+		else gEBI("logtype").focus();
+	}
 }
 
 function changeNiveau()
@@ -149,7 +190,7 @@ function chargeCycleSelonSemestre(cycle)
 	AJX.send("chargeCyclesSelonSemestre");
 }
 
-function valider(){
+function soumettre(){
 	if(!checkForm())return;
 	var base = gVBI("categories");
 	var id = gVBI("utilisateurs");
@@ -201,4 +242,26 @@ function checkForm()
 		return false;
 	}
 	return true;
+}
+
+function preg_replace (array_pattern, array_pattern_replace, my_string) // Auteur : XUXU.fr
+{
+var new_string = String (my_string);
+	for (i=0; i<array_pattern.length; i++) {
+		var reg_exp= RegExp(array_pattern[i], "gi");
+		var val_to_replace = array_pattern_replace[i];
+		new_string = new_string.replace (reg_exp, val_to_replace);
+	}
+	return new_string;
+}
+
+function no_accent (my_string) // Auteur : XUXU.fr
+{
+	var new_string = "";
+	var pattern_accent = new Array("é", "è", "ê", "ë", "ç", "à", "â", "ä", "î", "ï", "ù", "ô", "ó", "ö");
+	var pattern_replace_accent = new Array("e", "e", "e", "e", "c", "a", "a", "a", "i", "i", "u", "o", "o", "o");
+	if (my_string && my_string!= "") {
+		new_string = preg_replace (pattern_accent, pattern_replace_accent, my_string);
+	}
+	return new_string;
 }

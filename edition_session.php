@@ -175,8 +175,13 @@ if($ava>0){
 		<input type="hidden" id="session" value="<?php echo $sessionId; ?>"/>
 		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant; ?>"/>
 		<table class="center"><tr><td class="center">
-		<h2><?php echo utf8_encode($module['intitule'])?></h2>
+		<h2><?php echo utf8_encode($module['intitule'])?> dispensé par <?php echo utf8_encode($module['enseignants'])?></h2>
 		<?php
+		$session = $_GET["session"];
+		$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$sessionId' AND session.module=modules.id;";
+		//echo $req;
+		$res = mysql_fetch_array(mysql_query($req));
+		$ecoles = explode("--",substr($res["module_ecole"],1,strlen($res["module_ecole"])-2));
 		if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))
 		{
 		?>
@@ -184,11 +189,6 @@ if($ava>0){
 		<p>
 			<select class="design" id="etudiant">
 			<?php
-			$session = $_GET["session"];
-			$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$sessionId' AND session.module=modules.id;";
-			//echo $req;
-			$res = mysql_fetch_array(mysql_query($req));
-			$ecoles = explode("--",substr($res["module_ecole"],1,strlen($res["module_ecole"])-2));
 			if($droits[$_SESSION["auto"]]["voir_tous_sites"])
 			{
 				for($i=0;$i<count($ecoles);$i++)
@@ -202,16 +202,15 @@ if($ava>0){
 			</select>
 			<a class="bouton" href="javascript:inscrire();">Inscrire</a>
 		</p>
-			<?php
+		<?php 
+		} else {
 			if ($res["obligatoire"]>0)
 			{
 			?>
-		<p>Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?> :
-		<a href="reg_module_obligatoire.php?id=<?php echo $res["session_id"]?>&nPeriode=<? echo $semestre_courant;?>">inscrire les étudiants</a>.</p>
+			<p>Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?></p>
 			<?php
 			}
-		} else {
-			if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
+			//if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
 			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
 		}
 			if($nres>0){

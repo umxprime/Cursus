@@ -10,3 +10,4 @@ conf.php
 fpdf/*
 !fpdf/pdf.php
 *.pdf
+aide/*.mov

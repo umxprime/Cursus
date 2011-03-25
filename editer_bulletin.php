@@ -76,6 +76,15 @@ $req.= "AND niveaux.periode<='$periode_courante' AND niveaux.etudiant=tutorats.e
 $req.= "ORDER BY niveaux.niveau ASC, niveaux.periode ASC;";
 $resTutorats = mysql_query($req);
 
+$req = "SELECT stages.credits, stages.valide, stages.appreciation, stages.lieu, stages.debut, stages.fin, ";
+$req.= "periodes.id as idPeriode, periodes.nom as nomPeriode, periodes.annee as anneePeriode, niveaux.niveau ";
+$req.= "FROM stages,periodes,niveaux WHERE ";
+$req.= "stages.periode=niveaux.periode AND stages.etudiant='$id' AND periodes.id=niveaux.periode ";
+$req.= "AND niveaux.periode<='$periode_courante' AND niveaux.etudiant=stages.etudiant AND niveaux.niveau>0 AND niveaux.niveau<11 ";
+$req.= "ORDER BY niveaux.niveau ASC, niveaux.periode ASC;";
+
+$resStages = mysql_query($req);
+
 $pdf=new PDF("L","mm",array($largeurPage,$hauteurPage));
 $pdf->SetAutoPageBreak(true);
 $pdf->AliasNbPages();
@@ -122,8 +131,22 @@ while($eval=mysql_fetch_assoc($resTutorats))
 	$eval["credits"]=Tutorat::calculerCredits($eval["niveau"]);
 	array_push($evaluations,$eval);
 }
+while($eval=mysql_fetch_assoc($resStages))
+{
+	$eval["code"]=Evaluation::CODE_STAGE;
+	$eval["enseignants"]="";
+	$eval["obligatoire"]="";
+	$eval["note_1"]=$eval["valide"];
+	$eval["note_2"]="";
+	$eval["appreciation_1"]=$eval["appreciation"];
+	$eval["appreciation_2"]="";
+	$eval["intitule"]="Stage ".$eval["lieu"];
+	array_push($evaluations,$eval);
+}
 
 $evaluations = array_orderby($evaluations,'idPeriode',SORT_ASC,'code',SORT_STRING);
+
+//var_dump($evaluations);exit();
 
 $periodes = array();
 $periodeActuelle=-1;
@@ -183,7 +206,7 @@ for ($i=0;$i<count($periodes);$i++)
 		$appreciation1 = $evaluation["appreciation_1"];
 		$appreciation2 = $evaluation["appreciation_2"];
 		
-		$objetEvaluation = new Evaluation($note1,$note2,$appreciation1,$appreciation2,$creditsModule);
+		$objetEvaluation = new Evaluation($note1,$note2,$appreciation1,$appreciation2,$creditsModule,$codeModule);
 		$couleursPDF = $objetEvaluation->couleursPDF();
 		if(!$objetEvaluation->aUneNoteSuffisante() && $evaluation["niveau"]!=$niveauEtudiant) continue;
 		
@@ -243,7 +266,7 @@ for ($i=0;$i<count($periodes);$i++)
 		$pdf->SetTextColor($couleursPDF["couleurNote1Texte"]);
 		$pdf->SetDrawColor($couleursPDF["couleurNote1Texte"]);
 		$pdf->SetFontSize(14);
-		$pdf->Cell(10,10,verif($note1),1,0,"C",true);
+		$pdf->Cell(10,10,$objetEvaluation->conformerNote($note1),1,0,"C",true);
 		
 		// APPRECIATION 1
 		$pdf->SetX($pdf->GetX()+5);
@@ -264,7 +287,7 @@ for ($i=0;$i<count($periodes);$i++)
 			$pdf->SetTextColor($couleursPDF["couleurNote2Texte"]);
 			$pdf->SetDrawColor($couleursPDF["couleurNote2Texte"]);
 			$pdf->SetFontSize(14);
-			$pdf->Cell(10,10,verif($note2),1,0,"C",true);
+			$pdf->Cell(10,10,$objetEvaluation->conformerNote($note2),1,0,"C",true);
 			
 			// APPRECIATION 2
 			$pdf->SetX($pdf->GetX()+5);

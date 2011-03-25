@@ -185,9 +185,9 @@ else
 								{
 									if ($droits[$_SESSION['auto']]["ajouter_module"])
 									{
-										array_push($periodes,$periode["annee"].", ".$periode["nom"]." <a href=\"gestion_modules.php?session=".$periode["session_id"]."&nPeriode=".$periode["id"]."\">Voir</a>/<a href=\"javascript:supprimer_session(".$periode["session_id"].");\">Retirer</a>");
+										array_push($periodes,$periode["annee"].", ".$periode["nom"]." <a href=\"edition_session.php?session=".$periode["session_id"]."&nPeriode=".$periode["id"]."\">Voir</a>/<a href=\"javascript:supprimer_session(".$periode["session_id"].");\">Retirer</a>");
 									} else {
-										array_push($periodes,$periode["annee"].", ".$periode["nom"]." <a href=\"gestion_modules.php?session=".$periode["session_id"]."&nPeriode=".$periode["id"]."\">Voir</a>");
+										array_push($periodes,$periode["annee"].", ".$periode["nom"]." <a href=\"edition_session.php?session=".$periode["session_id"]."&nPeriode=".$periode["id"]."\">Voir</a>");
 									}
 									array_push($used,"periodes.id!='".$periode["id"]."'");
 								}
@@ -205,6 +205,7 @@ else
 								 while($periode=mysql_fetch_array($res))
 								{
 									echo "<option value=\"".$periode["id"]."\" ";
+									if($periode["id"]==$periode_courante)echo "selected ";
 									echo ">".$periode["annee"].", ".$periode["nom"]."</option>";
 								} 
 							?>

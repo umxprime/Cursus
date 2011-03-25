@@ -48,7 +48,7 @@ if($_GET["eval"]>0){
 	if($droits[$_SESSION['auto']]["edit_tous_evaluations"]){
 		$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 	}else if($droits[$_SESSION['auto']]["edit_evaluations"]){
-		$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
+		$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 	}else{
 		$req="select id from etudiants where id <0;";
 	}
@@ -79,7 +79,7 @@ if($_GET["eval"]>0){
 	include("inc_nav_sem.php");
 ?>
 <table class="center"><tr><td>
-<h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <a class="bouton" href="gestion_modules.php?nPeriode=<?php echo $semestre_courant;?>&session=<?php echo $eval['session'];?>"><?php echo utf8_encode($module['intitule']);?></a></h2>
+<h2>Evaluation de <?php echo utf8_encode($etudiant['prenom'])." ".utf8_encode($etudiant['nom']);?> pour le module : <a class="bouton" href="edition_session.php?nPeriode=<?php echo $semestre_courant;?>&session=<?php echo $eval['session'];?>"><?php echo utf8_encode($module['intitule']);?></a></h2>
 <h2>Première session</h2>
 <form id="evaluation" method="post" action="reg_eval.php">
 

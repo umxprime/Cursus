@@ -76,8 +76,8 @@ if(isset($_POST['date'])){
 	$dateRdv = array('annee'=>$expJour[0],'mois'=>$expJour[1],'jour'=>$expJour[2]);
 	$heureRdv = array('heure'=>$expHeure[0],'minutes'=>$expHeure[1],'secondes'=>$expHeure[2]);
 }
-$semestre_courant = $sem["semestre"];
-include("inc_sem_courant.php");
+//$semestre_courant = $sem["semestre"];
+//include("inc_sem_courant.php");
 ?>
 <title>Edition d'un rendez-vous</title>
 
@@ -94,7 +94,7 @@ include("inc_sem_courant.php");
 		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant;?>"/>
 		<table><tr><td>
 			<h2>
-				<?php echo "Tutorat ".$etu['prenom']." ".$etu['nom']."/ rdv ".$rdv['ordre']; ?>
+				<?php echo "Tutorat ".utf8_encode($etu['prenom']." ".$etu['nom'])."/ rdv ".$rdv['ordre']; ?>
 			</h2>
 			<form id="formulaire" action="reg_rdv.php"
 				method="post">

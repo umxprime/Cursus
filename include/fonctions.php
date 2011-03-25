@@ -501,6 +501,7 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semes
 		}
 		$c_select .= "\t\t<option value=\"s33\">Étudiants en auditeur libre</option>\n";
 		$c_select .= "</optgroup>";
+		$c_select .= "<optgroup label=\"Étudiants\">";
 	}
 	while($etu = mysql_fetch_array($res))
 	{
@@ -516,7 +517,8 @@ function liste_etudiants($sauf=array(), $conn, $perid,$ecole=0,$all=false,$semes
 		$c_select .= "\t\t<option value=\"".$etu["id"]."\"";
 		$c_select .= ">".utf8_encode($etu["nom"])." ".utf8_encode($etu['prenom'])."</option> <br />\n";
 	}
-	if($group)$c_select .= "\t<\optgroup>";
+	
+	if($group or $semestres)$c_select .= "\t<\optgroup>";
 	return $c_select;
 }
 function clean_chaine($ch){

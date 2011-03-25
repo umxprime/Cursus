@@ -36,29 +36,35 @@ class Evaluation
 	private $appreciation1;
 	private $appreciation2;
 	private $credits;
+	private $code;
 	private $notesSaisies;
 	private $appreciationsSaisies;
 	private $estUnRattrapage;
 	private $toutSaisi;
 	
-	public function __construct($note1,$note2,$appreciation1,$appreciation2,$credits)
+	const CODE_STAGE = "STAGE";
+	
+	public function __construct($note1,$note2,$appreciation1,$appreciation2,$credits,$code)
 	{
 		$this->note1 = $note1;
 		$this->note2 = $note2;
 		$this->appreciation1 = $appreciation1;
 		$this->appreciation2 = $appreciation2;
 		$this->credits = $credits;
+		$this->code = $code;
 		$this->toutSaisi = false;
 		$this->verifierStatut();
 	}
 	
 	public function conformerNote($note)
 	{
+		if($this->estUnStage()) return $note==1 ? "Ok" : "-";
 		return (strlen($note)>0) ? $note : "-";
 	}
 	
 	public function estUneNoteSaisie($note)
 	{
+		if($this->estUnStage()) return $this->note1=="1";
 		return $this->conformerNote($note)!="-";
 	}
 	
@@ -69,16 +75,19 @@ class Evaluation
 	
 	public function estUneNoteSuffisante($note)
 	{
+		if($this->estUnStage()) return true;
 		return strpos("_ABCDabcd",$this->conformerNote($note))>0;
 	}
 	
 	public function estUneNoteInsuffisante($note)
 	{
+		if($this->estUnStage()) return false;
 		return strpos("_EFef",$this->conformerNote($note))>0;
 	}
 	
 	public function aUneNoteSuffisante()
 	{
+		if($this->estUnStage()) return $this->estUneNoteSuffisante($this->note1);
 		return $this->estUneNoteSuffisante($this->note1) || $this->estUneNoteSuffisante($this->note2);
 	}
 	
@@ -90,6 +99,11 @@ class Evaluation
 		else return 0;
 	}
 	
+	public function estUnStage()
+	{
+		return $this->code == Evaluation::CODE_STAGE;
+	}
+	
 	public function verifierStatut()
 	{
 		$estUnRattrapage = false;
@@ -97,6 +111,13 @@ class Evaluation
 		$appreciationsSaisies = false;
 		if ($this->estUneAppreciationSaisie($this->appreciation1)) $appreciationsSaisies=true;
 		if ($this->estUneNoteSaisie($this->note1)) $notesSaisies=true;
+		if ($this->estUnStage())
+		{
+			$this->notesSaisies=$notesSaisies;
+			$this->appreciationsSaisies=$appreciationsSaisies;
+			if($this->notesSaisies && $this->appreciationsSaisies) $this->toutSaisi = true;
+			return;
+		}
 		if ($notesSaisies && $appreciationsSaisies && !$this->estUneNoteSuffisante($this->note1))
 		{
 			$estUnRattrapage = true;
@@ -131,7 +152,7 @@ class Evaluation
 			$couleurECTSTexte = "#FF8500";
 			$couleurECTSFond = "white";
 		}
-		if($this->estUneNoteSuffisante($this->note1))
+		if($this->estUneNoteSaisie($this->note1) && $this->estUneNoteSuffisante($this->note1))
 		{
 			$couleurNote1Texte = "white";
 			$couleurNote1Fond = "#80B711";
@@ -142,7 +163,7 @@ class Evaluation
 			$couleurNote1Texte = "white";
 			$couleurNote1Fond = "#FF8500";
 		}
-		if($this->estUneNoteSuffisante($this->note2))
+		if($this->estUneNoteSaisie($this->note2) && $this->estUneNoteSuffisante($this->note2))
 		{
 			$couleurNote2Texte = "white";
 			$couleurNote2Fond = "#80B711";

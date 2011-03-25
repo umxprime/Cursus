@@ -67,7 +67,7 @@ if($droits[$_SESSION['auto']]["admin_tutorats"] or $_SESSION['userid']==$eval['p
 	include("inc_nav_sem.php");
 ?>
 <table class="center"><tr><td>
-<h2><a href="tutorats.php?nPeriode=<?php echo $semestre_courant;?>&tuteur=<?php echo $eval["prof_id"]?>">Tutorat de <?php echo utf8_encode($eval['prof']);?></a> pour <?php echo utf8_encode($eval['prenom']." ".$eval['nom']);?></h2>
+<h2><a class="lienBouton" href="edition_tutorats.php?nPeriode=<?php echo $semestre_courant;?>&tuteur=<?php echo $eval["prof_id"]?>">Tutorat de <?php echo utf8_encode($eval['prof']);?></a> pour <?php echo utf8_encode($eval['prenom']." ".$eval['nom']);?></h2>
 <h2>Première session</h2>
 <form id="evaluation" method="post" action="reg_eval.php?nPeriode=<?php echo $semestre_courant;?>&tuteur=<?php echo $eval["prof_id"];?>">
 

@@ -105,7 +105,7 @@ if ($nres>0){
 		$sauf[] = $etudiant['id'];
 		for($d=1;$d<=5;$d++){
 			if(is_array($rdv[$d-1])){
-				$tablEvals .= "<a class=\"bouton\" href=\"edit_rdv.php?rdv=".$rdv[$d-1]['id']."\">";
+				$tablEvals .= "<a class=\"bouton\" href=\"edit_rdv.php?rdv=".$rdv[$d-1]['id']."&nPeriode=$semestre_courant\">";
 				if (strlen($rdv[$d-1]['cr'])>1){
 					$tablEvals .= "modifier";
 				}else{

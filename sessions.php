@@ -216,7 +216,7 @@ $c = mysql_num_rows($sessions);
 				<table class="center full">
 					<tr><td class="center">
 						<a class="bouton" href="edition_modules.php?nPeriode=<?php echo $semestre_courant;?>&id=-1" class="button">Éditer un module</a>
-						<a class="bouton" href="edition_unites.php?nPeriode=<?php echo $semestre_courant;?>" class="button">Gérer les unités</a>
+						<!-- <a class="bouton" href="edition_unites.php?nPeriode=<?php echo $semestre_courant;?>" class="button">Gérer les unités</a> -->
 					</td></tr>
 					<tr><td class="center">
 						<?php

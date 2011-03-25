@@ -57,14 +57,15 @@ if($droits[$_SESSION['auto']]["edit_tous_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."';";
 }else if($droits[$_SESSION['auto']]["edit_modules"]){
 	$req = "select intitule,enseignants from modules where id = '".$session['module']."' AND enseignants LIKE '%".$_SESSION['username']."%';";
-}else{
-	$req="select id from etudiants wehre id <0;";
+}else if ($_SESSION['auto']=="e"){
+	header("Location:etudiants.php?nPeriode=$semestre_courant");
 }
 //echo $req;
 $res = mysql_query($req);
 $module = mysql_fetch_array($res);
 //echo "error :".mysql_error();
 $ava=mysql_num_rows($res);
+if($ava==0) header("Location:sessions.php?nPeriode=$semestre_courant");
 //echo "nres :".$ava;
 if($ava>0){
 	$req = "SELECT evaluations.*, etudiants.nom, etudiants.prenom, etudiants.log, etudiants.mail, etudiants.id as id_etudiant ";
@@ -166,7 +167,7 @@ if($ava>0){
 	<body>
 		<div id="global">
 		<?php
-			$outil="modules";
+			$outil="sessions";
 			include("barre_outils.php") ;
 			$disableNavSemPrec=true;
 			$disableNavSemSuiv=true;
@@ -175,17 +176,22 @@ if($ava>0){
 		<input type="hidden" id="session" value="<?php echo $sessionId; ?>"/>
 		<input type="hidden" id="semestre_courant" value="<?php echo $semestre_courant; ?>"/>
 		<table class="center"><tr><td class="center">
-		<h2><?php echo utf8_encode($module['intitule'])?> dispensé par <?php echo utf8_encode($module['enseignants'])?></h2>
+		<h2 style="font-weight:bold"><?php echo utf8_encode($module['intitule'])?> dispensé par <?php echo utf8_encode($module['enseignants'])?></h2>
 		<?php
 		$session = $_GET["session"];
 		$req = "SELECT session.id as session_id, session.module as session_module, modules.id as module_id, modules.ecole as module_ecole, modules.obligatoire FROM session, modules WHERE session.id='$sessionId' AND session.module=modules.id;";
 		//echo $req;
 		$res = mysql_fetch_array(mysql_query($req));
 		$ecoles = explode("--",substr($res["module_ecole"],1,strlen($res["module_ecole"])-2));
+		if ($res["obligatoire"]>0)
+		{
+		?>
+		<h2 style="color:#333;font-weight:bold">Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?></h2>
+		<?php
+		}
 		if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))
 		{
 		?>
-		<h2>Inscrire des étudiants à ce module</h2>
 		<p>
 			<select class="design" id="etudiant">
 			<?php
@@ -204,16 +210,10 @@ if($ava>0){
 		</p>
 		<?php 
 		} else {
-			if ($res["obligatoire"]>0)
-			{
-			?>
-			<p>Ce module est obligatoire pour les étudiants en semestre <?php echo intval($res["obligatoire"]);?></p>
-			<?php
-			}
 			//if(($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive == true))
 			echo "<h2 style=\"color:#E40;font-weight:bold\">La saisie des évaluations est clôturée pour cette période.</h2>";
 		}
-			if($nres>0){
+		if($nres>0){
 		?>
 		<form id="fpresences" action="reg_session.php" method="post">
 			<?php

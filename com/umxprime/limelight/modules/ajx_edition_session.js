@@ -56,7 +56,6 @@ function inscrire()
 	var session = gVBI("session");
 	var semestre_courant = gVBI("semestre_courant");
 	AJX.setAction("inscrire", "inscrire", "etudiant:"+etudiant+",session:"+session+",semestre_courant:"+semestre_courant);
-	AJX.debug("inscrire");
 	AJX.send("inscrire");
 }
 

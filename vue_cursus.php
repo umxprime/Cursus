@@ -110,6 +110,7 @@ $res_sem = mysql_query($req);
 			//pour chaque etudiant afficher un mini bulletin avec ses modules, son tutorat et son évaluation
 			$global_inscrit=0;
 			$global_acquis=$etudiant["credits"];
+			$acquis = array();
 			while($niveauSemestre=mysql_fetch_array($res_sem))
 			{
 				echo "<ul class=\"bulletin\">\n";
@@ -147,6 +148,7 @@ $res_sem = mysql_query($req);
 						$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
 						$classe = $valide['classe'];
 						$total_acquis += $valide['creds'];
+						$acquis[$niveauSemestre["niveau"]]+=$valide['creds'];
 						//echo $n_lignes;
 						$sem_eval .= "<li class=\"".$classe."\">";
 						$sem_eval .= "<a href=\"edition_session.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])."\">";
@@ -163,6 +165,7 @@ $res_sem = mysql_query($req);
 						$valide = valide_eval($eval["note_1"],$eval["note_2"],$eval['credits']);
 						$classe = $valide['classe'];
 						$total_acquis += $valide['creds'];
+						$acquis[$niveauSemestre["niveau"]]+=$valide['creds'];
 						//echo $n_lignes;
 						echo "<li class=\"".$classe."\">";
 						echo "<a href=\"edition_session.php?session=".$eval["session"]."\" title=\"".utf8_encode($eval['intitule'])." (".utf8_encode($eval["enseignants"]).")\">";
@@ -192,6 +195,7 @@ $res_sem = mysql_query($req);
 					}else{
 						$classe = "ok";
 						$total_acquis += $stage['credits'];
+						$acquis[$niveauSemestre["niveau"]]+=$valide['creds'];
 						$comm = "validé";
 					}
 					echo "<li class=\"".$classe."\">";
@@ -244,6 +248,7 @@ $res_sem = mysql_query($req);
 					$valide = valide_eval($eval["note_1"],$eval["note_2"],credits_tutorat($tut['niveau']));
 					$classe = $valide['classe'];
 					$total_acquis += $valide['creds'];
+					$acquis[$niveauSemestre["niveau"]]+=$valide['creds'];
 					echo  "\t<li class=\"".$classe."\"><a href=\"#\" title=\"".$tut["nom_complet"]."\">Tutorat</a> : ";
 					echo "<a href='#' title=\"".$eval["appreciation_1"]."\">".$eval["note_1"]."</a> / ";
 					echo "<a href='#' title=\"".$eval["appreciation_2"]."\">".$eval["note_2"]."</a>\n";
@@ -260,8 +265,14 @@ $res_sem = mysql_query($req);
 				}
 				//affichage de l'�valuation semestrielle en bas de liste
 				echo $sem_eval;
-				echo "<li class=\"credits\"><a class=\"contrat\" href=\"edition_contrats.php?id=".$etudiant_id."&nPeriode=".$niveauSemestre["periode"]."\">Contrat d'étude</a><span class=\"bleu\">".min($total_acquis,30)."</span> / ".min($total_inscrit,30)."</li>";
-				$global_acquis+=min($total_acquis,30);
+				echo "<li class=\"credits\"><a class=\"contrat\" href=\"edition_contrats.php?id=".$etudiant_id."&nPeriode=".$niveauSemestre["periode"]."\">Contrat d'étude</a><span class=\"bleu\">".min($acquis[$niveauSemestre["niveau"]],30)."</span> / ".min($acquis[$niveauSemestre["niveau"]],30)."</li>";
+				$global_acquis = $etudiant["credits"];
+				foreach($acquis as $cr)
+				{
+					$global_acquis+=min($cr,30);
+					//echo "<li>$cr</li>";
+				}
+				//$global_acquis+=min($acquis[$niveauSemestre["niveau"]],30);
 				$global_inscrit=$niveauSemestre["niveau"]*30;
 				echo "<li class=\"credits\"><span class=\"bleu\">".min($global_acquis,$global_inscrit)."</span> / ".$global_inscrit."</li>";
 				echo "</ul>";

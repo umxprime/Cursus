@@ -24,9 +24,9 @@ function init()
 
 addListener(window,"load",init,true);
 
-function desinscrire(eval,etudiant,periode)
+function desinscrire(eval,etudiant,periode,session)
 {
-	if(window.confirm("Êtes-vous certain de vouloir désinscrire l'étudiant de ce module ?"))ajx("edition_contrats","desinscrire","id:"+eval+",etudiant:"+etudiant+",periode:"+periode,true);
+	if(window.confirm("Êtes-vous certain de vouloir désinscrire l'étudiant de ce module ?"))ajx("edition_contrats","desinscrire","id:"+eval+",session:"+session+",etudiant:"+etudiant+",periode:"+periode,true);
 }
 
 function inscrire(etudiant,periode)

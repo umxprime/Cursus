@@ -59,6 +59,12 @@
 				$_SESSION['userid'] = $professeur['id'];
 				$_SESSION['username'] = $professeur['prenom']." ".$professeur['nom'];
 				$_SESSION['ecole'] = $professeur['ecole'];
+				$req = "INSERT INTO mouche (";
+				$req .= "`date`,`userid`,`username`,`type`,`statut`";
+				$req .= ") VALUES(";
+				$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("connexion")."','".$_SESSION['auto']."'";
+				$req .= ");";
+				mysql_query($req);
 				echo "window.location = \"sessions.php?nPeriode=".$semestre_courant."\"";
 				break;
 			} else {
@@ -69,6 +75,12 @@
 				$req = "SELECT cycles.ecole FROM niveaux,cycles WHERE niveaux.etudiant='".$etudiant['id']."' AND niveaux.cycle=cycles.id ORDER BY niveaux.periode DESC;";
 				$res = mysql_query($req);
 				$_SESSION['ecole']=mysql_result($res,0,"ecole");
+				$req = "INSERT INTO mouche (";
+				$req .= "`date`,`userid`,`username`,`type`,`statut`";
+				$req .= ") VALUES(";
+				$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("connexion")."','".$_SESSION['auto']."'";
+				$req .= ");";
+				mysql_query($req);
 				echo "window.location = \"etudiants.php\"";
 				break;
 			}

@@ -41,6 +41,7 @@ $req = "SELECT etudiants.id,etudiants.nom,etudiants.prenom,niveaux.niveau FROM e
 //echo $req;
 $etudiant = mysql_fetch_array(mysql_query($req)) or die(mysql_error());
 $req = "SELECT "; 
+$req .= "session.id as session_id,";
 $req .= "modules.id,";
 $req .= "modules.code,";
 $req .= "modules.intitule,";
@@ -61,7 +62,7 @@ while($inscrit = mysql_fetch_array($inscrits))
 {
 	$obligatoire=true;
 	if(intval($inscrit["obligatoire"])==-1)$obligatoire=false;
-	array_push($inscriptions,array("type"=>"inscrit","id"=>$inscrit["id"],"code"=>$inscrit["code"],"intitule"=>$inscrit["intitule"],"credits"=>$inscrit["credits"],"obligatoire"=>$obligatoire,"evaluation_id"=>$inscrit["evaluation_id"]));
+	array_push($inscriptions,array("type"=>"inscrit","id"=>$inscrit["id"],"session_id"=>$inscrit["session_id"],"code"=>$inscrit["code"],"intitule"=>$inscrit["intitule"],"credits"=>$inscrit["credits"],"obligatoire"=>$obligatoire,"evaluation_id"=>$inscrit["evaluation_id"]));
 }
 // Modules obligatoires à inscrire
 $req = "SELECT ";
@@ -171,7 +172,7 @@ while($stage=mysql_fetch_array($stages))
 						echo "</td><td>";
 						if(!$inscriptions[$i]["obligatoire"])
 						{
-							echo "<a class=\"bouton\" href=\"javascript:desinscrire(".$inscriptions[$i]["evaluation_id"].",$id,$semestre_courant)\">Désinscrire</a>";
+							echo "<a class=\"bouton\" href=\"javascript:desinscrire(".$inscriptions[$i]["evaluation_id"].",$id,$semestre_courant,".$inscriptions[$i]["session_id"].")\">Désinscrire</a>";
 						}else if(!$inscriptions[$i]["evaluation_id"])
 						{
 							echo "<a class=\"bouton\" href=\"javascript:inscrire_obligatoire(".$inscriptions[$i]["session_id"].",$id,$semestre_courant)\">Inscrire</a>";

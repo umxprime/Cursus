@@ -40,10 +40,22 @@
 		case "desinscrire" :
 			$req = "DELETE FROM evaluations WHERE id='$eval'";
 			$res = mysql_query($req);
+			$req = "INSERT INTO mouche (";
+			$req .= "`date`,`userid`,`username`,`type`,`statut`";
+			$req .= ") VALUES(";
+			$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("désinscription de l\'étudiant $etudiant ($nom) pour la session $session")."','".$_SESSION['auto']."'";
+			$req .= ");";
+			$res = mysql_query($req);
 			echo "window.location = '?session=$session&nPeriode=$semestre_courant';";
 			break;
 		case "tout_desinscrire" :
 			$req = "DELETE FROM evaluations WHERE session='$session'";
+			$res = mysql_query($req);
+			$req = "INSERT INTO mouche (";
+			$req .= "`date`,`userid`,`username`,`type`,`statut`";
+			$req .= ") VALUES(";
+			$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("désinscription de l'ensemble des évaluations pour la session $session")."','".$_SESSION['auto']."'";
+			$req .= ");";
 			$res = mysql_query($req);
 			echo "window.location = '?session=$session&nPeriode=$semestre_courant';";
 			break;
@@ -65,6 +77,12 @@
 					$req .= "'$session','".$etu["id"]."'";
 					$req .= ");";
 					mysql_query($req);
+					$req = "INSERT INTO mouche (";
+					$req .= "`date`,`userid`,`username`,`type`,`statut`";
+					$req .= ") VALUES(";
+					$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("inscription de l\'étudiant ".$etu["id"]." sur la session $session")."','".$_SESSION['auto']."'";
+					$req .= ");";
+					mysql_query($req);
 				}
 			}else{
 				$req = "INSERT INTO evaluations (";
@@ -72,6 +90,13 @@
 				$req .= ") VALUES(";
 				$req .= "'$session','$etudiant'";
 				$req .= ");";
+				$res = mysql_query($req);
+				$req = "INSERT INTO mouche (";
+				$req .= "`date`,`userid`,`username`,`type`,`statut`";
+				$req .= ") VALUES(";
+				$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("inscription de l\'étudiant $etudiant sur la session $session")."','".$_SESSION['auto']."'";
+				$req .= ");";
+				echo "//".$req."\n";
 				$res = mysql_query($req);
 			}
 			echo "window.location = '?session=$session&nPeriode=$semestre_courant';";

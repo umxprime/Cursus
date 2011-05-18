@@ -188,16 +188,19 @@ for($i=0;$i<count($periodes);$i++)
 }
 
 $acquisCursus=$etudiant["credits"];
+$acquisNiveaux = array();
 for ($i=0;$i<count($periodes);$i++)
 {
 	$acquisPeriode = 0;
 	$evaluations = $periodes[$i];
 	$bandeauPeriode=true;
 	
+	//$acquisCursus=$etudiant["credits"];
+	
 	for ($j=0;$j<count($evaluations);$j++)
 	{	
 		$evaluation = $evaluations[$j];
-		
+		$evaluation["niveau"];
 		$intituleModule = $evaluation["intitule"];
 		$codeModule = $evaluation["code"];
 		$creditsModule = $evaluation["credits"];
@@ -214,6 +217,8 @@ for ($i=0;$i<count($periodes);$i++)
 		$enseignantsModule = $evaluation["enseignants"];
 		$acquisPeriode+= $creditsAcquis;
 		$acquisPeriode = min(30,$acquisPeriode);
+		
+		$acquisNiveaux[$evaluation["niveau"]]+=$creditsAcquis;
 		$acquisCursus += $creditsAcquis;
 		$acquisCursus = min($evaluation["niveau"]*30,$acquisCursus);
 		
@@ -324,6 +329,11 @@ for ($i=0;$i<count($periodes);$i++)
 		$texteCTaille = $pdf->GetStringWidth($texteC)+5;
 		
 		$pdf->SetFontSize(20);
+		$acquisCursus = $etudiant["credits"];
+		foreach($acquisNiveaux as $cr)
+		{
+			$acquisCursus += min($cr,30);
+		}
 		$texteD = $acquisCursus."/".($evaluation["niveau"]*30);
 		$texteDTaille = $pdf->GetStringWidth($texteD)+5;
 		

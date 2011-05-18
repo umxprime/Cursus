@@ -42,11 +42,11 @@ function init()
 
 addListener(window,"load",init);
 
-function desinscrire(eval,nom)
+function desinscrire(eval,nom,etudiant)
 {
 	var session = gVBI("session");
 	var semestre_courant = gVBI("semestre_courant");
-	AJX.setAction("desinscrire", "desinscrire", "eval:"+eval+",session:"+session+",semestre_courant:"+semestre_courant);
+	AJX.setAction("desinscrire", "desinscrire", "nom:"+nom+",etudiant:"+etudiant+",eval:"+eval+",session:"+session+",semestre_courant:"+semestre_courant);
 	if(window.confirm("Êtes-vous certain de vouloir désinscrire "+nom+" de ce module ?"))AJX.send("desinscrire");
 }
 
@@ -56,6 +56,7 @@ function inscrire()
 	var session = gVBI("session");
 	var semestre_courant = gVBI("semestre_courant");
 	AJX.setAction("inscrire", "inscrire", "etudiant:"+etudiant+",session:"+session+",semestre_courant:"+semestre_courant);
+	AJX.debug("inscrire");
 	AJX.send("inscrire");
 }
 

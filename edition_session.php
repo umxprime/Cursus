@@ -106,7 +106,7 @@ if($ava>0){
 			$destsMail .= "<".$eval["log"]."@esa-npdc.net>";
 			if($neval<$nres){$destsMail .=", ";}
 			//desinscription de l'étudiant
-			if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))$tablEvals .= "<td class=\"center\">\n<a class=\"bouton\" href=\"javascript:desinscrire(".$eval['id'].",'".utf8_encode($eval['prenom'])." ".utf8_encode($eval['nom'])."');\">Désinscrire</a></td>\n";
+			if(!($dateLimiteEval[1]<date("Y-m-d H:i:s",time()) && $limiteEvalActive==true))$tablEvals .= "<td class=\"center\">\n<a class=\"bouton\" href=\"javascript:desinscrire(".$eval['id'].",'".utf8_encode($eval['prenom'])." ".utf8_encode($eval['nom'])."',".$eval["id_etudiant"].");\">Désinscrire</a></td>\n";
 			$tablEvals .= "<td class=\"center\">";
 			$sauf[] = $eval['id_etudiant'];
 			for($d=1;$d<=10;$d++){

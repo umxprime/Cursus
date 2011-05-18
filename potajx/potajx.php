@@ -33,5 +33,6 @@
 		$str = str_replace("%##%",":",$str);
 		return utf8_decode($str);
 	}
+	session_start();
 	include("modules/ajx_".$_GET["page"].".php");
 ?>

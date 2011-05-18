@@ -24,7 +24,14 @@
 			$id = $params["id"];
 			$etudiant = $params["etudiant"];
 			$periode = $params["periode"];
+			$session = $params["session"];
 			$req = "DELETE FROM evaluations WHERE id='$id';";
+			$res = mysql_query($req);
+			$req = "INSERT INTO mouche (";
+			$req .= "`date`,`userid`,`username`,`type`,`statut`";
+			$req .= ") VALUES(";
+			$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("désinscription de l\'étudiant $etudiant sur la session $session depuis le contrat d\'étude")."','".$_SESSION['auto']."'";
+			$req .= ");";
 			$res = mysql_query($req);
 			echo "window.location='edition_contrats.php?id=$etudiant&nPeriode=$periode'";
 			break;
@@ -35,6 +42,12 @@
 			//echo "alert($id)";
 			//break;
 			$req = "INSERT INTO evaluations (`session`,`etudiant`) VALUES('$id','$etudiant');";
+			$res = mysql_query($req);
+			$req = "INSERT INTO mouche (";
+			$req .= "`date`,`userid`,`username`,`type`,`statut`";
+			$req .= ") VALUES(";
+			$req .= "NOW(),'".$_SESSION['userid']."','".$_SESSION['username']."','".utf8_decode("inscription de l\'étudiant $etudiant sur la session $id depuis le contrat d\'étude")."','".$_SESSION['auto']."'";
+			$req .= ");";
 			$res = mysql_query($req);
 			echo "window.location='edition_contrats.php?id=$etudiant&nPeriode=$periode'";
 			break;
